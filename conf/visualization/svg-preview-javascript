@@ -1,0 +1,106 @@
+var status="halt";
+var step = 0;
+var time=0;
+var delay = 1000;
+var zoomX = 1;
+var zoomY = 1;
+
+function changeHref(_step) {
+  var img = document.getElementById('image');
+  var img1 = document.getElementById('image1');
+  img.setAttributeNS("http://www.w3.org/1999/xlink", "href", dia[_step] + "#scaleSvg");
+  img1.setAttributeNS("http://www.w3.org/1999/xlink", "href", dia[(_step+1)%numberSvgs] + "#scaleSvg");
+   
+    if (_step==1) {
+    img.setAttributeNS(null, "z-index", "2");
+    img1.setAttributeNS(null, "z-index", "0");
+  } else if ((_step%2) == 0) {
+    img.setAttributeNS(null, "z-index", "0");  
+    img1.setAttributeNS(null, "z-index", "2");
+  } else if ((_step%2) == 1) {
+    img.setAttributeNS(null, "z-index", "2");  
+    img1.setAttributeNS(null, "z-index", "0");
+  }
+/*
+  if (_step==1) {
+    img.setAttributeNS(null, "visibility", "visible");
+    img1.setAttributeNS(null, "visibility", "hidden");
+  } else if ((_step%2) == 0) {
+    img.setAttributeNS(null, "visibility", "hidden");  
+    img1.setAttributeNS(null, "visibility", "visible");
+  } else if ((_step%2) == 1) {
+    img.setAttributeNS(null, "visibility", "visible");  
+    img1.setAttributeNS(null, "visibility", "hidden");
+  }
+*/
+}
+
+ 
+function nextSvg() {
+  step = (step + 1)%numberSvgs;
+  changeHref(step);
+}
+
+function backSvg() {
+  step = (numberSvgs + step - 1)%numberSvgs;
+  changeHref(step);
+}
+ 
+function firstSvg() {
+  step = 0;
+  status = "halt";
+  changeHref(step);
+}
+ 
+function lastSvg() {
+  step = numberSvgs -1;
+  changeHref(step);
+}
+
+
+function playSvg() { 
+  if(status == "halt") { 
+    status = "start"; 
+    load();
+  } 
+} 
+
+ 
+function load() {
+  if(status == "start") {
+    step = (step + 1)%numberSvgs;
+    changeHref(step);
+    setTimeout("load()",delay);
+  }
+}
+ 
+function pauseSvg() {
+  status = "halt";
+  load();
+}
+ 
+function speedPlus() {
+  if(delay > 32) { 
+    delay = delay / 2; 
+  } 
+}
+ 
+function speedMinus() {
+  if(delay < 7999) { 
+    delay = delay * 2;
+  } 
+}
+ 
+ 
+function zoom(x,y) {
+  var img = document.getElementById('zooming');
+  img.setAttribute('transform','scale('+x+' '+y+')');
+  zoomX = x;
+  zoomY = y;
+}
+ 
+function stoperror() { 
+  return true
+}
+ 
+window.onerror=stoperror

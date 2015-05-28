@@ -1,0 +1,13 @@
+mas scenario1 {
+	
+	agent drone {
+		ag-arch: pucrs.agentcontest2015.env.EISAgArch
+		instances: 1
+		focus: eis
+	}
+
+	workspace city {
+		artifact eis: pucrs.agentcontest2015.env.EISArtifact(A)
+	}
+
+}

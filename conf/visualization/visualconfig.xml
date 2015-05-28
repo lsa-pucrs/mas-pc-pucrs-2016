@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ascii"?>
+<conf>
+	<!-- ################# Path configuration for UNIX ################# -->
+	<!--	On UNIX platforms, the prefix of an absolute pathname is always "/".
+			Relative pathnames have no prefix. 
+			The root directory has the prefix "/" and an empty name sequence. -->
+		    
+	<!-- ################# Path configuration for MS Windows ############ --> 
+	<!--	For Win32 platforms, the prefix of a pathname that contains a drive 
+			specifier consists of the drive letter followed by ":" and possibly 
+			followed by "\" if the pathname is absolute. -->
+
+	<!-- MS Windows Example -->
+	<!-- 
+	<simulation-output 
+		path	= "C:\\workspace\\output\\" 
+		nameOutputFile	= "masSim" 
+		namePreviewSvg	= "SimulationPreview"
+	/> -->
+	
+	
+	<!-- UNIX platforms Example -->
+	<simulationOutput 
+		path = "/home/massim/www/webapps/massim/output/" 
+		nameOutputFile	= "masSim"
+		namePreviewSvg	= "SimulationPreview"
+	/>
+	
+	
+   <imageSize
+		height	= "525"
+		width	= "1025"
+		F = "1"
+	/>
+
+	
+
+	<gridConfig>
+		<!-- dimension of one cell defined by cellHeight and cellWidth -->
+		<!-- background colour of grid defined by backgroundColour -->
+		<!-- width of line in and around the grid defined by strokeWidth -->
+		<mainStyle
+			cellHeight	= "20"
+			cellWidth	= "20"
+			backgroundColour0 = "afdbb1"
+			backgroundColour1 = "9ec7a0"
+
+			strokeColour	= "green"
+			strokeWidth = "1"
+		/>
+		<!-- define the text under the grid -->
+		<textStyle
+			text-anchor = "middle"
+			font-family = "Arial Unicode"
+			font-size	= "30"
+		/>
+	</gridConfig>
+	
+	<!-- toDO labelStyle: added labelTextColour labelHeadColour labelHeadTextColour-->
+	<agentConfig>
+		<labelStyle
+			colour	= "#FEEFB8"
+			textColour = "black"
+		/>
+		<headStyle
+			colour = "#FEEFB8"
+			textColour = "black"
+		/>
+	</agentConfig>
+</conf>
