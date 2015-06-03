@@ -89,7 +89,7 @@ public class EISArtifact extends Artifact {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@INTERNAL_OPERATION
 	void receiving() {
 		while (receiving) {

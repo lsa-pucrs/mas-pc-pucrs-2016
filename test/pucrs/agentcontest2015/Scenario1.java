@@ -14,18 +14,18 @@ public class Scenario1 {
 	@Before
 	public void setUp() {
 
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				GraphMonitor.main(new String[] { "-rmihost", "localhost", "-rmiport", "1099" });
-//			}
-//		}).start();
-//		
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				GraphMonitor.main(new String[] { "-rmihost", "localhost", "-rmiport", "1099" });
+			}
+		}).start();
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		new Thread(new Runnable() {
 			@Override
