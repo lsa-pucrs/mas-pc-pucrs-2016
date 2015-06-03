@@ -1,7 +1,9 @@
 { include("common-cartago.asl") }
 
-+?eis(ArtId): true <- lookupArtifact("eis", ArtId).
+!register.
 
++?eis(ArtId): true <- lookupArtifact("eis", ArtId).
+	
 +!register
 	: true
 <-

@@ -35,24 +35,16 @@ public class EISArtifact extends Artifact {
 	private Logger logger = Logger.getLogger(EISArtifact.class.getName());
 
 	private EnvironmentInterfaceStandard ei;
-	private String team;
-	private Map<String, String> connections;
 	private Map<String, AgentId> agentIds;
 
 	private boolean receiving;
 
 	public EISArtifact() {
 	}
+	
+	protected void init() throws IOException {
 
-	protected void init() {
-	}
-
-	protected void init(String team) throws IOException {
-
-		connections = new HashMap<String, String>();
 		agentIds = new HashMap<String, AgentId>();
-
-		this.team = "connection" + team.toUpperCase();
 
 		ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
 
@@ -73,35 +65,26 @@ public class EISArtifact extends Artifact {
 
 	@OPERATION
 	void register() throws EntityException {
-		String agentName = getOpUserId().getAgentName();
-
-		// Try to find an entity of Team X to allocate agent
-		for (String entity : ei.getFreeEntities()) {
-			if (entity.startsWith(this.team)) {
-				try {
-					ei.registerAgent(agentName);
-					ei.associateEntity(agentName, entity);
-					agentIds.put(agentName, getOpUserId());
-					connections.put(agentName, entity);
-					System.out.println("Registering " + agentName + " w/ " + entity);
-					break;
-				} catch (AgentException e) {
-					logger.log(Level.SEVERE, e.getMessage());
-				} catch (RelationException e) {
-					logger.log(Level.SEVERE, e.getMessage());
-				}
-			}
+		try {
+			String agent = getOpUserId().getAgentName();
+			ei.registerAgent(agent);
+			ei.associateEntity(agent, agent);
+			agentIds.put(agent, getOpUserId());
+			System.out.println("Registering " + agent);
+		} catch (AgentException e) {
+			e.printStackTrace();
+		} catch (RelationException e) {
+			e.printStackTrace();
 		}
 	}
 
 	@OPERATION
 	void action(String action, Object... params) {
 		try {
+			String agent = getOpUserId().getAgentName();
 			LinkedList<Parameter> llparams = Translator.parametersToIdentifiers(params);
 			Action a = new Action(action, llparams);
-			String agent = getOpUserId().getAgentName();
-			String entity = connections.get(agent);
-			ei.performAction(agent, a, entity);
+			ei.performAction(agent, a, agent);
 		} catch (ActException e) {
 			e.printStackTrace();
 		}
@@ -110,11 +93,9 @@ public class EISArtifact extends Artifact {
 	@INTERNAL_OPERATION
 	void receiving() {
 		while (receiving) {
-			Set<String> agents = connections.keySet();
-			for (String agent : agents) {
+			for (String agent : ei.getAgents()) {
 				try {
-					String entity = connections.get(agent);
-					Collection<Percept> percepts = ei.getAllPercepts(agent).get(entity);
+					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agent);
 					for (Percept percept : percepts) {
 						String name = percept.getName();
 						Literal literal = Translator.perceptToLiteral(percept);

@@ -11,8 +11,4 @@ public class EISAgArch extends AgArch {
 	public EISAgArch() {
 	}
 
-	@Override
-	public void init() throws Exception {
-		super.init();
-	}
 }
