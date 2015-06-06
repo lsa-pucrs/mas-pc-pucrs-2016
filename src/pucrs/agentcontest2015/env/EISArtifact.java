@@ -36,6 +36,7 @@ public class EISArtifact extends Artifact {
 
 	private EnvironmentInterfaceStandard ei;
 	private Map<String, AgentId> agentIds;
+	private Map<String, String> agentToEntity;
 
 	private boolean receiving;
 
@@ -45,6 +46,7 @@ public class EISArtifact extends Artifact {
 	protected void init() throws IOException {
 
 		agentIds = new HashMap<String, AgentId>();
+		agentToEntity = new HashMap<String, String>();
 
 		ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
 
@@ -69,8 +71,26 @@ public class EISArtifact extends Artifact {
 			String agent = getOpUserId().getAgentName();
 			ei.registerAgent(agent);
 			ei.associateEntity(agent, agent);
+			agentToEntity.put(agent, agent);
 			agentIds.put(agent, getOpUserId());
 			System.out.println("Registering " + agent);
+		} catch (AgentException e) {
+			e.printStackTrace();
+		} catch (RelationException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@OPERATION
+	void register_freeconn() throws EntityException {
+		try {
+			String agent = getOpUserId().getAgentName();
+			ei.registerAgent(agent);
+			String entity = ei.getFreeEntities().iterator().next();
+			ei.associateEntity(agent, entity);
+			agentToEntity.put(agent, entity);
+			agentIds.put(agent, getOpUserId());
+			System.out.println("Registering " + agent + " to entity " + entity);
 		} catch (AgentException e) {
 			e.printStackTrace();
 		} catch (RelationException e) {
@@ -84,7 +104,7 @@ public class EISArtifact extends Artifact {
 			String agent = getOpUserId().getAgentName();
 			LinkedList<Parameter> llparams = Translator.parametersToIdentifiers(params);
 			Action a = new Action(action, llparams);
-			ei.performAction(agent, a, agent);
+			ei.performAction(agent, a, agentToEntity.get(agent));
 		} catch (ActException e) {
 			e.printStackTrace();
 		}
@@ -95,7 +115,7 @@ public class EISArtifact extends Artifact {
 		while (receiving) {
 			for (String agent : ei.getAgents()) {
 				try {
-					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agent);
+					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
 					for (Percept percept : percepts) {
 						String name = percept.getName();
 						Literal literal = Translator.perceptToLiteral(percept);

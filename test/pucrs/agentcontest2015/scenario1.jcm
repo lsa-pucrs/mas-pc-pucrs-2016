@@ -1,8 +1,14 @@
 mas scenario1 {
 	
-	agent connectionA1: car.asl {
+//	agent connectionA1: car.asl {
+//		ag-arch: pucrs.agentcontest2015.env.EISAgArch
+//		focus: eis
+//	}
+
+	agent vehicle: vehicle.asl {
 		ag-arch: pucrs.agentcontest2015.env.EISAgArch
 		focus: eis
+		instances: 4
 	}
 
 	workspace city {

@@ -34,3 +34,6 @@
 +!join_workspace(W,"local") <- joinWorkspace(W,I); +jcm__ws(W,I).
 +!join_workspace(W,local) <- joinWorkspace(W,I); +jcm__ws(W,I).
 +!join_workspace(W,H) <- joinRemoteWorkspace(W,H,I); +jcm__ws(W,I).
+
+// Query for EIS artifact
++?eis(ArtId): true <- lookupArtifact("eis", ArtId).
