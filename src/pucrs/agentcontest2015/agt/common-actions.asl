@@ -110,7 +110,7 @@
 
 // Assist assemble
 // AgentId must be a string
-+!assemble(AgentId)
++!assist_assemble(AgentId)
     : true // TODO check if current location is a workshop
     // TODO remember that an assembler may be required to obtain items and tools
 <-
