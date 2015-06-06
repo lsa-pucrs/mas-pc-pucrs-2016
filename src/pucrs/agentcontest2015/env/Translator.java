@@ -46,7 +46,7 @@ public class Translator {
 		return new Action(action.getFunctor(), pars);
 	}
 
-	public static Structure actoinToStructure(Action action) throws JasonException {
+	public static Structure actionToStructure(Action action) throws JasonException {
 		Structure s = ASSyntax.createStructure(action.getName());
 		for (Parameter par : action.getParameters())
 			s.addTerm(parameterToTerm(par));
