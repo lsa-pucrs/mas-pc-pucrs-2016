@@ -11,31 +11,39 @@
 	.
 
 +role("Car")
-	: true
+	: not roled
 <-
+	.print("Got role: Car");
 	pucrs.agentcontest2015.env.include("car.asl");
+	+roled;
 	.
 
 +role("Drone")
-	: true
+	: not roled
 <-
+	.print("Got role: Drone");
 	pucrs.agentcontest2015.env.include("drone.asl");
+	+roled;
 	.
 
 +role("Motorcycle")
-	: true
+	: not roled
 <-
+	.print("Got role: Motorcycle");
 	pucrs.agentcontest2015.env.include("motorcycle.asl");
+	+roled;
 	.
 
 +role("Truck")
-	: true
+	: not roled
 <-
+	.print("Got role: Truck");
 	pucrs.agentcontest2015.env.include("truck.asl");
+	+roled;
 	.
 	
 +role(S)
-	: true
+	: not roled
 <-
 	.print("Wat? Got role: ", S);
 	.
