@@ -97,6 +97,17 @@ public class EISArtifact extends Artifact {
 			e.printStackTrace();
 		}
 	}
+	
+	@OPERATION
+	void action(String action) {
+		try {
+			String agent = getOpUserId().getAgentName();
+			Action a = new Action(action);
+			ei.performAction(agent, a, agentToEntity.get(agent));
+		} catch (ActException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@OPERATION
 	void action(String action, Object... params) {
