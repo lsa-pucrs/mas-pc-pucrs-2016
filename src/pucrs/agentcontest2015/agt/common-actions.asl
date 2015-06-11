@@ -24,7 +24,7 @@
 +!goto
     : going(Id_lat, Id_Lon) // TODO context must test battery and if [Id_lat, Id_Lon] != [self.lat, self.lon]
 <-
-    action("goto"); // TODO test action without extra parameters
+    action("goto");
     .
 
 // Buy
@@ -55,7 +55,7 @@
 +!receive
     : true // TODO test giver position
 <-
-    action("receive"); // TODO test action without extra parameters
+    action("receive");
     .
 
 // Store
@@ -132,7 +132,7 @@
 +!charge
     : true // TODO check if battery is low, current location is a charging station and there is space
 <-
-    action("charge"); // TODO test action without extra parameters
+    action("charge");
     .
 
 // Bid for job
@@ -176,7 +176,7 @@
 +!continue
     : true // TODO check if already charging or going
 <-
-    action("continue"); // TODO test action without extra parameters
+    action("continue");
     .
 
 // Skip
@@ -184,7 +184,7 @@
 +!skip
     : true
 <-
-    action("skip"); // TODO test action without extra parameters
+    action("skip");
     .
 
 // Abort
@@ -192,5 +192,5 @@
 +!abort
     : true
 <-
-    action("abort"); // TODO test action without extra parameters
+    action("abort");
     .
