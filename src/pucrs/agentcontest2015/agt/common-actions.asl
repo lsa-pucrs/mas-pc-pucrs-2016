@@ -4,7 +4,7 @@
     : true // TODO context must test battery and if [Id_lat, Id_Lon] != [self.lat, self.lon]
 <-
     .concat("facility=", FacilityId, Param);
-    action("goto", Param);
+    !commitAction(action("goto", Param));
     //TODO +going(FacId_lat, FacId_Lon)
     .
 
@@ -14,7 +14,7 @@
     : true // TODO context must test battery and if [Id_lat, Id_Lon] != [self.lat, self.lon]
 <-
     .concat("lat=", Lat, " lon=", Lon, Param);
-    action("goto", Param);
+    !commitAction(action("goto", Param));
     //TODO +going(Lat, Lon)
     .
 
@@ -24,7 +24,7 @@
 +!goto
     : going(Id_lat, Id_Lon) // TODO context must test battery and if [Id_lat, Id_Lon] != [self.lat, self.lon]
 <-
-    action("goto");
+    !commitAction(action("goto"));
     .
 
 // Buy
@@ -34,7 +34,7 @@
     : true // TODO check if there is enough capacity to load items
 <-
     .concat("item=", ItemId, " amount=", Amount, Param);
-    action("buy", Param);
+    !commitAction(action("buy", Param));
     .
 
 // Give
@@ -45,7 +45,7 @@
     : true // TODO test receiver position
 <-
     .concat("agent=", AgentId, " item=", ItemId, " amount=", Amount, Param);
-    action("give", Param);
+    !commitAction(action("give", Param));
     .
 
 // Receive
@@ -55,7 +55,7 @@
 +!receive
     : true // TODO test giver position
 <-
-    action("receive");
+    !commitAction(action("receive"));
     .
 
 // Store
@@ -65,7 +65,7 @@
     : true // TODO check if current location is a storage and item * amount is with agent
 <-
     .concat("item=", ItemId, " amount=", Amount, Param);
-    action("store", Param);
+    !commitAction(action("store", Param));
     .
 
 // Retrieve
@@ -75,7 +75,7 @@
     : true // TODO check if current location is a storage and if item * amount is there
 <-
     .concat("item=", ItemId, " amount=", Amount, Param);
-    action("retrieve", Param);
+    !commitAction(action("retrieve", Param));
     .
 
 // Retrieve delivered
@@ -85,7 +85,7 @@
     : true // TODO check if current location is a storage and if item * amount is there
 <-
     .concat("item=", ItemId, " amount=", Amount, Param);
-    action("retrieve_delivered", Param);
+    !commitAction(action("retrieve_delivered", Param));
     .
 
 // Dump
@@ -95,7 +95,7 @@
     : true // TODO check if current location is a dump location and item * amount is with agent
 <-
     .concat("item=", ItemId, " amount=", Amount, Param);
-    action("dump", Param);
+    !commitAction(action("dump", Param));
     .
 
 // Assemble
@@ -105,7 +105,7 @@
     // TODO remember that an assistant may be required to obtain items and tools
 <-
     .concat("item=", ItemId, Param);
-    action("assemble", Param);
+    !commitAction(action("assemble", Param));
     .
 
 // Assist assemble
@@ -115,7 +115,7 @@
     // TODO remember that an assembler may be required to obtain items and tools
 <-
     .concat("assembler=", AgentId, Param);
-    action("assist_assemble", Param);
+    !commitAction(action("assist_assemble", Param));
     .
 
 // Deliver job
@@ -124,7 +124,7 @@
     : true // TODO check if current location is the storage to deliver to
 <-
     .concat("job=", JobId, Param);
-    action("deliver_job", Param);
+    !commitAction(action("deliver_job", Param));
     .
 
 // Charge
@@ -132,7 +132,7 @@
 +!charge
     : true // TODO check if battery is low, current location is a charging station and there is space
 <-
-    action("charge");
+    !commitAction(action("charge"));
     .
 
 // Bid for job
@@ -142,7 +142,7 @@
     : true
 <-
     .concat("job=", JobId, " price=", Price, Param);
-    action("bid_for_job", Param);
+    !commitAction(action("bid_for_job", Param));
     .
 
 // Post job (option 1)
@@ -156,7 +156,7 @@
     : true
 <-
     .concat("type=auction max_price=", MaxPrice, " fine=", Fine, " active_steps=", ActiveSteps, " auction_steps=", AuctionSteps, " storage=", StorageId, " ",Items, Param);
-    action("post_job", Param);
+    !commitAction(action("post_job", Param));
     .
 
 // Post job (option 2)
@@ -168,7 +168,7 @@
     : true
 <-
     .concat("type=priced price=", Price, " active_steps=", ActiveSteps, " storage=", StorageId, " ", Items, Param);
-    action("post_job", Param);
+    !commitAction(action("post_job", Param));
     .
 
 // Continue
@@ -176,7 +176,7 @@
 +!continue
     : true // TODO check if already charging or going
 <-
-    action("continue");
+    !commitAction(action("continue"));
     .
 
 // Skip
@@ -184,7 +184,7 @@
 +!skip
     : true
 <-
-    action("skip");
+    !commitAction(action("skip"));
     .
 
 // Abort
@@ -192,5 +192,9 @@
 +!abort
     : true
 <-
-    action("abort");
+    !commitAction(action("abort"));
     .
+@commitAction[atomic]
++!commitAction(Act) : true 
+<- 
+    Act.

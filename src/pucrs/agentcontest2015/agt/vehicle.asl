@@ -47,3 +47,10 @@
 <-
 	.print("Wat? Got role: ", S);
 	.
+	
++step(X) 
+	: true
+ <- 
+ 	-+lastStep(X);
+	.wait(100);
+	!select_goal.	

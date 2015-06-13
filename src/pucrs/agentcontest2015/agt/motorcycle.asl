@@ -2,18 +2,7 @@
 
 !register.
 
-// Why Cartago signals are not stored? :(
-
-+chargingStation(Id, Lat, Lng, Rate, Price, Slots)[source(A)]
++!select_goal 
 	: true
 <-
-	.print("Itz a charger!");
-	.wait(500);
-	!goto(Id);
-	.
-
-+product(Id, Volume, Info)[source(A)]
-	: true
-<-
-	.print(product(Id, Volume, Info));
-	.
+	.print("Nothing to do at this step").
