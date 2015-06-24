@@ -1,5 +1,3 @@
-{ include("common.asl") }
-
 !register.
 
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
@@ -11,7 +9,6 @@
 +shop(ShopId, Lat, Lng, Items)
 	: true
 <-
-	.print(shop(ShopId, Items));
 	-shop(ShopId, _);
 	+shop(ShopId, Items);
 	.
