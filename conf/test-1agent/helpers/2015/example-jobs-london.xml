@@ -1,0 +1,15 @@
+<jobs>
+	<job id="job1" type="priced" firstStepActive="1" lastStepActive="450"
+		reward="10000" storageId="storage1">
+		<products>
+			<product id="base1" amount="2" />
+		</products>
+	</job>
+	<job id="job2" type="auction" firstStepAuction="1" firstStepActive="20"
+		lastStepActive="200" fine="10000" maxReward="20000" storageId="storage1">
+		<products>
+			<product id="base1" amount="3" />
+			<product id="base2" amount="3" />
+		</products>
+	</job>
+</jobs>

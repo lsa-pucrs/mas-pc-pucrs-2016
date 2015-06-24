@@ -20,7 +20,7 @@ public class Scenario2 {
 			@Override
 			public void run() {
 				try {
-					Server.main(new String[] { "--conf", "conf/2015-tests-1sims.xml" });
+					Server.main(new String[] { "--conf", "conf/test-1agent/2015-tests-1sims.xml" });
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

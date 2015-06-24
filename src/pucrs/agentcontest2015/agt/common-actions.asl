@@ -23,17 +23,6 @@
 	);
 	.
 
-// Goto (option 3)
-// No parameters
-// TODO check if this option is going to be used
-+!goto
-	: going(Id_lat, Id_Lon) // TODO context must test battery and if [Id_lat, Id_Lon] != [self.lat, self.lon]
-<-
-	!commitAction(
-		goto
-	);
-	.
-
 // Buy
 // ItemId must be a string
 // Amount must be an integer

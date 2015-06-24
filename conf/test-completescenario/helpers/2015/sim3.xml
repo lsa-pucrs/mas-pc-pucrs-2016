@@ -1,0 +1,20 @@
+<simulation
+        id="2014-tournament-sim3"
+		>
+			<configuration 
+				thinning="60"
+				numberOfNodes="600"
+				randomWeight = "0"
+				gradientWeight = "0"
+				optimaWeight = "100"
+				blurIterations = "8"
+				optimaPercentage = "5">
+			
+			&actions;
+			&roles;	
+				
+			</configuration>
+			
+			&agents;
+			
+		</simulation>

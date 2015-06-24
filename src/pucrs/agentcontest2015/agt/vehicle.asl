@@ -50,7 +50,7 @@
 	
 +step(X) 
 	: true
- <- 
+<-
  	-+lastStep(X);
 	.wait(100);
-	!select_goal.	
+	!select_goal.
