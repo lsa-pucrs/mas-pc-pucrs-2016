@@ -8,6 +8,7 @@
 			facility(FacilityId)
 		)
 	);
+	+going(FacilityId);
 .
 
 // Goto (option 2)
@@ -21,6 +22,7 @@
 			lon(Lon)
 		)
 	);
+	+going;
 	.
 
 // Buy
@@ -164,6 +166,7 @@
 +!charge
 	: true // TODO check if battery is low, current location is a charging station and there is space
 <-
+	+charging;
 	!commitAction(charge);
 	.
 

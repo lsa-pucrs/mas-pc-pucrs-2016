@@ -1,6 +1,11 @@
 { include("common-cartago.asl") }
 { include("common-actions.asl") }
 
+chargingList([]).
+
+lowBattery :- charge(X) & X < 4000.
+
+
 !register_freeconn.
 
 +!register_freeconn
@@ -56,8 +61,12 @@
 	.print("Wat? Got role: ", S);
 	.
 	
++charge(X)[artifact_id(_)] <- -+charge(X).
+	
 +step(X) 
 	: true
 <-
+	.wait(100);
  	-+lastStep(X);
 	!select_goal.
+	
