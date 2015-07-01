@@ -1,6 +1,7 @@
 package pucrs.agentcontest2015.env;
 
 import jason.JasonException;
+import jason.NoValueException;
 import jason.asSyntax.Literal;
 
 import java.io.IOException;
@@ -8,8 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import cartago.AgentId;
@@ -34,33 +34,30 @@ public class EISArtifact extends Artifact {
 
 	private Logger logger = Logger.getLogger(EISArtifact.class.getName());
 
-	private EnvironmentInterfaceStandard ei;
-	private Map<String, AgentId> agentIds;
-	private Map<String, String> agentToEntity;
+	private static EnvironmentInterfaceStandard ei;
+	private static Map<String, AgentId> agentIds;
+	private static Map<String, String> agentToEntity;
 
 	private boolean receiving;
 
-	public EISArtifact() {
-	}
-	
-	protected void init() throws IOException {
-
-		agentIds = new HashMap<String, AgentId>();
-		agentToEntity = new HashMap<String, String>();
-
-		ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
-
+	public EISArtifact() throws IOException {
+		agentIds = new ConcurrentHashMap<String, AgentId>();
+		agentToEntity = new ConcurrentHashMap<String, String>();
+		
 		try {
+			ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
 			if (ei.isInitSupported())
 				ei.init(new HashMap<String, Parameter>());
 			if (ei.getState() != EnvironmentState.PAUSED)
 				ei.pause();
 			if (ei.isStartSupported())
 				ei.start();
+		} catch (IOException e) {
 		} catch (ManagementException e) {
-			logger.log(Level.SEVERE, e.getMessage());
 		}
+	}
 
+	protected void init() throws IOException {
 		receiving = true;
 		execInternalOp("receiving");
 	}
@@ -98,29 +95,15 @@ public class EISArtifact extends Artifact {
 		}
 	}
 	
-	@OPERATION
-	void action(String action) {
+	public static void action(String agent, String action) throws NoValueException {
 		try {
-			String agent = getOpUserId().getAgentName();
-			Action a = new Action(action);
+			Action a = Translator.literalToAction(action);
 			ei.performAction(agent, a, agentToEntity.get(agent));
 		} catch (ActException e) {
 			e.printStackTrace();
 		}
 	}
 
-	@OPERATION
-	void action(String action, Object... params) {
-		try {
-			String agent = getOpUserId().getAgentName();
-			LinkedList<Parameter> llparams = Translator.parametersToIdentifiers(params);
-			Action a = new Action(action, llparams);
-			ei.performAction(agent, a, agentToEntity.get(agent));
-		} catch (ActException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@INTERNAL_OPERATION
 	void receiving() {
 		while (receiving) {
@@ -138,7 +121,7 @@ public class EISArtifact extends Artifact {
 					e.printStackTrace();
 				}
 			}
-			await_time(500);
+			await_time(200);
 		}
 	}
 

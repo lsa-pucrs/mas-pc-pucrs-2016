@@ -1,0 +1,173 @@
+<agents>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Saboteur"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Saboteur"/>
+	</agent>
+		<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Saboteur"/>
+	</agent>
+		<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Saboteur"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="red">
+		<configuration roleName="Inspector"/>
+	</agent>
+
+	
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Explorer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Repairer"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Saboteur"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Saboteur"/>
+	</agent>
+		<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Saboteur"/>
+	</agent>
+		<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Saboteur"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Sentinel"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Inspector"/>
+	</agent>
+	<agent agentclass="massim.competition2015.MapSimulationAgent" agentcreationclass="massim.competition2015.MapSimulationAgentParameter" team="blue">
+		<configuration roleName="Inspector"/>
+	</agent>
+
+</agents>

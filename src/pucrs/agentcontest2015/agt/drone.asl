@@ -1,4 +1,3 @@
-{ include("common.asl") }
 !register.
 
 +inFacility(X) : going(L) & X == L & not arrived <- +arrived.
@@ -10,4 +9,6 @@
 +!select_goal 
 	: true
 <-
-	.print("Nothing to do at this step").
+	.print("Nothing to do at this step");
+	!skip;
+	.

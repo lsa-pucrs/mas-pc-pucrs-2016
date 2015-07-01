@@ -16,6 +16,8 @@
 	.print("Got role: Car");
 	pucrs.agentcontest2015.env.include("car.asl");
 	+roled;
+	.wait(100);
+	!select_goal;
 	.
 
 +role("Drone")
@@ -24,6 +26,8 @@
 	.print("Got role: Drone");
 	pucrs.agentcontest2015.env.include("drone.asl");
 	+roled;
+	.wait(100);
+	!select_goal;
 	.
 
 +role("Motorcycle")
@@ -32,6 +36,8 @@
 	.print("Got role: Motorcycle");
 	pucrs.agentcontest2015.env.include("motorcycle.asl");
 	+roled;
+	.wait(100);
+	!select_goal;
 	.
 
 +role("Truck")
@@ -40,6 +46,8 @@
 	.print("Got role: Truck");
 	pucrs.agentcontest2015.env.include("truck.asl");
 	+roled;
+	.wait(100);
+	!select_goal;
 	.
 	
 +role(S)
@@ -50,7 +58,6 @@
 	
 +step(X) 
 	: true
- <- 
+<-
  	-+lastStep(X);
-	.wait(100);
-	!select_goal.	
+	!select_goal.

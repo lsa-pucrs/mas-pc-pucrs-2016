@@ -105,11 +105,14 @@ public class Translator {
 		throw new JasonException("The type of parameter " + par + " is unknown!");
 	}
 
-	public static LinkedList<Parameter> parametersToIdentifiers(Object[] params) {
+	public static Action literalToAction(String actionlitstr) {
+		Literal literal = Literal.parseLiteral(actionlitstr);
 		LinkedList<Parameter> list = new LinkedList<Parameter>();
-		for(Object o : params){
-			list.add(new Identifier(o.toString()));
+		for (Term term : literal.getTerms()) {
+			Literal termlit = (Literal) term;
+			String act = termlit.getFunctor() + "=" + termlit.getTerm(0);
+			list.add(new Identifier(act));			
 		}
-		return list;
+		return new Action(literal.getFunctor(), list);
 	}
 }
