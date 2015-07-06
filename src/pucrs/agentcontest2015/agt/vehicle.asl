@@ -2,8 +2,11 @@
 { include("common-actions.asl") }
 
 chargingList([]).
+chargeTotal(3500).
 
 lowBattery :- charge(X) & X < 4000.
+
+closestFacility(L,F) :- .nth(0,L,F).
 
 
 !register_freeconn.
@@ -68,5 +71,5 @@ lowBattery :- charge(X) & X < 4000.
 <-
 	.wait(100);
  	-+lastStep(X);
-	!select_goal.
-	
+	!select_goal;
+	.
