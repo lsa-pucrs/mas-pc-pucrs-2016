@@ -6,9 +6,9 @@
     </products>
   </job>
 
-  <job id="job2" type="priced" firstStepActive="80" lastStepActive="450" reward="10000" storageId="storage1">
+  <job id="job2" type="priced" firstStepActive="3" lastStepActive="450" reward="10000" storageId="storage1">
     <products>
-      <product id="material3" amount="2"/>
+      <product id="material1" amount="2"/>
     </products>
   </job>
 
