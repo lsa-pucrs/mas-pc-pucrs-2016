@@ -1,3 +1,10 @@
+chargingList([]).
+chargeTotal(3500).
+
+lowBattery :- charge(X) & X < 4000.
+
+closestFacility(L,F) :- .nth(0,L,F).
+
 !register.
 
 +charge(X)

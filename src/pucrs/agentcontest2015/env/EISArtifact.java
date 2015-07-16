@@ -112,7 +112,7 @@ public class EISArtifact extends Artifact {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
 					for (Percept percept : percepts) {
 						String name = percept.getName();
-						Literal literal = Translator.perceptToLiteral(percept);
+						Literal literal = Translator.perceptToLiteral(percept);						
 						signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
 					}
 				} catch (PerceiveException e) {

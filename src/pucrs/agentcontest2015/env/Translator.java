@@ -28,7 +28,7 @@ public class Translator {
 	public static Literal perceptToLiteral(Percept per) throws JasonException {
 		Literal l = ASSyntax.createLiteral(per.getName());
 		for (Parameter par : per.getParameters())
-			l.addTerm(parameterToTerm(par));
+			l.addTerm(parameterToTerm(per, par));
 		return l;
 	}
 
@@ -44,13 +44,6 @@ public class Translator {
 		for (int i = 0; i < action.getArity(); i++)
 			pars[i] = termToParameter(action.getTerm(i));
 		return new Action(action.getFunctor(), pars);
-	}
-
-	public static Structure actionToStructure(Action action) throws JasonException {
-		Structure s = ASSyntax.createStructure(action.getName());
-		for (Parameter par : action.getParameters())
-			s.addTerm(parameterToTerm(par));
-		return s;
 	}
 
 	public static Parameter termToParameter(Term t) throws NoValueException {
@@ -77,7 +70,7 @@ public class Translator {
 		return new Identifier(t.toString());
 	}
 
-	public static Term parameterToTerm(Parameter par) throws JasonException {
+	public static Term parameterToTerm(Percept per, Parameter par) throws JasonException {
 		if (par instanceof Numeral) {
 			return ASSyntax.createNumber(((Numeral) par).getValue().doubleValue());
 		} else if (par instanceof Identifier) {
@@ -93,16 +86,29 @@ public class Translator {
 			ListTerm list = new ListTermImpl();
 			ListTerm tail = list;
 			for (Parameter p : (ParameterList) par)
-				tail = tail.append(parameterToTerm(p));
+				tail = tail.append(parameterToTerm(per, p));
 			return list;
 		} else if (par instanceof Function) {
-			Function f = (Function) par;
-			Structure l = ASSyntax.createStructure(f.getName());
-			for (Parameter p : f.getParameters())
-				l.addTerm(parameterToTerm(p));
-			return l;
+			return filter(per, par);
 		}
 		throw new JasonException("The type of parameter " + par + " is unknown!");
+	}
+	
+	public static Structure filter(Percept per, Parameter par) throws JasonException{
+		Function f = (Function) par;
+		String name = f.getName();
+		Structure l = ASSyntax.createStructure(name);
+		if(name.equals("availableItem")){
+			l = ASSyntax.createStructure("item");
+		}
+		for (Parameter p : f.getParameters())
+			l.addTerm(parameterToTerm(per, p));
+		if(per.getName().equals("shop") && name.equals("item")){
+			l.addTerm(ASSyntax.createNumber(0));
+			l.addTerm(ASSyntax.createNumber(0));
+			l.addTerm(ASSyntax.createNumber(0));
+		}
+		return l;		
 	}
 
 	public static Action literalToAction(String actionlitstr) {

@@ -1,7 +1,24 @@
 // Goto (option 1)
 // FacilityId must be a string
 +!goto(FacilityId)
-	: true // TODO context must test battery and if [Id_lat, Id_Lon] != [self.lat, self.lon]
+	: inFacility(FacilityId)
+<-
+	true
+.
+
++!goto(FacilityId)
+	: going(FacilityId)
+<-
+//	!continue;
+	!commitAction(
+		goto(
+			facility(FacilityId)
+		)
+	);
+.
+
++!goto(FacilityId)
+	: not inFacility(FacilityId)
 <-
 	!commitAction(
 		goto(

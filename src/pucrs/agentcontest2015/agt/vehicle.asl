@@ -1,13 +1,6 @@
 { include("common-cartago.asl") }
+{ include("common-perceptions.asl") }
 { include("common-actions.asl") }
-
-chargingList([]).
-chargeTotal(3500).
-
-lowBattery :- charge(X) & X < 4000.
-
-closestFacility(L,F) :- .nth(0,L,F).
-
 
 !register_freeconn.
 
