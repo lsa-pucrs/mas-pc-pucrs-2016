@@ -11,6 +11,7 @@ import jason.asSyntax.Pred;
 import jason.asSyntax.Term;
 import jason.asSyntax.directives.DirectiveProcessor;
 import jason.asSyntax.directives.Include;
+import jason.bb.BeliefBase;
 
 import java.util.Arrays;
 
@@ -35,8 +36,10 @@ public class include extends DefaultInternalAction {
 	
     public void importComponents(Agent from, Agent to) throws JasonException {
         if (from != null) {
-            for (Literal b: from.getInitialBels())
+            for (Literal b: from.getInitialBels()){
+            	b.addAnnot(BeliefBase.TSelf);
             	to.getBB().add(b);
+            }
             for (Plan p: from.getPL()) 
                 to.getPL().add(p, false);
         }
