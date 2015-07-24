@@ -1,5 +1,3 @@
-!register.
-
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
 	: true
 <-

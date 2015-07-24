@@ -114,11 +114,13 @@ public class Translator {
 	public static Action literalToAction(String actionlitstr) {
 		Literal literal = Literal.parseLiteral(actionlitstr);
 		LinkedList<Parameter> list = new LinkedList<Parameter>();
+		String act = "";
 		for (Term term : literal.getTerms()) {
 			Literal termlit = (Literal) term;
-			String act = termlit.getFunctor() + "=" + termlit.getTerm(0);
-			list.add(new Identifier(act));			
+			act = act + termlit.getFunctor() + "=" + termlit.getTerm(0) + " ";
+//			list.add(new Identifier(act));			
 		}
+		list.add(new Identifier(act));
 		return new Action(literal.getFunctor(), list);
 	}
 }

@@ -1,5 +1,3 @@
-!register.
-
 +!select_goal 
 	: true
 <-
