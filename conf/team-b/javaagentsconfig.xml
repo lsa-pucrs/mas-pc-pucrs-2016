@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<javaAgentsConfig verbose="no">
+  <agents>
+    <agent name="agentB1" entity="connectionB1" class="massim.javaagents.agents.SimpleDebugStreamAgent" team="B"/>
+    <agent name="agentB2" entity="connectionB2" class="massim.javaagents.agents.SimpleDebugStreamAgent" team="B"/>
+    <agent name="agentB3" entity="connectionB3" class="massim.javaagents.agents.SimpleDebugStreamAgent" team="B"/>
+    <agent name="agentB4" entity="connectionB4" class="massim.javaagents.agents.SimpleDebugStreamAgent" team="B"/>
+  </agents>
+</javaAgentsConfig>

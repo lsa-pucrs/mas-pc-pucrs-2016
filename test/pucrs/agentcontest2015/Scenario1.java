@@ -3,6 +3,7 @@ package pucrs.agentcontest2015;
 import jacamo.infra.JaCaMoLauncher;
 import jason.JasonException;
 import massim.competition2015.monitor.GraphMonitor;
+import massim.javaagents.App;
 import massim.server.Server;
 import massim.test.InvalidConfigurationException;
 
@@ -20,13 +21,13 @@ public class Scenario1 {
 				GraphMonitor.main(new String[] { "-rmihost", "localhost", "-rmiport", "1099" });
 			}
 		}).start();
-		
+
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -37,13 +38,22 @@ public class Scenario1 {
 				}
 			}
 		}).start();
-		
+
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// SimpleDebugStreamAgent.actionconfformat =
+				// "conf/team-b/actionconf/%1$s-%2$d";
+				App.main(new String[] { "./conf/team-b/javaagentsconfig.xml" });
+			}
+		}).start();
+
 		try {
 			JaCaMoLauncher runner = new JaCaMoLauncher();
 			runner.init(new String[] { "test/pucrs/agentcontest2015/scenario1.jcm" });
