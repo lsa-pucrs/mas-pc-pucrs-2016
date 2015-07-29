@@ -26,8 +26,8 @@
 
 //atPlace(Lat,Lng):- lat(Lat) & lon(Lng).
 	
-has_items(JustOne) :- true. // implementar isso
-has_items([First|Others]) :- true. // implementar isso -- checar se tem todos os items da lista
+has_items([JustOne]) :- JustOne. // implementar isso
+has_items([First|Others]) :- First & has_items(Others). // implementar isso -- checar se tem todos os items da lista
 
 +!select_goal 
 	: going(L) 
@@ -53,6 +53,7 @@ has_items([First|Others]) :- true. // implementar isso -- checar se tem todos os
 +!select_goal
 	: commit(JobId) & job(JobId, StorangeId, Items) & has_items(Items) 
 <-
+	.print("#####", Items);
 	!deliver_job(JobId, StorangeId, Items);
 	.
 	
