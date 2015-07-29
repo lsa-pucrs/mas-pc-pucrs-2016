@@ -240,7 +240,7 @@ public class AgentsInterpreter implements Interpreter,AgentListener,EnvironmentL
 			} catch (RelationException e) {
 				e.printStackTrace();
 			}
-			System.out.println("associated agent \"" + agent.getName() + "\" with entity \"" + as.entity + "\"");
+//			System.out.println("associated agent \"" + agent.getName() + "\" with entity \"" + as.entity + "\"");
 
 			ei.attachAgentListener(agent.getName(), this);
 
@@ -251,7 +251,7 @@ public class AgentsInterpreter implements Interpreter,AgentListener,EnvironmentL
 		ei.attachEnvironmentListener(this);
 		
 		// free entities
-		System.out.println("free entities: " + ei.getFreeEntities());
+//		System.out.println("free entities: " + ei.getFreeEntities());
 		
 		
 	}
@@ -372,9 +372,9 @@ public class AgentsInterpreter implements Interpreter,AgentListener,EnvironmentL
 				Agent.getEnvironmentInterface().performAction(ag.getName(), action);
 			} catch (ActException e) {
 				//e.printStackTrace();
-				System.out.println("agent \"" + ag.getName() + "\" action \"" + action.toProlog() + "\" failed!");
-				System.out.println("message:" + e.getMessage());
-				System.out.println("cause:" + e.getCause());
+//				System.out.println("agent \"" + ag.getName() + "\" action \"" + action.toProlog() + "\" failed!");
+//				System.out.println("message:" + e.getMessage());
+//				System.out.println("cause:" + e.getCause());
 			}
 
 		}
@@ -382,9 +382,9 @@ public class AgentsInterpreter implements Interpreter,AgentListener,EnvironmentL
 		// print mental state
 		if ( verbose == true ) {
 			for ( Agent ag : agents.values() ) {
-				System.out.println("Agent \"" + ag.getName() + "\"");
-				System.out.println("  beliefs: " + ag.getBeliefBase());
-				System.out.println("  goals: " + ag.getGoalBase());
+//				System.out.println("Agent \"" + ag.getName() + "\"");
+//				System.out.println("  beliefs: " + ag.getBeliefBase());
+//				System.out.println("  goals: " + ag.getGoalBase());
 			}
 		}
 		

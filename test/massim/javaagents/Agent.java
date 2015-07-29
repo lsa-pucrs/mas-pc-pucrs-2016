@@ -163,9 +163,7 @@ public abstract class Agent {
 	 * @param obj
 	 */
 	protected final void println(Object obj) {
-		
-		System.out.println("Agent " + name + ": " + obj);
-		
+//		System.out.println("[" + name + "] " + obj);
 	}
 
 	/**
