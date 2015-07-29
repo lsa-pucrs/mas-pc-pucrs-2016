@@ -7,12 +7,9 @@ lowBattery :- charge(Battery) & Battery < 3000.
 
 closestFacility(List,Facility) :- .nth(0,List,Facility).
 
-append([],L,L).
-append([H|T],L2,[H|L3]) :-  append(T,L2,L3).
-
-processList([],L,L2,LR).
-processList([item(IID,_)|Items],[shop(SID,LI)|L],L2,LR) :- .member(item(IID,_,_,_),LI) & append(SID,L2,LR) & processList(Items,L,L2,LR).
-
+processList(List,[ ],Aux,List2) :- true.
+processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],Aux,List2) :- .member(item(ItemId,_,_,_),ListItems) & .concat([ShopId],List2,Result) & .print(Result) & processList([item(ItemId,_)],List,Aux,Result).
+//processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],List2) :- processList([item(ItemId,_)],List,List2).
 
 +charge(Battery)
 	: charging & chargeTotal(BatteryTotal) & BatteryTotal == Battery
@@ -20,20 +17,27 @@ processList([item(IID,_)|Items],[shop(SID,LI)|L],L2,LR) :- .member(item(IID,_,_,
 	.print("Stop charging, battery is full.");
 	-charging;
 	.
-	
+/* 	
++item(Id,Qty)[artifact_id(_)]
+	: true
+<-
+	+item(Id,Qty);
+	.
+*/	
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items) 
 	: not working(_,_,_)
 <- 
 	+working(JobId,Items,StorageId);
 	.
 	
+/*
 +working(JobId,Items,StorageId)
-	: shopsList(List) & processList(Items,List,[],Result)
+	: shopsList(List) & Aux = []
 <-
-	.print(Result);
-	
+	?processList(Items,List,Aux,Result);
+	.print("RESULT   ",Result);
 	.	
-	
+*/	
 +inFacility(Facility)[artifact_id(_)]
 	: going(GoingFacility) & Facility == GoingFacility 
 <- 
@@ -86,10 +90,27 @@ processList([item(IID,_)|Items],[shop(SID,LI)|L],L2,LR) :- .member(item(IID,_,_,
 	.
 	
 +!select_goal
+	: inFacility(shop2) & not item(base1,_)
+<-
+	.print("Buying base1");
+	!buy(base1,10);
+	+item(base1,10);
+	.
+
++!select_goal
+	: inFacility(shop2) & not item(tool1,_)
+<-
+	.print("Buying tool1");
+	!buy(tool1,1);
+	+item(tool1,1);
+	.			
+	
++!select_goal
 	: working(JobId,Items,StorageId)
 <-
-	.print("Going to shop ");
-	.		
+	.print("Going to shop2");
+	!goto(shop2);
+	.			
 
 +!select_goal 
 	: true

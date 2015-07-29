@@ -11,6 +11,18 @@
       <product id="material1" cost="139" amount="30" restock="3"/>      
     </products>
   </facility>
+  
+  <facility type="shop" id="shop2">
+    <location lat="52.3679" lon="9.7359"/>
+    <products>
+      <product id="base1" cost="5" amount="500" restock="2" />
+      <product id="base2" cost="17" amount="50" restock="3"/>
+      <product id="base3" cost="241" amount="30" restock="4"/>
+      <product id="tool1" cost="51" amount="5" restock="5"/>
+      <product id="tool2" cost="139" amount="3" restock="0"/>
+      <product id="material1" cost="139" amount="30" restock="3"/>      
+    </products>
+  </facility>  
 
   <facility type="workshop" cost="300" id="workshop1">
     <location lat="52.3589" lon="9.7499"/>
