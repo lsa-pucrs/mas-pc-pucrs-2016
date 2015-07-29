@@ -10,56 +10,18 @@
 	.print("Registering...");
 	register_freeconn;
 	.
-	
-+role("Car", _, _, _, _)
-	: not roled
-<-
-	.print("Got role: Car");
-	pucrs.agentcontest2015.env.include("car.asl");
-	+roled;
-	.wait(100);
-	!select_goal;
-	.
 
-+role("Drone", _, _, _, _)
++role(Role, Speed, LoadCap, BatteryCap, Tools)
 	: not roled
 <-
-	.print("Got role: Drone");
-	pucrs.agentcontest2015.env.include("drone.asl");
+	.print("Got role: ", Role);
+	pucrs.agentcontest2015.actions.tolower(Role, File);
+	.concat(File, ".asl", FileExt);
+	pucrs.agentcontest2015.actions.include(FileExt);
 	+roled;
 	.wait(100);
 	!select_goal;
 	.
-
-+role("Motorcycle", _, _, _, _)
-	: not roled
-<-
-	.print("Got role: Motorcycle");
-	pucrs.agentcontest2015.env.include("motorcycle.asl");
-	+roled;
-	.wait(100);
-	!select_goal;
-	.
-
-+role("Truck", _, _, _, _)
-	: not roled
-<-
-	.print("Got role: Truck");
-	pucrs.agentcontest2015.env.include("truck.asl");
-	+roled;
-	.wait(100);
-	!select_goal;
-	.
-	
-//+role(Role, Speed, LoadCap, BatteryCap, Tools)
-//	: not roled
-//<-
-//	.print("Got role: ", Role);
-//	pucrs.agentcontest2015.env.include("truck.asl");
-//	+roled;
-//	.wait(100);
-//	!select_goal;
-//	.
 	
 +role(S)
 	: not roled
