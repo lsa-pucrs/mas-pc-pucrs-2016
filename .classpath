@@ -19,7 +19,7 @@
 	<classpathentry kind="lib" path="lib/cartago.jar" sourcepath="/media/Storage/Documents/Master/repos/cartago-code/cartago/trunk"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/eis-0.3.jar"/>
+	<classpathentry kind="lib" path="lib/eis-0.3.jar" sourcepath="/media/Storage/Documents/Master/repos/eis/eis/src"/>
 	<classpathentry kind="lib" path="lib/eismassim-2.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/eismassim-2.2.jar" sourcepath="lib/eismassim-2.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/graphhopper-0.4.1.jar"/>
@@ -44,5 +44,6 @@
 	<classpathentry kind="lib" path="lib/xml-apis-1.3.04.jar"/>
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/apltk-0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
