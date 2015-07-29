@@ -10,8 +10,8 @@
 	.print("Registering...");
 	register_freeconn;
 	.
-
-+role("Car")
+	
++role("Car", _, _, _, _)
 	: not roled
 <-
 	.print("Got role: Car");
@@ -21,7 +21,7 @@
 	!select_goal;
 	.
 
-+role("Drone")
++role("Drone", _, _, _, _)
 	: not roled
 <-
 	.print("Got role: Drone");
@@ -31,7 +31,7 @@
 	!select_goal;
 	.
 
-+role("Motorcycle")
++role("Motorcycle", _, _, _, _)
 	: not roled
 <-
 	.print("Got role: Motorcycle");
@@ -41,7 +41,7 @@
 	!select_goal;
 	.
 
-+role("Truck")
++role("Truck", _, _, _, _)
 	: not roled
 <-
 	.print("Got role: Truck");
@@ -50,6 +50,16 @@
 	.wait(100);
 	!select_goal;
 	.
+	
+//+role(Role, Speed, LoadCap, BatteryCap, Tools)
+//	: not roled
+//<-
+//	.print("Got role: ", Role);
+//	pucrs.agentcontest2015.env.include("truck.asl");
+//	+roled;
+//	.wait(100);
+//	!select_goal;
+//	.
 	
 +role(S)
 	: not roled
