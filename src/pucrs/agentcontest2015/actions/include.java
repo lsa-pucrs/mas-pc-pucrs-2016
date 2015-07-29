@@ -1,4 +1,4 @@
-package pucrs.agentcontest2015.env;
+package pucrs.agentcontest2015.actions;
 
 import jason.JasonException;
 import jason.asSemantics.Agent;
