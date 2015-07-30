@@ -63,9 +63,8 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 
 @buyTools
 +!select_goal
-	: inFacility(Facility) & shopsList(List) & .member(shop(Facility,_),List) & tools(Tools) & Tools \== []
+	: inFacility(Facility) & tools(Tools) & Tools \== [] & .nth(0,Tools,Tool) &  shopsList(List) & findShops(Tool,List,[],Result) & .member(Facility,Result)
 <-
-	.nth(0,Tools,Tool);
 	.print("Buying tool: ",Tool);
 	!buy(Tool,1);
 	+item(Tool,1);
