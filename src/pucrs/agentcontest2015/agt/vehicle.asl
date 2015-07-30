@@ -23,18 +23,18 @@
 	!select_goal;
 	.
 	
-+role(S)
++role(Role)
 	: not roled
 <-
-	.print("Wat? Got role: ", S);
+	.print("Wat? Got role: ", Role);
 	.
 	
-+charge(X)[artifact_id(_)] <- -+charge(X).
++charge(Battery)[artifact_id(_)] <- -+charge(Battery).
 	
-+step(X) 
++step(Step) 
 	: true
 <-
 	.wait(100);
- 	-+lastStep(X);
+ 	-+lastStep(Step);
 	!select_goal;
 	.

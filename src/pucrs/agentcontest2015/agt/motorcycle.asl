@@ -28,6 +28,7 @@ processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],Aux,List2) :- .
 	: not working(_,_,_)
 <- 
 	+working(JobId,Items,StorageId);
+	+go(shop2);
 	.
 	
 /*
@@ -106,10 +107,11 @@ processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],Aux,List2) :- .
 	.			
 	
 +!select_goal
-	: working(JobId,Items,StorageId)
+	: working(JobId,Items,StorageId) & go(Shop)
 <-
-	.print("Going to shop2");
-	!goto(shop2);
+	.print("Going to ",Shop);
+	!goto(Shop);
+	-go(Shop);
 	.			
 
 +!select_goal 
