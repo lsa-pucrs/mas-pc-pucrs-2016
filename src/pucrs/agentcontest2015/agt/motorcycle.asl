@@ -7,9 +7,10 @@ lowBattery :- charge(Battery) & Battery < 3000.
 
 closestFacility(List,Facility) :- .nth(0,List,Facility).
 
-processList(List,[ ],Aux,List2) :- true.
-processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],Aux,List2) :- .member(item(ItemId,_,_,_),ListItems) & .concat([ShopId],List2,Result) & .print(Result) & processList([item(ItemId,_)],List,Aux,Result).
-//processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],List2) :- processList([item(ItemId,_)],List,List2).
+bestShop(Shops,Shop) :- .nth(0,Shops,Shop).
+
+findShops(ItemId,[],Aux,Result) :- Result = Aux.
+findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemId,_,_,_),ListItems) & .concat([ShopId],Aux,ResultAux) & findShops(ItemId,List,ResultAux,Result).
 
 +charge(Battery)
 	: charging & chargeTotal(BatteryTotal) & BatteryTotal == Battery
@@ -17,28 +18,25 @@ processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],Aux,List2) :- .
 	.print("Stop charging, battery is full.");
 	-charging;
 	.
-/* 	
-+item(Id,Qty)[artifact_id(_)]
-	: true
-<-
-	+item(Id,Qty);
-	.
-*/	
+
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items) 
 	: not working(_,_,_)
 <- 
 	+working(JobId,Items,StorageId);
-	+go(shop2);
-	.
-	
-/*
-+working(JobId,Items,StorageId)
-	: shopsList(List) & Aux = []
-<-
-	?processList(Items,List,Aux,Result);
-	.print("RESULT   ",Result);
 	.	
-*/	
+
++working(JobId,Items,StorageId)
+	: shopsList(List)
+<-
+	for ( .member(item(ItemId,Qty),Items) )
+	{
+		?findShops(ItemId,List,[],Result);
+		.print("Shops with item ",ItemId,": ",Result);
+		?bestShop(Result,Shop);
+		+buyList(ItemId,Qty,Shop);
+	}
+	.	
+	
 +inFacility(Facility)[artifact_id(_)]
 	: going(GoingFacility) & Facility == GoingFacility 
 <- 
@@ -62,6 +60,7 @@ processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],Aux,List2) :- .
 	-+chargingList([ChargingId|List]);
 	.
 
+@chargeAction
 +!select_goal 
 	: lowBattery & inFacility(Facility) & chargingList(List) & .member(Facility,List) & not charging  
 <- 
@@ -69,51 +68,49 @@ processList([item(ItemId,_)|Items],[shop(ShopId,ListItems)|List],Aux,List2) :- .
 	!charge;
 	. 
 
+@continueCharging
 +!select_goal 
 	: charging 
 <- 
 	.print("Keep charging."); 
 	!continue;
 	.
-	
+
+@buyAction
++!select_goal
+	: buyList(Item,Qty,Shop) & inFacility(Shop) & not item(Item,_)
+<-
+	.print("Buying ",Qty,"x item ",Item);
+	!buy(Item,Qty);
+	+item(Item,Qty);
+	-buyList(Item,Qty,Shop);
+	.	
+
+@gotoCharging	
 +!select_goal 
 	: not going(_) & lowBattery & chargingList(List) & closestFacility(List,Facility) 
 <- 
 	.print("Going to charging station ",Facility); 
 	!goto(Facility);
 	.
-
+	
+@continueGoto
 +!select_goal 
 	: going(Facility) 
 <-
 	.print("Continuing to location ",Facility); 
 	!continue;
-	.
-	
-+!select_goal
-	: inFacility(shop2) & not item(base1,_)
-<-
-	.print("Buying base1");
-	!buy(base1,10);
-	+item(base1,10);
-	.
+	.		
 
+@gotoShop
 +!select_goal
-	: inFacility(shop2) & not item(tool1,_)
-<-
-	.print("Buying tool1");
-	!buy(tool1,1);
-	+item(tool1,1);
-	.			
-	
-+!select_goal
-	: working(JobId,Items,StorageId) & go(Shop)
+	: working(JobId,Items,StorageId) & buyList(Item,Qty,Shop)
 <-
 	.print("Going to ",Shop);
 	!goto(Shop);
-	-go(Shop);
 	.			
 
+@skipAction
 +!select_goal 
 	: true
 <-
