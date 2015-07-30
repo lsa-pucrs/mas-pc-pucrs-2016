@@ -22,6 +22,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items) 
 	: not working(_,_,_)
 <- 
+	.print("New job: ",JobId," Items: ",Items);
 	+working(JobId,Items,StorageId);
 	.	
 
@@ -58,6 +59,30 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	:  chargingList(List) & not .member(ChargingId,List) 
 <- 
 	-+chargingList([ChargingId|List]);
+	.
+
+@buyTools
++!select_goal
+	: inFacility(Facility) & shopsList(List) & .member(shop(Facility,_),List) & tools(Tools) & Tools \== []
+<-
+	.nth(0,Tools,Tool);
+	.print("Buying tool: ",Tool);
+	!buy(Tool,1);
+	+item(Tool,1);
+	-tools(Tools);
+	.delete(0,Tools,ToolsNew);
+	+tools(ToolsNew);
+	.	
+		
+@goBuyTools
++!select_goal
+	: tools(Tools) & Tools \== [] & shopsList(List) & not going(_)
+<-
+	.nth(0,Tools,Tool);
+	?findShops(Tool,List,[],Result);
+	?bestShop(Result,Shop);
+	.print("Going to shop: ",Shop," to buy tool: ",Tool);
+	!goto(Shop);
 	.
 
 @chargeAction

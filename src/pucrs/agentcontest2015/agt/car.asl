@@ -1,3 +1,10 @@
++!select_goal 
+	: true
+<-
+	.print("Nothing to do at this step");
+	!skip;
+	.
+/* 
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
 	: true
 <-
@@ -67,3 +74,4 @@
 	.print("Nothing to do at this step");
 	!skip;
 	.
+*/

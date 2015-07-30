@@ -15,6 +15,7 @@
 	: not roled
 <-
 	.print("Got role: ", Role);
+	+tools(Tools);
 	pucrs.agentcontest2015.actions.tolower(Role, File);
 	.concat(File, ".asl", FileExt);
 	pucrs.agentcontest2015.actions.include(FileExt);
