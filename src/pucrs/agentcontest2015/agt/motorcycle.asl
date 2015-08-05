@@ -1,6 +1,7 @@
 chargingList([]).
 chargeTotal(3500).
 shopsList([]).
+workshopList([]).
 itemList([]).
 
 lowBattery :- charge(Battery) & Battery < 3000.
@@ -22,7 +23,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items) 
 	: not working(_,_,_)
 <- 
-	.print("New job: ",JobId," Items: ",Items);
+	.print("New job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	+working(JobId,Items,StorageId);
 	.	
 
@@ -31,12 +32,13 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 <-
 	for ( .member(item(ItemId,Qty),Items) )
 	{
+		-+itemList([item(ItemId,Qty)|Items]);
 		?findShops(ItemId,List,[],Result);
 		.print("Shops with item ",ItemId,": ",Result);
 		?bestShop(Result,Shop);
 		+buyList(ItemId,Qty,Shop);
 	}
-	.	
+	.
 	
 +inFacility(Facility)[artifact_id(_)]
 	: going(GoingFacility) & Facility == GoingFacility 
@@ -60,6 +62,14 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 <- 
 	-+chargingList([ChargingId|List]);
 	.
+	
+@workshopList[atomic]
++workshop(WorkshopId,Lat,Lng,Price) 
+	:  workshopList(List) & not .member(WorkshopId,List) 
+<- 
+	.print("Workshop percept: ",WorkshopId);
+	-+workshopList([WorkshopId|List]);
+	.	
 
 @buyTools
 +!select_goal
@@ -71,7 +81,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	-tools(Tools);
 	.delete(0,Tools,ToolsNew);
 	+tools(ToolsNew);
-	.	
+	.
 		
 @goBuyTools
 +!select_goal
@@ -92,6 +102,16 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	!charge;
 	. 
 
+@deliverJob
++!select_goal 
+	: working(JobId,Items,StorageId) & inFacility(StorageId) 
+<- 
+	.print("In facility ", StorangeId, " to deliver job ", JobId);
+	!deliver_job(JobId);
+	-working(JobId,Items,StorageId);
+	.print("Job ", JobId, " has been delivered.");
+	.
+
 @continueCharging
 +!select_goal 
 	: charging 
@@ -108,7 +128,23 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	!buy(Item,Qty);
 	+item(Item,Qty);
 	-buyList(Item,Qty,Shop);
-	.	
+	.
+	
+@gotoWorkshop
++!select_goal
+	: working(JobId,Items,StorageId) & inFacility(Shop) & not buyList(_,_,_) & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & assembleItems
+<-
+	.print("I bought all items in the buyList, now I'm going to workshop ", Facility);
+	!goto(Facility);
+	.
+
+@gotoStorageToDeliverJob
++!select_goal
+	: working(JobId,Items,StorageId) & inFacility(Shop) & not buyList(_,_,_) & not going(_)
+<-
+	.print("I bought all items in the buyList, now I'm going to deliver the job ", StorageId);
+	!goto(StorageId);
+	.
 
 @gotoCharging	
 +!select_goal 
