@@ -8,7 +8,8 @@
       <product id="base3" cost="241" amount="30" restock="4"/>
       <product id="tool1" cost="51" amount="5" restock="5"/>
       <product id="tool2" cost="139" amount="3" restock="0"/>
-      <product id="tool3" cost="139" amount="3" restock="0"/>         
+      <product id="tool3" cost="139" amount="3" restock="0"/>      
+      <product id="material1" cost="139" amount="30" restock="3"/>      
     </products>
   </facility>
   
@@ -20,7 +21,8 @@
       <product id="base3" cost="241" amount="30" restock="4"/>
       <product id="tool1" cost="51" amount="5" restock="5"/>
       <product id="tool2" cost="139" amount="3" restock="0"/>
-      <product id="tool3" cost="139" amount="3" restock="0"/>               
+      <product id="tool3" cost="139" amount="3" restock="0"/>      
+      <product id="material1" cost="139" amount="30" restock="3"/>      
     </products>
   </facility>  
 

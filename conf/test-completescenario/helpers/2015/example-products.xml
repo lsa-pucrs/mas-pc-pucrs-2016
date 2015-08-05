@@ -1,8 +1,7 @@
 <products>
   <product id="material1" volume="10" userAssembled="true">
     <requirements>
-      <product id="base1" amount="2" consumed="true"/>
-      <product id="base2" amount="2" consumed="true"/>      
+      <product id="base1" amount="5" consumed="true"/>
       <product id="tool1" amount="1" consumed="false"/>
     </requirements>
   </product>
