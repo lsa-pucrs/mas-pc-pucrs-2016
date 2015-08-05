@@ -130,29 +130,13 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	-buyList(Item,Qty,Shop);
 	.
 	
-@gotoWorkshop
-+!select_goal
-	: working(JobId,Items,StorageId) & inFacility(Shop) & not buyList(_,_,_) & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & assembleItems
-<-
-	.print("I bought all items in the buyList, now I'm going to workshop ", Facility);
-	!goto(Facility);
-	.
-
-@gotoStorageToDeliverJob
-+!select_goal
-	: working(JobId,Items,StorageId) & inFacility(Shop) & not buyList(_,_,_) & not going(_)
-<-
-	.print("I bought all items in the buyList, now I'm going to deliver the job ", StorageId);
-	!goto(StorageId);
-	.
-
 @gotoCharging	
 +!select_goal 
 	: not going(_) & lowBattery & chargingList(List) & closestFacility(List,Facility) 
 <- 
 	.print("Going to charging station ",Facility); 
 	!goto(Facility);
-	.
+	.	
 	
 @continueGoto
 +!select_goal 
@@ -161,14 +145,30 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	.print("Continuing to location ",Facility); 
 	!continue;
 	.		
-
+	
 @gotoShop
 +!select_goal
 	: working(JobId,Items,StorageId) & buyList(Item,Qty,Shop)
 <-
 	.print("Going to ",Shop);
 	!goto(Shop);
-	.			
+	.		
+	
+@gotoWorkshop
++!select_goal
+	: working(JobId,Items,StorageId) & not buyList(_,_,_) & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & assembleItems
+<-
+	.print("I have all items in the buyList, now I'm going to workshop ", Facility);
+	!goto(Facility);
+	.
+
+@gotoStorageToDeliverJob
++!select_goal
+	: working(JobId,Items,StorageId) & not buyList(_,_,_) & not going(_)
+<-
+	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
+	!goto(StorageId);
+	.		
 
 @skipAction
 +!select_goal 
