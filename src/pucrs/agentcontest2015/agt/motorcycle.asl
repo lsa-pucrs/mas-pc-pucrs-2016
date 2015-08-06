@@ -3,7 +3,6 @@ chargeTotal(3500).
 shopsList([]).
 workshopList([]).
 assembleList([]).
-item(material1,0).
 
 lowBattery :- charge(Battery) & Battery < 3000.
 
@@ -17,15 +16,12 @@ verifyItems([item(ItemId,Qty)|List]) :- item(ItemId,Qty) & verifyItems(List).
 findShops(ItemId,[],Aux,Result) :- Result = Aux.
 findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemId,_,_,_),ListItems) & .concat([ShopId],Aux,ResultAux) & findShops(ItemId,List,ResultAux,Result).
 
-
 @product[atomic]
 +product(ProductId, Volume, BaseList)[artifact_id(_)]
 	: not product(ProductId, Volume, BaseList)
 <-
 	+product(ProductId, Volume, BaseList);
-	//.print("---------------------------------------");
-	//.print("Produto ", ProductId," Base List",BaseList);
-	//.print("---------------------------------------");
+	+item(ProductId,0);
 	.
 
 +charge(Battery)
@@ -50,16 +46,16 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 		} else {
 				for ( .range(I,1,Qty) ) {
 					?assembleList(ListAssemble);
-					-+assembleList([ItemId|ListAssemble]);
-				}
-				for ( .member(consumed(ItemId2,Qty2),BaseList) )
-				{
-					?product(ItemdId2,Volume2,BaseList2);
-					if (BaseList2 == [])
+					-+assembleList([ItemId|ListAssemble]);				
+					for ( .member(consumed(ItemId2,Qty2),BaseList) )
 					{
-						?baseListJob(List2);
-						-+baseListJob([item(ItemId2,Qty2)|List2]);
-						.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
+						?product(ItemdId2,Volume2,BaseList2);
+						if (BaseList2 == [])
+						{
+							?baseListJob(List2);
+							-+baseListJob([item(ItemId2,Qty2)|List2]);
+							.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
+						}
 					}
 				}
 		}
@@ -70,13 +66,19 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +working(JobId,Items2,StorageId)
 	: shopsList(List) & baseListJob(Items)
 <-
-	-baseListJob(_);
+	-baseListJob(_);	
 	for ( .member(item(ItemId,Qty),Items) )
 	{
 		?findShops(ItemId,List,[],Result);
 		.print("Shops with item ",ItemId,": ",Result);
 		?bestShop(Result,Shop);
-		+buyList(ItemId,Qty,Shop);
+		if (buyList(ItemId,Qty2,Shop))
+		{
+			-buyList(ItemId,Qty2,Shop);
+			+buyList(ItemId,Qty+Qty2,Shop);			
+		} else {
+			+buyList(ItemId,Qty,Shop);		
+		}
 	}
 	.	
 	
@@ -107,13 +109,12 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +workshop(WorkshopId,Lat,Lng,Price) 
 	:  workshopList(List) & not .member(WorkshopId,List) 
 <- 
-	.print("Workshop percept: ",WorkshopId);
 	-+workshopList([WorkshopId|List]);
 	.	
 
 @buyTools
 +!select_goal
-	: inFacility(Facility) & tools(Tools) & Tools \== [] & .nth(0,Tools,Tool) &  shopsList(List) & findShops(Tool,List,[],Result) & .member(Facility,Result) & not item(Tool,_)
+	: inFacility(Facility) & tools(Tools) & Tools \== [] & .nth(0,Tools,Tool) &  shopsList(List) & findShops(Tool,List,[],Result) & .member(Facility,Result) & not item(Tool,1)
 <-
 	.print("Buying tool: ",Tool);
 	!buy(Tool,1);
@@ -136,11 +137,12 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	
 @buyAction
 +!select_goal
-	: buyList(Item,Qty,Shop) & inFacility(Shop) & not item(Item,_)
+	: buyList(Item,Qty,Shop) & inFacility(Shop) & item(Item,Qty2)
 <-
 	.print("Buying ",Qty,"x item ",Item);
 	!buy(Item,Qty);
-	+item(Item,Qty);
+	-item(Item,Qty);
+	+item(Item,Qty2);
 	-buyList(Item,Qty,Shop);
 	.
 
@@ -214,7 +216,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	
 @gotoWorkshop
 +!select_goal
-	: working(JobId,Items,StorageId) & assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_)
+	: working(JobId,Items,StorageId) & assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_)
 <-
 	.print("I'm going to workshop ", Facility);
 	!goto(Facility);
@@ -222,7 +224,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 
 @gotoStorageToDeliverJob
 +!select_goal
-	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_)
+	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_)
 <-
 	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
 	!goto(StorageId);
