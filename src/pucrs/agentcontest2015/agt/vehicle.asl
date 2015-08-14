@@ -20,7 +20,7 @@
 	.concat(File, ".asl", FileExt);
 	pucrs.agentcontest2015.actions.include(FileExt);
 	+roled;
-	.wait(100);
+	.wait(500);
 	!select_goal;
 	.
 	

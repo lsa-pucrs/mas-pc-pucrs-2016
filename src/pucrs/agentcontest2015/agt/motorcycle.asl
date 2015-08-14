@@ -42,7 +42,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 		if (BaseList == []) {
 			?baseListJob(List2);
 			-+baseListJob([item(ItemId,Qty)|List2]);
-			.print("Adding item ",ItemId," to base list job.");
+			//.print("Adding item ",ItemId," to base list job.");
 		} else {
 				for ( .range(I,1,Qty) ) {
 					?assembleList(ListAssemble);
@@ -54,7 +54,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 						{
 							?baseListJob(List2);
 							-+baseListJob([item(ItemId2,Qty2)|List2]);
-							.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
+							//.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
 						}
 					}
 				}
@@ -70,7 +70,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	for ( .member(item(ItemId,Qty),Items) )
 	{
 		?findShops(ItemId,List,[],Result);
-		.print("Shops with item ",ItemId,": ",Result);
+		//.print("Shops with item ",ItemId,": ",Result);
 		?bestShop(Result,Shop);
 		if (buyList(ItemId,Qty2,Shop))
 		{
@@ -158,7 +158,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +!select_goal 
 	: working(JobId,Items,StorageId) & inFacility(StorageId) 
 <- 
-	.print("In facility ", StorageId, " to deliver job ", JobId);
+	//.print("In facility ", StorageId, " to deliver job ", JobId);
 	!deliver_job(JobId);
 	-working(JobId,Items,StorageId);
 	+jobDone(JobId);
