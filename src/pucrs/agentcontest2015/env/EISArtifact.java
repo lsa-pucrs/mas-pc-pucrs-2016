@@ -170,6 +170,7 @@ public class EISArtifact extends Artifact {
 	});
 
 	public static List<Percept> agentise( String agent, Collection<Percept> perceptions ){
+		// TODO change entity name (a1) to Jason agent name (vehicle1)
 		List<Percept> list = new ArrayList<Percept>();
 		for(Percept perception : perceptions){
 			if(agentise.contains(perception.getName())){
