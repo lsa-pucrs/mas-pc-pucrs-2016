@@ -138,6 +138,7 @@ public class EISArtifact extends Artifact {
 					e.printStackTrace();
 				}
 			}
+			signal("ok");
 			for (Percept percept : leader_percepts) {
 				String name = percept.getName();
 				Literal literal = Translator.perceptToLiteral(percept);

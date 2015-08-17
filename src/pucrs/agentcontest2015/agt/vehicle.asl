@@ -35,7 +35,7 @@
 +step(Step) 
 	: true
 <-
-	.wait(100);
+	.wait({+ok});
  	-+lastStep(Step);
 	!select_goal;
 	.
