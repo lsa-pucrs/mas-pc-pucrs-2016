@@ -68,6 +68,7 @@ public class EISArtifact extends Artifact {
 		execInternalOp("receiving");
 	}
 	
+/*
 	private static AgentId leader;
 	
 	@OPERATION
@@ -75,6 +76,7 @@ public class EISArtifact extends Artifact {
 		leader = getOpUserId();
 		System.out.println("Registering leader: " + leader.getAgentName());
 	}
+*/
 
 	@OPERATION
 	void register() throws EntityException {
@@ -120,13 +122,13 @@ public class EISArtifact extends Artifact {
 
 	@INTERNAL_OPERATION
 	void receiving() throws JasonException {
-		Set<Percept> leader_percepts = new HashSet<Percept>();
+		//Set<Percept> leader_percepts = new HashSet<Percept>();
 		while (receiving) {
-			leader_percepts.clear();
+			//leader_percepts.clear();
 			for (String agent : ei.getAgents()) {
 				try {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
-					leader_percepts.addAll(agentise(agent, percepts));
+					//leader_percepts.addAll(agentise(agent, percepts));
 					for (Percept percept : filter(percepts)) {
 						String name = percept.getName();
 						Literal literal = Translator.perceptToLiteral(percept);
@@ -139,11 +141,13 @@ public class EISArtifact extends Artifact {
 				}
 			}
 			signal("ok");
+/*
 			for (Percept percept : leader_percepts) {
 				String name = percept.getName();
 				Literal literal = Translator.perceptToLiteral(percept);
 				signal(leader, name, (Object[]) literal.getTermsArray());
 			}
+*/
 			await_time(100);
 		}
 	}
@@ -152,7 +156,7 @@ public class EISArtifact extends Artifact {
 	void stopReceiving() {
 		receiving = false;
 	}
-
+/*
 	static List<String> agentise = Arrays.asList(new String[]{
 		"charge",
 		"fPosition",
@@ -184,31 +188,34 @@ public class EISArtifact extends Artifact {
 		}
 		return list;
 	}
-	
+*/	
 	static List<String> agent_filter = Arrays.asList(new String[]{
 		"charge",
-		"entity",
-		"fPosition",
+//		"entity",
+//		"fPosition",
 		"inFacility",
 		"item",
-		"lastAction",
-		"lastActionParam",
-		"lastActionResult",
-		"lat",
+//		"lastAction",
+//		"lastActionParam",
+//		"lastActionResult",
+//		"lat",
 		"load",
-		"lon",
-		"requestAction",
+//		"lon",
+//		"requestAction",
 		"role",
-		"route",
-		"routeLength",
-		"team",
-		"timestamp",
-		
+		"step",
+//		"route",
+//		"routeLength",
+//		"team",
+//		"timestamp",		
+
+		"pricedJob",
+		"product",		
 		"shop",
 		"storage",
 		"workshop",
 		"chargingStation",
-		"dump",
+		//"dump",
 	});
 	
 	public static List<Percept> filter( Collection<Percept> perceptions ){

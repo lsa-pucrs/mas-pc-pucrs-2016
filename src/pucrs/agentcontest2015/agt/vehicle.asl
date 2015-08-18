@@ -20,8 +20,8 @@
 	.concat(File, ".asl", FileExt);
 	pucrs.agentcontest2015.actions.include(FileExt);
 	+roled;
-	.wait(500);
-	!select_goal;
+	//.wait({+ok});
+	//!select_goal;
 	.
 	
 +role(Role)
@@ -33,7 +33,7 @@
 +charge(Battery)[artifact_id(_)] <- -+charge(Battery).
 	
 +step(Step) 
-	: true
+	: roled
 <-
 	.wait({+ok});
  	-+lastStep(Step);
