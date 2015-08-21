@@ -12,20 +12,20 @@
 	.
 
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
-	: not roled
+	: not roled(_, _, _, _, _)
 <-
 	.print("Got role: ", Role);
 	+tools(Tools);
 	pucrs.agentcontest2015.actions.tolower(Role, File);
 	.concat(File, ".asl", FileExt);
 	pucrs.agentcontest2015.actions.include(FileExt);
-	+roled;
+	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
 	//.wait({+ok});
 	//!select_goal;
 	.
 	
 +role(Role)
-	: not roled
+	: not roled(_, _, _, _, _)
 <-
 	.print("Wat? Got role: ", Role);
 	.
@@ -33,7 +33,7 @@
 +charge(Battery)[artifact_id(_)] <- -+charge(Battery).
 	
 +step(Step) 
-	: roled
+	: roled(_, _, _, _, _)
 <-
 	.wait({+ok});
  	-+lastStep(Step);

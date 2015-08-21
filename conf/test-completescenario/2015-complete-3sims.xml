@@ -25,7 +25,7 @@
 
 		<simulation id="2015-tournament-sim1of3">
 		
-			<configuration maxNumberOfSteps="500" map="hannover"
+			<configuration maxNumberOfSteps="150" map="hannover"
 				seedcapital="500000" interest="2" minLon="9.7051" minLat="52.3526"
 				maxLon="9.7686" maxLat="52.3783" proximity="0.0002" cellSize="0.001">
 
@@ -126,7 +126,7 @@
 		</simulation>
 
 		<simulation id="2015-tournament-sim2of3">
-			<configuration maxNumberOfSteps="200" map="london"
+			<configuration maxNumberOfSteps="150" map="london"
 				seedcapital="500000" interest="2" minLon="-0.1978" minLat="51.4647"
 				maxLon="-0.0354" maxLat="51.5223" proximity="0.0002" cellSize="0.001">
 
@@ -150,8 +150,8 @@
 							<tool id="tool1" />
 						</tools>
 					</role>
-					<role name="Motorcycle" speed="4" loadCapacity="300"
-						batteryCapacity="350">
+					<role name="Motorcycle" speed="4" loadCapacity="3000"
+						batteryCapacity="3500">
 						<roads>
 							<road name="road" />
 						</roads>
@@ -228,7 +228,7 @@
 
 		<simulation id="2015-tournament-sim3of3">
 		
-			<configuration maxNumberOfSteps="200" map="clausthal"
+			<configuration maxNumberOfSteps="150" map="clausthal"
 				seedcapital="500000" interest="2" minLon="10.3264" minLat="51.7959"
 				maxLon="10.3641" maxLat="51.8122" proximity="0.0002" cellSize="0.001">
 
@@ -252,8 +252,8 @@
 							<tool id="tool1" />
 						</tools>
 					</role>
-					<role name="Motorcycle" speed="4" loadCapacity="300"
-						batteryCapacity="350">
+					<role name="Motorcycle" speed="4" loadCapacity="3000"
+						batteryCapacity="3500">
 						<roads>
 							<road name="road" />
 						</roads>
@@ -275,8 +275,8 @@
 				</roles>
 
 				&products;
-        		&facilitiesl;
-        		&jobsl;
+        		&facilities;
+        		&jobs;
 
 			</configuration>
 

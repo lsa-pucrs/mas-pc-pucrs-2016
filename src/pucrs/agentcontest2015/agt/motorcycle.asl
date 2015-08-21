@@ -16,9 +16,29 @@ verifyItems([item(ItemId,Qty)|List]) :- item(ItemId,Qty) & verifyItems(List).
 findShops(ItemId,[],Aux,Result) :- Result = Aux.
 findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemId,_,_,_),ListItems) & .concat([ShopId],Aux,ResultAux) & findShops(ItemId,List,ResultAux,Result).
 
++simEnd
+	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art(WS,Art,ArtId) & jcm__ws(WSname2,WSid2)
+<-
+	.print("-------------------- END OF THE ROUND ----------------");
+	.abolish(_[source(self)]);
+    .drop_all_intentions;
+    .drop_all_desires;	
+	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
+	+tools(Tools);
+	+chargingList([]);
+	+chargeTotal(3500);
+	+shopsList([]);
+	+workshopList([]);
+	+assembleList([]);
+	+verifyItems([]);
+	+current_wsp(WSid,WSname,WScode); 
+	+jcm__art(WS,Art,ArtId);
+	+jcm__ws(WSname2,WSid2);
+	.
+
 @product[atomic]
 +product(ProductId, Volume, BaseList)[artifact_id(_)]
-	: not product(ProductId, Volume, BaseList)
+	: not product(ProductId, _, _)
 <-
 	+product(ProductId, Volume, BaseList);
 	+item(ProductId,0);
@@ -66,7 +86,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +working(JobId,Items2,StorageId)
 	: shopsList(List) & baseListJob(Items)
 <-
-	-baseListJob(_);	
+	//-baseListJob(_);	
 	for ( .member(item(ItemId,Qty),Items) )
 	{
 		?findShops(ItemId,List,[],Result);
@@ -118,6 +138,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 <-
 	.print("Buying tool: ",Tool);
 	!buy(Tool,1);
+	-item(Tool,0);
 	+item(Tool,1);
 	-tools(Tools);
 	.delete(0,Tools,ToolsNew);
@@ -141,8 +162,8 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 <-
 	.print("Buying ",Qty,"x item ",Item);
 	!buy(Item,Qty);
-	-item(Item,Qty);
-	+item(Item,Qty2);
+	-item(Item,Qty2);
+	+item(Item,Qty+Qty2);
 	-buyList(Item,Qty,Shop);
 	.
 
@@ -165,6 +186,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	.print("Job ", JobId, " has been delivered.");
 	for ( .member(item(ItemId,Qty),Items))  {
 		-item(ItemId,Qty);
+		+item(ItemId,0);
 	}
 	.
 	
@@ -179,7 +201,8 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	.delete(0,ListAssemble,ListAssembleNew);
 	+assembleList(ListAssembleNew);
 	?item(ItemId,Qty);
-	-+item(ItemId,Qty+1);
+	-item(ItemId,Qty);
+	+item(ItemId,Qty+1);
 	.
 
 @continueCharging
@@ -224,8 +247,15 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 
 @gotoStorageToDeliverJob
 +!select_goal
-	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_)
+	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_) & baseListJob(Bases)
 <-
+	// clearing bases used to assemble
+	-baseListJob(_);
+	for ( .member(item(ItemId,Qty),Bases))  {
+		?item(ItemId,Qty2);
+		-item(ItemId,Qty2);
+		+item(ItemId,Qty2-Qty);
+	};
 	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
 	!goto(StorageId);
 	.		

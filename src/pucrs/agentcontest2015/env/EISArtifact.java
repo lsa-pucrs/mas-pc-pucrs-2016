@@ -151,6 +151,11 @@ public class EISArtifact extends Artifact {
 			await_time(100);
 		}
 	}
+	
+	@OPERATION
+	void reset() {	
+		
+	}
 
 	@OPERATION
 	void stopReceiving() {
@@ -209,6 +214,8 @@ public class EISArtifact extends Artifact {
 //		"team",
 //		"timestamp",		
 
+		"simEnd",		
+		"auctionJob",		
 		"pricedJob",
 		"product",		
 		"shop",
