@@ -148,6 +148,14 @@ public class EISArtifact extends Artifact {
 				signal(leader, name, (Object[]) literal.getTermsArray());
 			}
 */
+			/* exemplo de propriedade observavel
+			private String propertyName = "set_a_name"; //nome da propriedade
+			defineObsProperty(propertyName, 0); //define a new observable property and sets initial value
+			...
+			ObsProperty prop = getObsProperty(propertyName); //get current value of observable property
+			prop.updateValues(0); //updates current value of property (I am almost sure that this command generates a signal automatically)
+			signal(propertyName);
+			*/
 			await_time(100);
 		}
 	}
