@@ -18,7 +18,17 @@
       <product id="base2" amount="2" consumed="true"/>
       <product id="base3" amount="1" consumed="true"/>
       <product id="tool1" amount="1" consumed="false"/>
-      <product id="tool2" amount="1" consumed="false"/>
+      <product id="tool3" amount="1" consumed="false"/>
+    </requirements>
+  </product>
+  <product id="material4" volume="200" userAssembled="true">
+    <requirements>
+      <product id="material1" amount="2" consumed="true"/>
+      <product id="material3" amount="2" consumed="true"/>
+      <product id="material2" amount="2" consumed="true"/>
+      <product id="base2" amount="2" consumed="true"/>
+      <product id="base3" amount="1" consumed="true"/>
+      <product id="tool1" amount="1" consumed="false"/>
       <product id="tool3" amount="1" consumed="false"/>
     </requirements>
   </product>
