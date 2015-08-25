@@ -108,6 +108,40 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	-+workshopList([WorkshopId|List]);
 	.	
 
+//@decomp
+//+!decomp(JobId,Items,StorageId)
+//	: true
+//<-
+//	+baseListJob([]);
+//	for ( .member(item(ItemId,Qty),Items) )
+//	{
+//		?product(ItemId,Volume,BaseList);
+//		if (BaseList == []) {
+//			?baseListJob(List2);
+//			-+baseListJob([item(ItemId,Qty)|List2]);
+//			//.print("Adding item ",ItemId," to base list job.");
+//		} else {
+//				for ( .range(I,1,Qty) ) {
+//					?assembleList(ListAssemble);
+//					-+assembleList([ItemId|ListAssemble]);				
+//					for ( .member(consumed(ItemId2,Qty2),BaseList) )
+//					{
+//						?product(ItemdId2,Volume2,BaseList2);
+//						if (BaseList2 == [])
+//						{
+//							?baseListJob(List2);
+//							-+baseListJob([item(ItemId2,Qty2)|List2]);
+//							//.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
+//						}
+//					}
+//				}
+//		}
+//	}		
+//	+working(JobId,Items,StorageId);
+//	.
+
+//############################################################################
+
 @decomp
 +!decomp(JobId,Items,StorageId)
 	: true
@@ -116,29 +150,31 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	for ( .member(item(ItemId,Qty),Items) )
 	{
 		?product(ItemId,Volume,BaseList);
-		if (BaseList == []) {
-			?baseListJob(List2);
-			-+baseListJob([item(ItemId,Qty)|List2]);
-			//.print("Adding item ",ItemId," to base list job.");
-		} else {
-				for ( .range(I,1,Qty) ) {
-					?assembleList(ListAssemble);
-					-+assembleList([ItemId|ListAssemble]);				
-					for ( .member(consumed(ItemId2,Qty2),BaseList) )
-					{
-						?product(ItemdId2,Volume2,BaseList2);
-						if (BaseList2 == [])
-						{
-							?baseListJob(List2);
-							-+baseListJob([item(ItemId2,Qty2)|List2]);
-							//.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
-						}
-					}
-				}
-		}
+		!decomp_2(ItemId,Qty,BaseList);
 	}		
 	+working(JobId,Items,StorageId);
 	.
+	
+@atomic	
++!decomp_2(ItemId,Qty,BaseList)
+	: true 
+<- 
+	if (BaseList == []) {
+			?baseListJob(List2);
+			-+baseListJob([item(ItemId,Qty)|List2]);
+	} else {
+			for ( .range(I,1,Qty) ) {
+				?assembleList(ListAssemble);
+				-+assembleList([ItemId|ListAssemble]);				
+				for ( .member(consumed(ItemId2,Qty2),BaseList) )
+				{
+					?product(ItemId2,Volume2,BaseList2);
+					!decomp_2(ItemId2,Qty2,BaseList2);
+				}
+			}
+	}.
+	
+//############################################################################
 
 @remember
 +!select_goal
