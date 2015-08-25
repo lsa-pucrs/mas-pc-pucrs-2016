@@ -49,7 +49,7 @@
 							<tool id="tool1" />
 						</tools>
 					</role>
-					<role name="Motorcycle" speed="4" loadCapacity="3000"
+					<role name="Motorcycle" speed="4" loadCapacity="30000"
 						batteryCapacity="3500">
 						<roads>
 							<road name="road" />
