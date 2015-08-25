@@ -1,21 +1,19 @@
 <jobs>
-  <job id="job1" type="auction" firstStepAuction="50" firstStepActive="60" lastStepActive="200" fine="10000" maxReward="20000" storageId="storage1">
+  <job id="job1" type="auction" firstStepAuction="100" firstStepActive="110" lastStepActive="160" fine="10000" maxReward="20000" storageId="storage1">
     <products>
       <product id="material1" amount="3"/>
-      <product id="material2" amount="3"/>
     </products>
   </job>
 
-  <job id="job2" type="priced" firstStepActive="3" lastStepActive="450" reward="10000" storageId="storage1">
+  <job id="job2" type="priced" firstStepActive="3" lastStepActive="140" reward="10000" storageId="storage1">
     <products>
       <product id="material1" amount="2"/>
     </products>
   </job>
 
-  <job id="job3" type="auction" firstStepAuction="10" firstStepActive="20" lastStepActive="200" fine="10000" maxReward="20000" storageId="storage1">
+  <job id="job3" type="auction" firstStepAuction="50" firstStepActive="60" lastStepActive="140" fine="10000" maxReward="20000" storageId="storage1">
     <products>
       <product id="material1" amount="3"/>
-      <product id="material2" amount="3"/>
     </products>
   </job>
 </jobs>

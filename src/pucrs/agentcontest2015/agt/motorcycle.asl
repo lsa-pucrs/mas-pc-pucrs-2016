@@ -1,10 +1,9 @@
 chargingList([]).
-chargeTotal(3500).
 shopsList([]).
 workshopList([]).
 assembleList([]).
 
-lowBattery :- charge(Battery) & Battery < 3000.
+lowBattery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
 
 closestFacility(List,Facility) :- .nth(0,List,Facility).
 
@@ -19,29 +18,14 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +simEnd
 	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art(WS,Art,ArtId) & jcm__ws(WSname2,WSid2)
 <-
-	.print("-------------------- END OF THE ROUND ----------------");
-	.abolish(_[source(self)]);
-    .drop_all_intentions;
-    .drop_all_desires;	
+	!end_round;
+	!new_round;
 	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
 	+tools(Tools);
-	+chargingList([]);
-	+chargeTotal(3500);
-	+shopsList([]);
-	+workshopList([]);
-	+assembleList([]);
-	+verifyItems([]);
+	+chargeTotal(BatteryCap);
 	+current_wsp(WSid,WSname,WScode); 
 	+jcm__art(WS,Art,ArtId);
 	+jcm__ws(WSname2,WSid2);
-	.
-
-@product[atomic]
-+product(ProductId, Volume, BaseList)[artifact_id(_)]
-	: not product(ProductId, _, _)
-<-
-	+product(ProductId, Volume, BaseList);
-	+item(ProductId,0);
 	.
 
 +charge(Battery)
@@ -50,37 +34,29 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	.print("Stop charging, battery is full.");
 	-charging;
 	.
+	
++jobTaken(JobId)
+	: auctionJob(JobId,Items,StorageId) & not working(_,_,_) & not jobDone(JobId)
+<-
+	.print("We won the auction for job ",JobId,"!");
+	-auctionJob(JobId,Items,StorageId);
+	!decomp(JobId,Items,StorageId);
+	.
 
+@auctionJob[atomic]
++auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
+	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId)
+<- 
+	Bid = 1000;
+	+bid(JobId,Bid,Items,StorageId);
+	.
+	
+@pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
 	: not working(_,_,_) & not jobDone(JobId)
 <- 
-	.print("New job: ",JobId," Items: ",Items, " Storage: ", StorageId);
-	+baseListJob([]);
-	for ( .member(item(ItemId,Qty),Items) )
-	{
-		?product(ItemId,Volume,BaseList);
-		if (BaseList == []) {
-			?baseListJob(List2);
-			-+baseListJob([item(ItemId,Qty)|List2]);
-			//.print("Adding item ",ItemId," to base list job.");
-		} else {
-				for ( .range(I,1,Qty) ) {
-					?assembleList(ListAssemble);
-					-+assembleList([ItemId|ListAssemble]);				
-					for ( .member(consumed(ItemId2,Qty2),BaseList) )
-					{
-						?product(ItemdId2,Volume2,BaseList2);
-						if (BaseList2 == [])
-						{
-							?baseListJob(List2);
-							-+baseListJob([item(ItemId2,Qty2)|List2]);
-							//.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
-						}
-					}
-				}
-		}
-	}	
-	+working(JobId,Items,StorageId);
+	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
+	!decomp(JobId,Items,StorageId);
 	.	
 
 +working(JobId,Items2,StorageId)
@@ -132,6 +108,68 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 	-+workshopList([WorkshopId|List]);
 	.	
 
+@decomp
++!decomp(JobId,Items,StorageId)
+	: true
+<-
+	+baseListJob([]);
+	for ( .member(item(ItemId,Qty),Items) )
+	{
+		?product(ItemId,Volume,BaseList);
+		if (BaseList == []) {
+			?baseListJob(List2);
+			-+baseListJob([item(ItemId,Qty)|List2]);
+			//.print("Adding item ",ItemId," to base list job.");
+		} else {
+				for ( .range(I,1,Qty) ) {
+					?assembleList(ListAssemble);
+					-+assembleList([ItemId|ListAssemble]);				
+					for ( .member(consumed(ItemId2,Qty2),BaseList) )
+					{
+						?product(ItemdId2,Volume2,BaseList2);
+						if (BaseList2 == [])
+						{
+							?baseListJob(List2);
+							-+baseListJob([item(ItemId2,Qty2)|List2]);
+							//.print("Adding base ",ItemId2," for material item ",ItemId," to base list job.");
+						}
+					}
+				}
+		}
+	}		
+	+working(JobId,Items,StorageId);
+	.
+
+@remember
++!select_goal
+	: remember(Facility)
+<-
+	.print("Had to stop my continue, initiating go to again to ",Facility); 
+	-remember(Facility);
+	!goto(Facility);
+	.
+
+@postBid
++!select_goal
+	: bid(JobId,Bid,Items,StorageId) & not postedBid(JobId) & going(Facility)
+<-
+	!bid_for_job(JobId,Bid);
+	.print("Posted bid ",Bid," for job: ",JobId);
+	+auctionJob(JobId,Items,StorageId);
+	+postedBid(JobId);
+	+remember(Facility);
+	.
+
+@postBidAlt
++!select_goal
+	: bid(JobId,Bid,Items,StorageId) & not postedBid(JobId)
+<-
+	!bid_for_job(JobId,Bid);
+	.print("Posted bid ",Bid," for job: ",JobId);
+	+auctionJob(JobId,Items,StorageId);
+	+postedBid(JobId);
+	.
+
 @buyTools
 +!select_goal
 	: inFacility(Facility) & tools(Tools) & Tools \== [] & .nth(0,Tools,Tool) &  shopsList(List) & findShops(Tool,List,[],Result) & .member(Facility,Result) & not item(Tool,1)
@@ -177,7 +215,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 
 @deliverJob
 +!select_goal 
-	: working(JobId,Items,StorageId) & inFacility(StorageId) 
+	: working(JobId,Items,StorageId) & inFacility(StorageId) & verifyItems(Items)
 <- 
 	//.print("In facility ", StorageId, " to deliver job ", JobId);
 	!deliver_job(JobId);
@@ -217,7 +255,11 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemI
 +!select_goal 
 	: not going(_) & lowBattery & chargingList(List) & closestFacility(List,Facility) 
 <- 
-	.print("Going to charging station ",Facility); 
+	.print("Going to charging station ",Facility);
+	if (going(Facility))
+	{
+		+remember(Facility);
+	} 
 	!goto(Facility);
 	.	
 	

@@ -222,6 +222,7 @@ public class EISArtifact extends Artifact {
 //		"team",
 //		"timestamp",		
 
+		"jobTaken",
 		"simEnd",		
 		"auctionJob",		
 		"pricedJob",
