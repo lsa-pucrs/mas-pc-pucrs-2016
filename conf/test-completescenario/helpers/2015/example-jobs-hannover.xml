@@ -7,7 +7,7 @@
 
   <job id="job2" type="priced" firstStepActive="3" lastStepActive="140" reward="10000" storageId="storage1">
     <products>
-      <product id="material1" amount="2"/>
+      <product id="material4" amount="2"/>
     </products>
   </job>
 
