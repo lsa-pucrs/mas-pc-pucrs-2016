@@ -6,4 +6,5 @@
 	+workshopList([]);
 	+assembleList([]);
 	+verifyItems([]);
+	+auxList([]);
 	.
