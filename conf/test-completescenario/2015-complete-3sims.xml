@@ -25,7 +25,7 @@
 
 		<simulation id="2015-tournament-sim1of3">
 		
-			<configuration maxNumberOfSteps="170" map="hannover"
+			<configuration maxNumberOfSteps="250" map="hannover"
 				seedcapital="500000" interest="2" minLon="9.7051" minLat="52.3526"
 				maxLon="9.7686" maxLat="52.3783" proximity="0.0002" cellSize="0.001">
 

@@ -14,6 +14,7 @@ verifyItems([item(ItemId,Qty)|List]) :- item(ItemId,Qty) & verifyItems(List).
 
 findShops(ItemId,[],Aux,Result) :- Result = Aux.
 findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemId,_,_,_),ListItems) & .concat([ShopId],Aux,ResultAux) & findShops(ItemId,List,ResultAux,Result).
+findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- not .member(item(ItemId,_,_,_),ListItems) & findShops(ItemId,List,Aux,Result).
 
 +simEnd
 	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art(WS,Art,ArtId) & jcm__ws(WSname2,WSid2)
