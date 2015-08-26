@@ -2,6 +2,7 @@ chargingList([]).
 shopsList([]).
 workshopList([]).
 assembleList([]).
+auxList([]).                   // lista para limpar as bases compostas
 
 lowBattery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
 
@@ -170,6 +171,11 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- not .member(item(I
 				for ( .member(consumed(ItemId2,Qty2),BaseList) )
 				{
 					?product(ItemId2,Volume2,BaseList2);
+					if (BaseList2 \== [])
+					{
+						?auxList(Aux);
+						-+auxList([item(ItemId2,Qty2)|Aux]);						
+					}
 					!decomp_2(ItemId2,Qty2,BaseList2);
 				}
 			}
@@ -326,15 +332,22 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- not .member(item(I
 
 @gotoStorageToDeliverJob
 +!select_goal
-	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_) & baseListJob(Bases)
+	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_) & baseListJob(Bases) & auxList(Aux)
 <-
 	// clearing bases used to assemble
 	-baseListJob(_);
+	-auxList(_);
+	+auxList([]);
 	for ( .member(item(ItemId,Qty),Bases))  {
 		?item(ItemId,Qty2);
 		-item(ItemId,Qty2);
 		+item(ItemId,Qty2-Qty);
 	};
+	for ( .member(item(ItemId2,Qty3),Aux))  {
+		?item(ItemId2,Qty4);
+		-item(ItemId2,Qty4);
+		+item(ItemId2,Qty4-Qty3);
+	};	
 	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
 	!goto(StorageId);
 	.		
