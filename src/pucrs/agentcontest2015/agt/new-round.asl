@@ -1,4 +1,4 @@
-+!new_round 
++!new_round(Role, Speed, LoadCap, BatteryCap, Tools)
 	: true
 <-
 	+chargingList([]);
@@ -6,5 +6,8 @@
 	+workshopList([]);
 	+assembleList([]);
 	+verifyItems([]);
-	+auxList([]);
+	+auxList([]);                    // lista para limpar as bases compostas
+	+tools(Tools);
+	+chargeTotal(BatteryCap);
+	+loadTotal(LoadCap);	
 	.

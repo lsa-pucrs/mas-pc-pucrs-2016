@@ -1,8 +1,11 @@
 { include("common-cartago.asl") }
-{ include("common-perceptions.asl") }
+{ include("common-rules.asl") }
 { include("common-actions.asl") }
+{ include("common-plans.asl") }
+{ include("common-select-goal.asl") }
 { include("end-round.asl") }
 { include("new-round.asl") }
+{ include("props.asl") }           // might not be needed when we make the change to obs. prop. in Cartago
 
 !register_freeconn.
 
@@ -12,41 +15,25 @@
 	.print("Registering...");
 	register_freeconn;
 	.
-	
-+product(ProductId, Volume, BaseList)[artifact_id(_)]
-	: not product(ProductId, Volume, BaseList)
-<-
-	+product(ProductId, Volume, BaseList);
-	+item(ProductId,0);
-	.	
 
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
-	: not roled(_, _, _, _, _)
+	: not roled(_, _, _, _, _) & .my_name(N)
 <-
 	.print("Got role: ", Role);
-	+tools(Tools);
-	+chargeTotal(BatteryCap);
-	+loadTotal(LoadCap);
+	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);
 	pucrs.agentcontest2015.actions.tolower(Role, File);
 	.concat(File, ".asl", FileExt);
 	pucrs.agentcontest2015.actions.include(FileExt);
+	if (N == vehicle1)
+	{
+		pucrs.agentcontest2015.actions.include("initiator.asl");
+		!test;
+	};
 	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
-	//.wait({+ok});
-	//!select_goal;
 	.
 	
 +role(Role)
 	: not roled(_, _, _, _, _)
 <-
-	.print("Wat? Got role: ", Role);
-	.
-	
-+charge(Battery)[artifact_id(_)] <- -+charge(Battery).
-	
-+step(Step) 
-	: roled(_, _, _, _, _)
-<-
-	.wait({+ok});
- 	-+lastStep(Step);
-	!select_goal;
+	.print("I do not have any plan for role: ", Role);
 	.
