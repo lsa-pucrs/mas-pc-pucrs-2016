@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -21,6 +18,7 @@ import cartago.AgentId;
 import cartago.Artifact;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
+import cartago.ObsProperty;
 import eis.EILoader;
 import eis.EnvironmentInterfaceStandard;
 import eis.exceptions.ActException;
@@ -32,8 +30,8 @@ import eis.exceptions.PerceiveException;
 import eis.exceptions.RelationException;
 import eis.iilang.Action;
 import eis.iilang.EnvironmentState;
-import eis.iilang.Identifier;
 import eis.iilang.Parameter;
+import eis.iilang.ParameterList;
 import eis.iilang.Percept;
 
 public class EISArtifact extends Artifact {
@@ -58,8 +56,8 @@ public class EISArtifact extends Artifact {
 				ei.pause();
 			if (ei.isStartSupported())
 				ei.start();
-		} catch (IOException e) {
-		} catch (ManagementException e) {
+		} catch (IOException | ManagementException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -131,12 +129,16 @@ public class EISArtifact extends Artifact {
 					//leader_percepts.addAll(agentise(agent, percepts));
 					for (Percept percept : filter(percepts)) {
 						String name = percept.getName();
+						/*Verifying available items in a nearby shop*/
+						if(name.equals("shop")){
+							for(Parameter p: percept.getParameters())
+								if(p.toString().contains("availableItem"))
+									pinShopAvailableItems(percept, p);
+						}
 						Literal literal = Translator.perceptToLiteral(percept);
 						signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
 					}
-				} catch (PerceiveException e) {
-				} catch (NoEnvironmentException e) {
-				} catch (JasonException e) {
+				} catch (PerceiveException | NoEnvironmentException | JasonException e) {
 					e.printStackTrace();
 				}
 			}
@@ -242,6 +244,24 @@ public class EISArtifact extends Artifact {
 			}
 		}
 		return list;
+	}
+	
+	/**
+	 * This method defines/updates an observed property for consulting available items (price and amount) in the shops. 
+	 * 
+	 * @param Percept percept
+	 * @param Parameter param
+	 */
+	public void pinShopAvailableItems(Percept percept, Parameter param){
+		String propertyName = "availableItems";
+		ObsProperty property = getObsProperty(propertyName);
+		if(property == null){
+			defineObsProperty(propertyName, percept.getParameters().get(0), new ParameterList());
+			property = getObsProperty(propertyName);
+		}
+
+		property.updateValues(percept.getParameters().get(0), param);
+		signal(propertyName);
 	}
 
 }
