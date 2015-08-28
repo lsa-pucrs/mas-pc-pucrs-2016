@@ -25,7 +25,6 @@
 +working(JobId,Items2,StorageId)
 	: shopsList(List) & baseListJob(Items)
 <-
-	//-baseListJob(_);	
 	for ( .member(item(ItemId,Qty),Items) )
 	{
 		?findShops(ItemId,List,[],Result);

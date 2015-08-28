@@ -99,6 +99,12 @@
 	?item(ItemId,Qty);
 	-item(ItemId,Qty);
 	+item(ItemId,Qty+1);
+	?product(ItemId,Volume,Bases);
+	for (.member(consumed(ItemIdBase,QtyBase),Bases))  {
+		?item(ItemIdBase,Qty2);
+		-item(ItemIdBase,Qty2);
+		+item(ItemIdBase,Qty2-QtyBase);
+	};
 	.
 
 @continueCharging
@@ -149,21 +155,11 @@
 +!select_goal
 	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_) & baseListJob(Bases) & auxList(Aux)
 <-
+	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
 	// clearing bases used to assemble
 	-baseListJob(_);
 	-auxList(_);
 	+auxList([]);
-	for ( .member(item(ItemId,Qty),Bases))  {
-		?item(ItemId,Qty2);
-		-item(ItemId,Qty2);
-		+item(ItemId,Qty2-Qty);
-	};
-	for ( .member(item(ItemId2,Qty3),Aux))  {
-		?item(ItemId2,Qty4);
-		-item(ItemId2,Qty4);
-		+item(ItemId2,Qty4-Qty3);
-	};	
-	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
 	!goto(StorageId);
 	.		
 
