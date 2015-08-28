@@ -5,7 +5,10 @@
  	-+lastStep(Step);
 	!select_goal;
 	.
-	
+
++availableItems(ShopId,ItemsInformation)
+  <- println("I perceived a pin for ", ShopId, ", and its available items are: ", ItemsInformation).
+
 +simEnd
 	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art(WS,Art,ArtId) & jcm__ws(WSname2,WSid2)
 <-
@@ -23,11 +26,12 @@
 	.print("Stop charging, battery is full.");
 	-charging;
 	.
-	
+
 @shopsList[atomic]
 +shop(ShopId, Lat, Lng, Items)
 	: shopsList(List) & not .member(shop(ShopId,_),List)
 <-
+	.print("-> Shop: ", ShopId, " | Items: ", Items);
 	-+shopsList([shop(ShopId,Items)|List]);
 	.
 	
