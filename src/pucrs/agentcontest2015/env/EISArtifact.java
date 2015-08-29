@@ -129,12 +129,12 @@ public class EISArtifact extends Artifact {
 					//leader_percepts.addAll(agentise(agent, percepts));
 					for (Percept percept : filter(percepts)) {
 						String name = percept.getName();
-						/*Verifying available items in a nearby shop*/
+						/*Verifying available items in a nearby shop
 						if(name.equals("shop")){
 							for(Parameter p: percept.getParameters())
 								if(p.toString().contains("availableItem"))
 									pinShopAvailableItems(percept, p);
-						}
+						}*/
 						Literal literal = Translator.perceptToLiteral(percept);
 						signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
 					}

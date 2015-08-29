@@ -1,3 +1,4 @@
+@jobTaken[atomic]
 +jobTaken(JobId)
 	: auctionJob(JobId,Items,StorageId) & not working(_,_,_) & not jobDone(JobId)
 <-
