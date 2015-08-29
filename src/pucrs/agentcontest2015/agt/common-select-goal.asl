@@ -43,9 +43,8 @@
 		
 @goBuyTools
 +!select_goal
-	: tools(Tools) & Tools \== [] & shopsList(List) & not going(_)
+	: tools(Tools) & Tools \== [] & shopsList(List) & not going(_) & .nth(0,Tools,Tool) & product(Tool, Vol, BaseList) & BaseList == []
 <-
-	.nth(0,Tools,Tool);
 	?findShops(Tool,List,[],Result);
 	?bestShop(Result,Shop);
 	.print("Going to shop: ",Shop," to buy tool: ",Tool);
@@ -75,7 +74,6 @@
 +!select_goal 
 	: working(JobId,Items,StorageId) & inFacility(StorageId) & verifyItems(Items)
 <- 
-	//.print("In facility ", StorageId, " to deliver job ", JobId);
 	!deliver_job(JobId);
 	-working(JobId,Items,StorageId);
 	+jobDone(JobId);
@@ -88,9 +86,8 @@
 	
 @assembleItem
 +!select_goal 
-	: working(JobId,Items,StorageId) & assembleList(ListAssemble) & ListAssemble \== [] & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) 
+	: assembleList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verifyItems(Bases) 
 <- 
-	.nth(0,ListAssemble,ItemId);
 	.print("Assembling item ", ItemId, " in workshop ", Facility);	
 	!assemble(ItemId);
 	-assembleList(ListAssemble);
@@ -99,7 +96,6 @@
 	?item(ItemId,Qty);
 	-item(ItemId,Qty);
 	+item(ItemId,Qty+1);
-	?product(ItemId,Volume,Bases);
 	for (.member(consumed(ItemIdBase,QtyBase),Bases))  {
 		?item(ItemIdBase,Qty2);
 		-item(ItemIdBase,Qty2);
@@ -137,7 +133,7 @@
 	
 @gotoShop
 +!select_goal
-	: working(JobId,Items,StorageId) & buyList(Item,Qty,Shop)
+	: buyList(Item,Qty,Shop)
 <-
 	.print("Going to ",Shop);
 	!goto(Shop);
@@ -145,7 +141,7 @@
 	
 @gotoWorkshop
 +!select_goal
-	: working(JobId,Items,StorageId) & assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_)
+	: assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_)
 <-
 	.print("I'm going to workshop ", Facility);
 	!goto(Facility);

@@ -49,3 +49,45 @@
 	-+workshopList([WorkshopId|List]);
 	.	
 	
+@decomp
++!decomp(Items)
+	: true
+<-
+	+baseListJob([]);
+	for ( .member(item(ItemId,Qty),Items) )
+	{
+		?product(ItemId,Volume,BaseList);
+		!decomp_2(ItemId,Qty,BaseList);
+	}
+	for ( .member(consumed(ItemId,Qty),Items) )
+	{
+		?product(ItemId,Volume,BaseList);
+		!decomp_2(ItemId,Qty,BaseList);
+	}		
+	.
+	
+@atomic	
++!decomp_2(ItemId,Qty,BaseList)
+	: true 
+<- 
+	if (BaseList == []) {
+			?baseListJob(List2);
+			-+baseListJob([item(ItemId,Qty)|List2]);
+	} else {
+			for ( .range(I,1,Qty) ) {
+				?assembleList(ListAssemble);
+				-+assembleList([ItemId|ListAssemble]);				
+				for ( .member(consumed(ItemId2,Qty2),BaseList) )
+				{
+					?product(ItemId2,Volume2,BaseList2);
+					if (BaseList2 \== [])
+					{
+						?auxList(Aux);
+						-+auxList([item(ItemId2,Qty2)|Aux]);						
+					}
+					!decomp_2(ItemId2,Qty2,BaseList2);
+				}
+			}
+	}.
+	
+	

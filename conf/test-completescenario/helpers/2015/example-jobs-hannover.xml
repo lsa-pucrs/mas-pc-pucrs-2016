@@ -1,5 +1,5 @@
 <jobs>
-  <job id="job1" type="auction" firstStepAuction="20" firstStepActive="30" lastStepActive="140" fine="10000" maxReward="20000" storageId="storage1">
+  <job id="job1" type="auction" firstStepAuction="40" firstStepActive="50" lastStepActive="140" fine="10000" maxReward="20000" storageId="storage1">
     <products>
       <product id="material1" amount="3"/>
     </products>
@@ -12,7 +12,7 @@
     </products>
   </job>
 
-  <job id="job3" type="auction" firstStepAuction="20" firstStepActive="30" lastStepActive="140" fine="10000" maxReward="20000" storageId="storage1">
+  <job id="job3" type="auction" firstStepAuction="40" firstStepActive="50" lastStepActive="140" fine="10000" maxReward="20000" storageId="storage1">
     <products>
       <product id="material1" amount="3"/>
     </products>
