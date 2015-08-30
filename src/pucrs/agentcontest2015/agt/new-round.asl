@@ -1,3 +1,9 @@
++lastStep(Step)
+	: Step == 0 & tools(Tools)
+<-
+	!checkTools(Tools);
+	.
+
 +!new_round(Role, Speed, LoadCap, BatteryCap, Tools)
 	: true
 <-
@@ -10,11 +16,9 @@
 	+tools(Tools);
 	+chargeTotal(BatteryCap);
 	+loadTotal(LoadCap);
-	.wait(500);
-	!checkTools(Tools);
 	.
 
-//@checkTools[atomic]
+@checkTools[atomic]
 +!checkTools(Tools)
 	: shopsList(List)
 <-
