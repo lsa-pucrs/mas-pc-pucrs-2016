@@ -3,7 +3,7 @@
     <requirements>
       <product id="base1" amount="2" consumed="true"/>
       <product id="base2" amount="2" consumed="true"/>      
-      <product id="tool1" amount="1" consumed="false"/>
+      <product id="tool2" amount="1" consumed="false"/>
     </requirements>
   </product>
   <product id="material2" volume="20" userAssembled="true">

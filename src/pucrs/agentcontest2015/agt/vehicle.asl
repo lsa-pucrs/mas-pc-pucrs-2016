@@ -15,6 +15,13 @@
 	.print("Registering...");
 	register_freeconn;
 	.
+	
++serverName(Name)[artifact_id(_)]
+	: true
+<-
+	+serverName(Name);
+	.print("My server name is ",Name);
+.	
 
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
 	: not roled(_, _, _, _, _) & .my_name(N)

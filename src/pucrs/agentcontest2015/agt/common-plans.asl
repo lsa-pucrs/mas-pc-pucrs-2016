@@ -10,11 +10,12 @@
 //  <- println("I perceived a pin for ", ShopId, ", and its available items are: ", ItemsInformation).
 
 +simEnd
-	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art(WS,Art,ArtId) & jcm__ws(WSname2,WSid2)
+	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art(WS,Art,ArtId) & jcm__ws(WSname2,WSid2) & serverName(ServerName)
 <-
 	!end_round;
 	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);
 	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
+	+serverName(ServerName);	
 	+current_wsp(WSid,WSname,WScode); 
 	+jcm__art(WS,Art,ArtId);
 	+jcm__ws(WSname2,WSid2);
@@ -26,6 +27,52 @@
 	.print("Stop charging, battery is full.");
 	-charging;
 	.
+	
++lastAction(Action)
+	: Action \== skip & free
+<-
+	.print("I am not free anymore.");
+	-free;
+	.
+
++lastAction(Action)
+	: Action == skip & not free
+<-
+	.print("I am free.");
+	+free;
+	.	
+	
++helpAssemble(ItemId,Qty,Tool,Facility,Agent)
+	: item(Tool,1) & free & not working(_,_,_)
+<-
+	+helping;
+	+warnAgent;
+	.print("I can help, I have ",Tool);
+	.
+
++helpAssemble(ItemId,Qty,Tool,Facility,Agent)[source(X)]
+	: true
+<-
+	-helpAssemble(ItemId,Qty,Tool,Facility,Agent)[source(X)];
+	.
+
+-helpAssemble(ItemId,Qty,Tool,Facility,Agent)[source(X)]
+	: helping & going(Facility)
+<-
+	+abort;
+	.	
+	
+-helpAssemble(ItemId,Qty,Tool,Facility,Agent)[source(X)]
+	: helping
+<-
+	-helping;
+	.		
+	
++iAmHere[source(X)]
+	: true
+<-	
+	-waitingForAssistAssemble;
+	.		
 
 @shopsList[atomic]
 +shop(ShopId, Lat, Lng, Items)

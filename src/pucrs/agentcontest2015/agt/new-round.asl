@@ -1,12 +1,15 @@
 +lastStep(Step)
-	: Step == 0 & tools(Tools)
+	: Step == 0 & tools(Tools) & compositeMaterials(CompositeList)
 <-
 	!checkTools(Tools);
+	!makeCompositeList;
 	.
 
 +!new_round(Role, Speed, LoadCap, BatteryCap, Tools)
 	: true
 <-
+	+free;
+	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
 	+shopsList([]);
 	+workshopList([]);
@@ -18,7 +21,6 @@
 	+loadTotal(LoadCap);
 	.
 
-@checkTools[atomic]
 +!checkTools(Tools)
 	: shopsList(List)
 <-
@@ -51,3 +53,19 @@
 		}
 	}
 	.
+
+@makeCompositeList[atomic]	
++!makeCompositeList
+	: true
+<-
+	for (product(ProductId, Volume, BaseList)) 
+	{
+		if (BaseList \== [])
+		{
+			?compositeMaterials(CompositeList);
+			-+compositeMaterials([ProductId|CompositeList]);
+		}
+	}
+	?compositeMaterials(Nova);
+//	.print("---------  Nova lista de materiais compostos: ", Nova);	
+	.	

@@ -98,10 +98,11 @@ public class EISArtifact extends Artifact {
 			String agent = getOpUserId().getAgentName();
 			ei.registerAgent(agent);
 			String entity = ei.getFreeEntities().iterator().next();
-			ei.associateEntity(agent, entity);
+			ei.associateEntity(agent, entity);		
 			agentToEntity.put(agent, entity);
 			agentIds.put(agent, getOpUserId());
 			System.out.println("Registering " + agent + " to entity " + entity);
+			signal(agentIds.get(agent), "serverName", Literal.parseLiteral(entity.substring(10).toLowerCase()));
 		} catch (AgentException e) {
 			e.printStackTrace();
 		} catch (RelationException e) {
@@ -210,7 +211,7 @@ public class EISArtifact extends Artifact {
 //		"fPosition",
 		"inFacility",
 		"item",
-//		"lastAction",
+		"lastAction",
 //		"lastActionParam",
 //		"lastActionResult",
 //		"lat",

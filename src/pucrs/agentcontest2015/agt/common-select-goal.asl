@@ -1,3 +1,13 @@
+@abort
++!select_goal
+	: going(Facility) & abort
+<-
+	.print("Aborting goto action to help, agent does not need my help anymore.");
+	-abort;
+	-going(Facility);
+	!abort;
+	.
+
 @remember
 +!select_goal
 	: remember(Facility)
@@ -83,6 +93,33 @@
 		+item(ItemId,0);
 	}
 	.
+
+@assistAssemble
++!select_goal
+	: helpAssemble(ItemId,Qty,Tool,Facility,Agent) & inFacility(Facility)
+<-
+	.print("I am assisting agent ",Agent," in order to make ",Qty,"x of item ",ItemId);
+	!assist_assemble(Agent);
+	.
+
+@assembleItemWithAssist
++!select_goal 
+	: assembleList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & iAmHere
+<- 
+	.print("Assembling item ", ItemId, " in workshop ", Facility);	
+	!assemble(ItemId);
+	-assembleList(ListAssemble);
+	.delete(0,ListAssemble,ListAssembleNew);
+	+assembleList(ListAssembleNew);
+	?item(ItemId,Qty);
+	-item(ItemId,Qty);
+	+item(ItemId,Qty+1);
+	for (.member(consumed(ItemIdBase,QtyBase),Bases))  {
+		?item(ItemIdBase,Qty2);
+		-item(ItemIdBase,Qty2);
+		+item(ItemIdBase,Qty2-QtyBase);
+	};
+	.
 	
 @assembleItem
 +!select_goal 
@@ -105,7 +142,7 @@
 
 @continueCharging
 +!select_goal 
-	: charging 
+	: charging //& charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap
 <- 
 	.print("Keep charging."); 
 	!continue;
@@ -139,10 +176,37 @@
 	!goto(Shop);
 	.		
 	
+@waitingForAssistAssemble
++!select_goal
+	: waitingForAssistAssemble
+<-
+	.print("I am waiting for help to assemble some items.");
+	!skip;	
+	.
+	
+@gotoWorkshopToAssist
++!select_goal
+	: helpAssemble(ItemId,Qty,Tool,Facility,Agent)
+<-
+	.print("I'm going to workshop ", Facility, " to assist agent ",Agent," in order to make ",Qty,"x of item ",ItemId);
+	!goto(Facility);	
+	.	
+	
 @gotoWorkshop
 +!select_goal
-	: assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_)
+	: assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verifyTools(Inter,[],ToolsMissing)
 <-
+	if (ToolsMissing \== [])
+	{
+		?serverName(Name);
+	    for (.member(assemble(ItemId,Tool),ToolsMissing))
+	    {
+	  		?count(ItemId,ListAssemble,0,Qty);
+	  		.print("I need help assembling ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
+	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));	  		
+	    }
+	    +waitingForAssistAssemble;
+	}
 	.print("I'm going to workshop ", Facility);
 	!goto(Facility);
 	.
@@ -152,6 +216,12 @@
 	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_) & baseListJob(Bases) & auxList(Aux)
 <-
 	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
+	// let agents know you do not need help anymore
+	for (iAmHere[source(X)])
+	{
+		-iAmHere[source(X)];
+		.send(X,untell,helpAssemble(_,_,_,_,_));
+	}
 	// clearing bases used to assemble
 	-baseListJob(_);
 	-auxList(_);
