@@ -150,7 +150,7 @@
 	
 @gotoCharging	
 +!select_goal 
-	: not going(_) & lowBattery & chargingList(List) & closestFacility(List,Facility) 
+	: lowBattery & chargingList(List) & closestFacility(List,Facility) 
 <- 
 	.print("Going to charging station ",Facility);
 	if (going(Facility))

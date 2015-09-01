@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import massim.competition2015.scenario.Location;
 import cartago.AgentId;
 import cartago.Artifact;
 import cartago.INTERNAL_OPERATION;
@@ -47,7 +49,11 @@ public class EISArtifact extends Artifact {
 	public EISArtifact() throws IOException {
 		agentIds = new ConcurrentHashMap<String, AgentId>();
 		agentToEntity = new ConcurrentHashMap<String, String>();
-		
+
+		String maps[] = new String[] { "hannover", "london" };
+
+		MapHelper.init(maps[0], 0.001, 0.0002);
+
 		try {
 			ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
 			if (ei.isInitSupported())
@@ -98,7 +104,7 @@ public class EISArtifact extends Artifact {
 			String agent = getOpUserId().getAgentName();
 			ei.registerAgent(agent);
 			String entity = ei.getFreeEntities().iterator().next();
-			ei.associateEntity(agent, entity);		
+			ei.associateEntity(agent, entity);
 			agentToEntity.put(agent, entity);
 			agentIds.put(agent, getOpUserId());
 			System.out.println("Registering " + agent + " to entity " + entity);
@@ -109,7 +115,7 @@ public class EISArtifact extends Artifact {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void action(String agent, String action) throws NoValueException {
 		try {
 			Action a = Translator.literalToAction(action);
@@ -121,13 +127,17 @@ public class EISArtifact extends Artifact {
 
 	@INTERNAL_OPERATION
 	void receiving() throws JasonException {
-		//Set<Percept> leader_percepts = new HashSet<Percept>();
+		// Set<Percept> leader_percepts = new HashSet<Percept>();
 		while (receiving) {
-			//leader_percepts.clear();
+			// leader_percepts.clear();
 			for (String agent : ei.getAgents()) {
 				try {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
-					//leader_percepts.addAll(agentise(agent, percepts));
+					// leader_percepts.addAll(agentise(agent, percepts));
+					filterLocations(agent, percepts);
+					
+					// TODO change map when round finish
+					
 					for (Percept percept : filter(percepts)) {
 						String name = percept.getName();
 						/*Verifying available items in a nearby shop
@@ -162,10 +172,10 @@ public class EISArtifact extends Artifact {
 			await_time(100);
 		}
 	}
-	
+
 	@OPERATION
-	void reset() {	
-		
+	void reset() {
+
 	}
 
 	@OPERATION
@@ -247,16 +257,44 @@ public class EISArtifact extends Artifact {
 		return list;
 	}
 	
+	static List<String> location_perceptions = Arrays.asList(new String[] { "shop", "storage", "workshop", "chargingStation", "dump", "entity" });
+
+	private void filterLocations(String agent, Collection<Percept> perceptions) {
+		double agLat = Double.NaN, agLon = Double.NaN;
+		for (Percept perception : perceptions) {
+			if(perception.getName().equals("lon")){
+				agLon = Double.parseDouble(perception.getParameters().get(0).toString());
+			}
+			if(perception.getName().equals("lat")){
+				agLat = Double.parseDouble(perception.getParameters().get(0).toString());
+			}
+			if (location_perceptions.contains(perception.getName())) {
+				boolean isEntity = perception.getName().equals("entity"); // Second parameter of entity is the team. :(
+				LinkedList<Parameter> parameters = perception.getParameters();
+				String facility = parameters.get(0).toString();
+				if (!MapHelper.hasLocation(facility)) {
+					String local = parameters.get(0).toString();
+					double lat = Double.parseDouble(parameters.get(isEntity ? 2 : 1).toString());
+					double lon = Double.parseDouble(parameters.get(isEntity ? 3 : 2).toString());
+					MapHelper.addLocation(local, new Location(lon, lat));
+				}
+			}
+		}
+		if(!Double.isNaN(agLat) && !Double.isNaN(agLon)){
+			MapHelper.addLocation(agent, new Location(agLon, agLat));
+		}
+	}
+	
 	/**
 	 * This method defines/updates an observed property for consulting available items (price and amount) in the shops. 
 	 * 
 	 * @param Percept percept
 	 * @param Parameter param
 	 */
-	public void pinShopAvailableItems(Percept percept, Parameter param){
+	public void pinShopAvailableItems(Percept percept, Parameter param) {
 		String propertyName = "availableItems";
 		ObsProperty property = getObsProperty(propertyName);
-		if(property == null){
+		if (property == null) {
 			defineObsProperty(propertyName, percept.getParameters().get(0), new ParameterList());
 			property = getObsProperty(propertyName);
 		}

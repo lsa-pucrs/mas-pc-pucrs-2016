@@ -44,6 +44,6 @@
 	<classpathentry kind="lib" path="lib/agentcontest-2015-0.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/agentcontest-2015-0.4.jar" sourcepath="lib/agentcontest-2015-0.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/eismassim-2.4-sources.jar"/>
-	<classpathentry kind="lib" path="lib/eismassim-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/eismassim-2.4.jar" sourcepath="lib/eismassim-2.4-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

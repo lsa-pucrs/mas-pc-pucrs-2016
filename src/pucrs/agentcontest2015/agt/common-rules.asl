@@ -1,6 +1,12 @@
-lowBattery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
+//lowBattery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
+lowBattery :- charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closestFacility(List, Facility, RouteLen)
+              & (RouteLen / Speed * 10 > Battery - 20) .
+              // Battery to the closest station > Battery w/ margin => Time to recharge
+              // It waste 10 of battery per motion
+              // TODO keep watching if 10 will remain the same for all roles
 
-closestFacility(List,Facility) :- .nth(0,List,Facility).
+closestFacility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility).
+closestFacility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 
 bestShop(Shops,Shop) :- .nth(0,Shops,Shop).
 
