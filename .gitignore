@@ -5,3 +5,5 @@ cache/
 graphs/
 log/
 *.raw
+*.log
+xmls/
