@@ -4,11 +4,11 @@ items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.
 
 aution_gain(Cost,Bid):- Bid = Cost * 10. // % lucro de 10 vezes o custo
 
-calculateBid(Items,Bid):- .print(" ############# Calculating BID #############") & calculateCost(Items,Cost) & aution_gain(Cost,Bid).
+calculateBid(Items,Bid):- calculateCost(Items,Cost) & aution_gain(Cost,Bid).
 
 calculateCost([],Cost):- Cost = 0.
-calculateCost([item(Id,Qty)],Cost):- 	item_price(Id,Price) & .print(" --> 2 ---- Item: ", Id, " Qty: ", Qty, " Price: ", Price) &  Cost = Price * Qty.
-calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) & .print(" --> 3 ---- Item: ", Id, " Qty: ", Qty, " Price: ", Price) & Temp = Price * Qty & calculateCost(L,Temp2) & Cost = Temp + Temp2.
+calculateCost([item(Id,Qty)],Cost):- 	item_price(Id,Price) &  Cost = Price * Qty.
+calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Qty & calculateCost(L,Temp2) & Cost = Temp + Temp2.
 										
 
 @jobTaken[atomic]
