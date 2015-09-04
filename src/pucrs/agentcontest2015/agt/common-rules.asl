@@ -9,6 +9,7 @@ closestFacility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest2
 closestFacility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 
 bestShop(Shops,Shop) :- .nth(0,Shops,Shop).
+bestFacility(Facilities,Facility) :- .nth(0,Facilities,Facility).
 
 verifyItems([item(ItemId,Qty)|List]) :- item(ItemId,Qty) & verifyItems(List).
 verifyItems([consumed(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verifyItems(List).
@@ -29,3 +30,5 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- not .member(item(I
 count(ItemId,[],Aux,Qty) :- Qty = Aux.
 count(ItemId,[ItemId|ListAssemble],Aux,Qty) :- Aux2 = Aux+1 & count(ItemId,ListAssemble,Aux2,Qty).
 count(ItemId,[ItemId2|ListAssemble],Aux,Qty) :- count(ItemId,ListAssemble,Aux,Qty).
+
+isTool(ItemId) :- ItemId == tool1 | ItemId == tool2 | ItemId == tool3 | ItemId == tool4.

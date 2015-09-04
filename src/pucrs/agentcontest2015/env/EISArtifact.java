@@ -244,7 +244,7 @@ public class EISArtifact extends Artifact {
 		"storage",
 		"workshop",
 		"chargingStation",
-		//"dump",
+		"dump",
 	});
 	
 	public static List<Percept> filter( Collection<Percept> perceptions ){

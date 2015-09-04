@@ -229,6 +229,22 @@
 	!goto(StorageId);
 	.		
 
++!select_goal
+	: not working(_,_,_) & item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & inFacility(DumpId) & dumpList(DumpList) & .member(DumpId,DumpList)
+<- 
+	.print("Dumping ", ItemId, "(", Qty, ")");
+	!dump(ItemId, Qty);
+	-item(ItemId,Qty);
+.
+
++!select_goal
+	: not working(_,_,_) & item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & dumpList(DumpList)
+<-
+	?bestFacility(DumpList, DumpId);
+	.print("I am going to ", DumpId);
+	!goto(DumpId);
+	.
+
 @skipAction
 +!select_goal 
 	: true
