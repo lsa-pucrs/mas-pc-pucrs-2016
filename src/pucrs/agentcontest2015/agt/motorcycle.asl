@@ -1,3 +1,16 @@
+
+items_has_price([item(NItem,Price,Qty,Load)]):- Price\==0.
+items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.
+
+aution_gain(Cost,Bid):- Bid = Cost * 10. // % lucro de 10 vezes o custo
+
+calculateBid(Items,Bid):- .print(" ############# Calculating BID #############") & calculateCost(Items,Cost) & aution_gain(Cost,Bid).
+
+calculateCost([],Cost):- Cost = 0.
+calculateCost([item(Id,Qty)],Cost):- 	item_price(Id,Price) & .print(" --> 2 ---- Item: ", Id, " Qty: ", Qty, " Price: ", Price) &  Cost = Price * Qty.
+calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) & .print(" --> 3 ---- Item: ", Id, " Qty: ", Qty, " Price: ", Price) & Temp = Price * Qty & calculateCost(L,Temp2) & Cost = Temp + Temp2.
+										
+
 @jobTaken[atomic]
 +jobTaken(JobId)
 	: auctionJob(JobId,Items,StorageId) & not working(_,_,_) & not jobDone(JobId)
@@ -12,7 +25,8 @@
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
 	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId)
 <- 
-	Bid = MaxBid-1;
+	?calculateBid(Items,Bid);
+	.print(" $$$$$ BID: ", Bid, " X Max BID: ", MaxBid);
 	+bid(JobId,Bid,Items,StorageId);
 	.
 	
@@ -41,3 +55,33 @@
 		}
 	}
 	.	
+
+@basesPrice	
++shop(Name,Lat,Long,Items): items_has_price(Items)
+	<- 
+	for(.member(item(NItem,Price,Qty,Load),Items))
+	{
+		if(not(item_price(NItem,Price2)) | (item_price(NItem,Price2) & Price > Price2)){
+			-item_price(NItem,Price2);
+			+item_price(NItem,Price);
+		}		 
+	}
+	!!calculate_materials_prices;
+	.
+	
+@materialsPrice
++!calculate_materials_prices: product(IdProd, Vol, BaseList) & BaseList \== [] & not(item_price(IdProd,_)) 
+	<- 
+	for (.member(consumed(ItemIdBase,QtyBase),BaseList) & item_price(ItemIdBase,PriceBase)){
+		if(not(item_price(IdProd,_))){
+			+item_price(IdProd,PriceBase * QtyBase);	
+		}else{
+			?item_price(IdProd,PriceProd);
+	 		-item_price(IdProd,PriceProd);
+	 		+item_price(IdProd,PriceProd + PriceBase * QtyBase);	
+		} 			
+	}
+	!!calculate_materials_prices.
+	
+@materialsPrice2	
++!calculate_materials_prices.
