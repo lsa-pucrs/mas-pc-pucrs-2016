@@ -266,7 +266,7 @@
 
 // Giver goto meeting place
 +!select_goal
-    : not going(_) & roled("Car", _, _, _, _) & item(ItemId, Qty) & Qty > 0
+    : false & not going(_) & roled("Car", _, _, _, _) & item(ItemId, Qty) & Qty > 0
 <-
     //.print(">>>>>>>>> I am going to ", FacilityId, " to give/retrieve item(", ItemId, Qty, ") to agent ", AgentId);
     .print("I am going to ", dump1, " to give/retrieve item(", ItemId, Qty, ") to agent ?");
@@ -277,7 +277,7 @@
 
 // Receiver goto meeting place
 +!select_goal
-    : not going(_) & roled("Truck", _, _, _, _) & item(ItemId, Qty) & Qty > 0
+    : false & not going(_) & roled("Truck", _, _, _, _) & item(ItemId, Qty) & Qty > 0
 <-
     //.print(">>>>>>>>> I am going to ", FacilityId, " to give/retrieve item(", ItemId, Qty, ") to agent ", AgentId);
     .print("I am going to ", dump1, " to give/retrieve item(", ItemId, Qty, ") to agent ?");
