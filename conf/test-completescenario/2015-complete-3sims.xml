@@ -25,9 +25,9 @@
 
 		<simulation id="2015-tournament-sim1of3">
 		
-			<configuration maxNumberOfSteps="250" map="hannover"
-				seedcapital="500000" interest="2" minLon="9.7051" minLat="52.3526"
-				maxLon="9.7686" maxLat="52.3783" proximity="0.0002" cellSize="0.001">
+					<configuration maxNumberOfSteps="250" map="clausthal"
+				seedcapital="500000" interest="2" minLon="10.3264" minLat="51.7959"
+				maxLon="10.3641" maxLat="51.8122" proximity="0.0002" cellSize="0.001">
 
 				<roles>
 					<role name="Car" speed="3" loadCapacity="550" batteryCapacity="5000">
@@ -72,8 +72,8 @@
 				</roles>
 
 				&products;
-        		&facilitiesh;
-        		&jobsh;
+        		&facilities;
+        		&jobs;
 
 			</configuration>
 
@@ -81,47 +81,49 @@
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Car" lon="9.7408" lat="52.3764" />
+					<configuration roleName="Car" lon="10.34" lat="51.80" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Drone" lon="9.7186" lat="52.3739" />
+					<configuration roleName="Drone" lon="10.343" lat="51.803" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Motorcycle" lon="9.7233"
-						lat="52.3584" />
+					<configuration roleName="Motorcycle" lon="10.346"
+						lat="51.806" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Truck" lon="9.7447" lat="52.3560" />
+					<configuration roleName="Truck" lon="10.349" lat="51.809" />
 				</agent>
 
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Car" lon="9.7408" lat="52.3764" />
+					<configuration roleName="Car" lon="10.34" lat="51.80" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Drone" lon="9.7186" lat="52.3739" />
+					<configuration roleName="Drone" lon="10.343" lat="51.803" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Motorcycle" lon="9.7233"
-						lat="52.3584" />
+					<configuration roleName="Motorcycle" lon="10.346"
+						lat="51.806" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Truck" lon="9.7447" lat="52.3560" />
+					<configuration roleName="Truck" lon="10.349" lat="51.809" />
 				</agent>
 			</agents>
+		
+
 
 		</simulation>
 
@@ -228,9 +230,9 @@
 
 		<simulation id="2015-tournament-sim3of3">
 		
-			<configuration maxNumberOfSteps="250" map="clausthal"
-				seedcapital="500000" interest="2" minLon="10.3264" minLat="51.7959"
-				maxLon="10.3641" maxLat="51.8122" proximity="0.0002" cellSize="0.001">
+			<configuration maxNumberOfSteps="250" map="hannover"
+				seedcapital="500000" interest="2" minLon="9.7051" minLat="52.3526"
+				maxLon="9.7686" maxLat="52.3783" proximity="0.0002" cellSize="0.001">
 
 				<roles>
 					<role name="Car" speed="3" loadCapacity="550" batteryCapacity="5000">
@@ -275,8 +277,8 @@
 				</roles>
 
 				&products;
-        		&facilities;
-        		&jobs;
+        		&facilitiesh;
+        		&jobsh;
 
 			</configuration>
 
@@ -284,45 +286,45 @@
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Car" lon="10.34" lat="51.80" />
+					<configuration roleName="Car" lon="9.7408" lat="52.3764" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Drone" lon="10.343" lat="51.803" />
+					<configuration roleName="Drone" lon="9.7186" lat="52.3739" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Motorcycle" lon="10.346"
-						lat="51.806" />
+					<configuration roleName="Motorcycle" lon="9.7233"
+						lat="52.3584" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="red">
-					<configuration roleName="Truck" lon="10.349" lat="51.809" />
+					<configuration roleName="Truck" lon="9.7447" lat="52.3560" />
 				</agent>
 
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Car" lon="10.34" lat="51.80" />
+					<configuration roleName="Car" lon="9.7408" lat="52.3764" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Drone" lon="10.343" lat="51.803" />
+					<configuration roleName="Drone" lon="9.7186" lat="52.3739" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Motorcycle" lon="10.346"
-						lat="51.806" />
+					<configuration roleName="Motorcycle" lon="9.7233"
+						lat="52.3584" />
 				</agent>
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
-					<configuration roleName="Truck" lon="10.349" lat="51.809" />
+					<configuration roleName="Truck" lon="9.7447" lat="52.3560" />
 				</agent>
 			</agents>
 

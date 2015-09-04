@@ -50,7 +50,7 @@ public class EISArtifact extends Artifact {
 		agentIds = new ConcurrentHashMap<String, AgentId>();
 		agentToEntity = new ConcurrentHashMap<String, String>();
 
-		String maps[] = new String[] { "hannover", "london" };
+		String maps[] = new String[] { "clausthal", "hannover", "london" };
 
 		MapHelper.init(maps[0], 0.001, 0.0002);
 
@@ -244,7 +244,7 @@ public class EISArtifact extends Artifact {
 		"storage",
 		"workshop",
 		"chargingStation",
-		//"dump",
+		"dump",
 	});
 	
 	public static List<Percept> filter( Collection<Percept> perceptions ){

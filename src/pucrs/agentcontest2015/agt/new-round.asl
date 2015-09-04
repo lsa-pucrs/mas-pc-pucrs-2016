@@ -11,6 +11,7 @@
 	+free;
 	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
+	+dumpList([]);
 	+shopsList([]);
 	+workshopList([]);
 	+assembleList([]);
