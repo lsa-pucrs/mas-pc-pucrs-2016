@@ -26,7 +26,6 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId)
 <- 
 	?calculateBid(Items,Bid);
-	.print(" $$$$$ BID: ", Bid, " X Max BID: ", MaxBid);
 	+bid(JobId,Bid,Items,StorageId);
 	.
 	
@@ -61,7 +60,8 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	<- 
 	for(.member(item(NItem,Price,Qty,Load),Items))
 	{
-		if(not(item_price(NItem,Price2)) | (item_price(NItem,Price2) & Price > Price2)){
+		if(not(item_price(NItem,Price2)) | (item_price(NItem,Price2) & Price > Price2))
+		{
 			-item_price(NItem,Price2);
 			+item_price(NItem,Price);
 		}		 
@@ -73,7 +73,8 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 +!calculate_materials_prices: product(IdProd, Vol, BaseList) & BaseList \== [] & not(item_price(IdProd,_)) 
 	<- 
 	for (.member(consumed(ItemIdBase,QtyBase),BaseList) & item_price(ItemIdBase,PriceBase)){
-		if(not(item_price(IdProd,_))){
+		if(not(item_price(IdProd,_)))
+		{
 			+item_price(IdProd,PriceBase * QtyBase);	
 		}else{
 			?item_price(IdProd,PriceProd);
