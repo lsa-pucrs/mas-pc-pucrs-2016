@@ -21,6 +21,14 @@
 	+jcm__ws(WSname2,WSid2);
 	.
 	
+@goHorse[atomic]	
++lastStep(Step)
+	: steps(TotalSteps) & Step >= TotalSteps - 20 & not goHorse
+<-
+	+goHorse;
+	.print("|||GOHORSE|||");
+	.
+	
 +charge(Battery)
 	: charging & chargeTotal(BatteryTotal) & BatteryTotal == Battery
 <-

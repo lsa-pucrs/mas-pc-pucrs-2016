@@ -5,6 +5,12 @@
 	+item(ProductId,0);
 	.	
 	
++steps(Steps)[artifact_id(_)]
+	: not steps(Steps)
+<-	
+	+steps(Steps);
+	.
+	
 +charge(Battery)[artifact_id(_)] <- -+charge(Battery).	
 
 +inFacility(Facility)[artifact_id(_)]
