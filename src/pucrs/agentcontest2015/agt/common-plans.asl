@@ -90,11 +90,17 @@
 	-+shopsList([shop(ShopId,Items)|List]);
 	.
 	
+@storageList[atomic]
++storage(StorageId, Lat, Lng, Price, TotCap, UsedCap, Items)
+	: storageList(List) & not .member(StorageId,List)
+<-
+	-+storageList([StorageId|List]);
+	.	
+	
 @chargingList[atomic]
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
 	:  chargingList(List) & not .member(ChargingId,List) & chargingPrice(Price2,Rate2)
 <- 
-	//.print("@@@@@ CHARGE PRICE ",Price," for  Rate: ",Rate);
 	if (Price > Price2)
 	{
 		-+chargingPrice(Price,Rate);

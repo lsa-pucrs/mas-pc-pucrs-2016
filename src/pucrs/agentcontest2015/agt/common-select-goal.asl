@@ -93,7 +93,53 @@
 		+item(ItemId,0);
 	}
 	.
-
+	
+@storeItem
++!select_goal 
+	: inFacility(Facility) & storageList(List) & .member(Facility,List) & storeList(Items) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+<- 
+	!store(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2-Qty);
+	-storeList(Items);
+	.delete(0,Items,ItemsNew);
+	+storeList(ItemsNew);	
+	.
+	
+@retrieveItem
++!select_goal 	
+	: inFacility(Facility) & storageList(List) & .member(Facility,List) & retrieveList(Items) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+<- 
+	!retrieve(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2+Qty);
+	-retrieveList(Items);
+	.delete(0,Items,ItemsNew);
+	+retrieveList(ItemsNew);		
+	.	
+	
+@retrieveDeliveredPartial
++!select_goal 	
+	: partial(JobId,Items,StorageId) & inFacility(StorageId) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+<- 
+	!retrieve_delivered(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2+Qty);
+	-partial(JobId,Items,StorageId);
+	.delete(0,Items,ItemsNew);
+	+partial(JobId,ItemsNew,StorageId);
+	.	
+	
+@retrieveDeliveredJob
++!select_goal 	
+	: working(JobId,Items,StorageId) & inFacility(StorageId) & verifyItems(Items)
+<- 
+	!retrieve_delivered(ItemId,Qty);
+	.		
+	
 @assistAssemble
 +!select_goal
 	: helpAssemble(ItemId,Qty,Tool,Facility,Agent) & inFacility(Facility)

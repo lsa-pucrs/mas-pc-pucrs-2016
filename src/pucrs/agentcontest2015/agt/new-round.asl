@@ -14,6 +14,9 @@
 	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
 	+dumpList([]);
+	+storageList([]);
+	+storeList([]);
+	+retrieveList([]);
 	+shopsList([]);
 	+workshopList([]);
 	+assembleList([]);
