@@ -19,10 +19,10 @@
 
 @postBid
 +!select_goal
-	: bid(JobId,Bid,Items,StorageId) & not postedBid(JobId) & going(Facility)
+	: bid(JobId,Bid,Items,StorageId,MaxBid) & not postedBid(JobId) & going(Facility)
 <-
 	!bid_for_job(JobId,Bid);
-	.print("Posted bid ",Bid," for job: ",JobId);
+	.print("Had to stop to post bid ",Bid," for job: ",JobId," which had max bid of ",MaxBid);
 	+auctionJob(JobId,Items,StorageId);
 	+postedBid(JobId);
 	+remember(Facility);
@@ -30,10 +30,10 @@
 
 @postBidAlt
 +!select_goal
-	: bid(JobId,Bid,Items,StorageId) & not postedBid(JobId)
+	: bid(JobId,Bid,Items,StorageId,MaxBid) & not postedBid(JobId)
 <-
 	!bid_for_job(JobId,Bid);
-	.print("Posted bid ",Bid," for job: ",JobId);
+	.print("Posted bid ",Bid," for job: ",JobId," which had max bid of ",MaxBid);
 	+auctionJob(JobId,Items,StorageId);
 	+postedBid(JobId);
 	.

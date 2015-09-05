@@ -2,9 +2,9 @@
 items_has_price([item(NItem,Price,Qty,Load)]):- Price\==0.
 items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.
 
-aution_gain(Cost,Bid):- Bid = Cost * 10. // % lucro de 10 vezes o custo
+auction_gain(Cost,Bid,MaxBid):- Bid =  MaxBid*30/100 + Cost. // % profit of 30% + expenses
 
-calculateBid(Items,Bid):- calculateCost(Items,Cost) & aution_gain(Cost,Bid).
+calculateBid(Items,Bid,MaxBid):- calculateCost(Items,Cost) & auction_gain(Cost,Bid,MaxBid).
 
 calculateCost([],Cost):- Cost = 0.
 calculateCost([item(Id,Qty)],Cost):- 	item_price(Id,Price) &  Cost = Price * Qty.
@@ -23,10 +23,10 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 
 @auctionJob[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
-	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId)
+	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid)
 <- 
-	?calculateBid(Items,Bid);
-	+bid(JobId,Bid,Items,StorageId);
+	?calculateBid(Items,Bid,MaxBid);
+	+bid(JobId,Bid,Items,StorageId,MaxBid);
 	.
 	
 @pricedJob[atomic]
