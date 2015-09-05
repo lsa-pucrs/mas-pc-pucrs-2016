@@ -92,9 +92,13 @@
 	
 @chargingList[atomic]
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
-	:  chargingList(List) & not .member(ChargingId,List) 
+	:  chargingList(List) & not .member(ChargingId,List) & chargingPrice(Price2,Rate2)
 <- 
 	//.print("@@@@@ CHARGE PRICE ",Price," for  Rate: ",Rate);
+	if (Price > Price2)
+	{
+		-+chargingPrice(Price,Rate);
+	}	
 	-+chargingList([ChargingId|List]);
 	.
 	

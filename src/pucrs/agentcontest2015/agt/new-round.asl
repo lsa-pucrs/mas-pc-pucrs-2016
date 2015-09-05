@@ -10,6 +10,7 @@
 <-
 	+free;
 	+workshopPrice(0);
+	+chargingPrice(0,0);
 	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
 	+dumpList([]);

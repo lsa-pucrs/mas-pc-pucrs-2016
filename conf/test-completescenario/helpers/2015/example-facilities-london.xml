@@ -60,15 +60,15 @@
     <location lon="-0.1668"  lat="51.4923"/>
   </facility>
 
-  <facility type="charging" cost="1" concurrent="2" id="charging1" rate="80">
+  <facility type="charging" cost="10" concurrent="2" id="charging1" rate="80">
     <location lon="-0.1337" lat="51.5080"/>
   </facility>
   
-  <facility type="charging" cost="2" concurrent="1" id="charging2" rate="80">
+  <facility type="charging" cost="20" concurrent="1" id="charging2" rate="80">
     <location lon="-0.1155" lat="51.4892"/>
   </facility>
   
-  <facility type="charging" cost="2" concurrent="4" id="charging3" rate="50">
+  <facility type="charging" cost="20" concurrent="4" id="charging3" rate="50">
     <location lon="-0.1071" lat="51.5146"/>
   </facility>
 

@@ -2,9 +2,9 @@
 items_has_price([item(NItem,Price,Qty,Load)]):- Price\==0.
 items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.
 
-auction_gain(Cost,Bid,MaxBid,WorkshopFee):- Bid =  MaxBid*30/100 + Cost + WorkshopFee. // % profit of 30% + expenses
+auction_gain(Cost,Bid,MaxBid,WorkshopFee,BatteryFee):- Bid =  MaxBid*30/100 + Cost + WorkshopFee + BatteryFee. // % profit of 30% + expenses
 
-calculateBid(Items,Bid,MaxBid,WorkshopFee):- calculateCost(Items,Cost) & auction_gain(Cost,Bid,MaxBid,WorkshopFee).
+calculateBid(Items,Bid,MaxBid,WorkshopFee,BatteryFee):- calculateCost(Items,Cost) & auction_gain(Cost,Bid,MaxBid,WorkshopFee,BatteryFee).
 
 calculateCost([],Cost):- Cost = 0.
 calculateCost([item(Id,Qty)],Cost):- 	item_price(Id,Price) &  Cost = Price * Qty.
@@ -23,6 +23,33 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 
 @auctionJob[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
+	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate)
+<- 
+	+count_comp(0);
+	for ( .member(item(ItemId,Qty),Items) )
+	{
+		?product(ItemId,Volume,BaseList);
+		!count_composite(ItemId,Qty,BaseList);
+	}
+	?count_comp(NumberOfComp);
+	-count_comp(NumberOfComp);
+	?closestFacility([Workshop], FacilityA, RouteLenWorkshop);
+	?closestFacility([ShopId], FacilityB, RouteLenShop);
+	?closestFacility([StorageId], FacilityC, RouteLenStorage);	
+	?calculateBid(Items,Bid,MaxBid,NumberOfComp*Price,math.round((RouteLenWorkshop / Speed * 10) + (RouteLenShop / Speed * 10) + (RouteLenStorage / Speed * 10) / Rate) * PriceC);
+	if (Bid > MaxBid)
+	{
+		.print("Ignoring auction job ",JobId," since our bid of ",Bid," is higher then the max bid of ",MaxBid);
+		+auctionJob(JobId,Items,StorageId);
+	}
+	else {
+		+bid(JobId,Bid,Items,StorageId,MaxBid);		
+	}
+	.
+
+// got an auction too soon, do not have lists ready yet just make a simple bid
+@auctionJob2[atomic]
++auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
 	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price)
 <- 
 	+count_comp(0);
@@ -33,7 +60,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	}
 	?count_comp(NumberOfComp);
 	-count_comp(NumberOfComp);
-	?calculateBid(Items,Bid,MaxBid,NumberOfComp*Price);
+	?calculateBid(Items,Bid,MaxBid,NumberOfComp*Price,1);
 	if (Bid > MaxBid)
 	{
 		.print("Ignoring auction job ",JobId," since our bid of ",Bid," is higher then the max bid of ",MaxBid);
@@ -42,7 +69,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	else {
 		+bid(JobId,Bid,Items,StorageId,MaxBid);		
 	}
-	.
+	.	
 	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
