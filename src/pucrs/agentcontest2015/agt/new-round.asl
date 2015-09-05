@@ -9,6 +9,7 @@
 	: true
 <-
 	+free;
+	+workshopPrice(0);
 	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
 	+dumpList([]);

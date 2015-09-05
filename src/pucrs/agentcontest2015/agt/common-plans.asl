@@ -86,13 +86,18 @@
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
 	:  chargingList(List) & not .member(ChargingId,List) 
 <- 
+	//.print("@@@@@ CHARGE PRICE ",Price," for  Rate: ",Rate);
 	-+chargingList([ChargingId|List]);
 	.
 	
 @workshopList[atomic]
 +workshop(WorkshopId,Lat,Lng,Price) 
-	:  workshopList(List) & not .member(WorkshopId,List) 
+	:  workshopList(List) & not .member(WorkshopId,List)  & workshopPrice(Price2)
 <- 
+	if (Price > Price2)
+	{
+		-+workshopPrice(Price);
+	}
 	-+workshopList([WorkshopId|List]);
 	.
 	
@@ -142,6 +147,7 @@
 					!decomp_2(ItemId2,Qty2,BaseList2);
 				}
 			}
-	}.
+	}
+	.
 	
 	
