@@ -13,7 +13,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 
 @jobTaken[atomic]
 +jobTaken(JobId)
-	: auctionJob(JobId,Items,StorageId) & not working(_,_,_) & not jobDone(JobId)
+	: auctionJob(JobId,Items,StorageId) & not working(_,_,_) & not jobDone(JobId) & free
 <-
 	.print("We won the auction for job ",JobId,"!");
 	-auctionJob(JobId,Items,StorageId);
@@ -46,7 +46,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
-	: not working(_,_,_) & not jobDone(JobId)
+	: not working(_,_,_) & not jobDone(JobId) & free
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	!decomp(Items);
