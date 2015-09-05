@@ -34,7 +34,14 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	?count_comp(NumberOfComp);
 	-count_comp(NumberOfComp);
 	?calculateBid(Items,Bid,MaxBid,NumberOfComp*Price);
-	+bid(JobId,Bid,Items,StorageId,MaxBid);
+	if (Bid > MaxBid)
+	{
+		.print("Ignoring auction job ",JobId," since our bid of ",Bid," is higher then the max bid of ",MaxBid);
+		+auctionJob(JobId,Items,StorageId);
+	}
+	else {
+		+bid(JobId,Bid,Items,StorageId,MaxBid);		
+	}
 	.
 	
 @pricedJob[atomic]
