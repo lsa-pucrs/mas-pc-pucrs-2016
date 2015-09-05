@@ -135,9 +135,15 @@
 	
 @retrieveDeliveredJob
 +!select_goal 	
-	: working(JobId,Items,StorageId) & inFacility(StorageId) & verifyItems(Items)
+	: delivered(JobId,Items,StorageId) & inFacility(StorageId) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
 <- 
 	!retrieve_delivered(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2+Qty);
+	-delivered(JobId,Items,StorageId);
+	.delete(0,Items,ItemsNew);
+	+delivered(JobId,ItemsNew,StorageId);
 	.		
 	
 @assistAssemble
