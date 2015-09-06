@@ -2,6 +2,8 @@
 
 package pucrs.agentcontest2015.cnp;
 
+import jason.asSyntax.Literal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class ContractNetBoard extends Artifact {
 		this.execInternalOp("checkDeadline",duration);
 	}
 	
-	@OPERATION void bid(String bid, OpFeedbackParam<Integer> id){
+	@OPERATION void bid(int bid, OpFeedbackParam<Integer> id){
 		if (getObsProperty("state").stringValue().equals("open")){
 			bidId++;
 			bids.add(new Bid(bidId,bid));
@@ -34,9 +36,9 @@ public class ContractNetBoard extends Artifact {
 			this.failed("cnp_closed");
 		}
 	}
-	
-	@OPERATION void award(Bid prop){
-		this.defineObsProperty("winner", prop.getId());
+
+	@OPERATION void award(int bidId, String Items, String JobId, String StorageId){
+		this.defineObsProperty("winner", bidId,Literal.parseLiteral(Items),Literal.parseLiteral(JobId),Literal.parseLiteral(StorageId));
 	}
 	
 	@INTERNAL_OPERATION void checkDeadline(long dt){
@@ -45,14 +47,18 @@ public class ContractNetBoard extends Artifact {
 		log("bidding stage closed.");
 	}
 	
-	@OPERATION void getBids(OpFeedbackParam<Bid[]> bidList){
+	@OPERATION void getBids(OpFeedbackParam<int[]> bidList,OpFeedbackParam<int[]> bidIdList){
 		await("biddingClosed");
-		Bid[] vect = new Bid[bids.size()];
 		int i = 0;
+		int[] vect = new int[bids.size()];
+		int[] vect2 = new int[bids.size()];
 		for (Bid p: bids){
-			vect[i++] = p;
+			vect[i] = p.getValue();
+			vect2[i] = p.getId();
+			i++;
 		}
 		bidList.set(vect);
+		bidIdList.set(vect2);
 	}
 	
 	@GUARD boolean biddingClosed(){
@@ -62,16 +68,16 @@ public class ContractNetBoard extends Artifact {
 	static public class Bid {
 		
 		private int id;
-		private String descr;
+		private int value;
 		
-		public Bid(int id, String descr){
-			this.descr = descr;
+		public Bid(int id, int value){
+			this.value = value;
 			this.id = id;
 		}
 		
 		public int getId(){ return id; }
-		public String getDescr(){ return descr; }
-		public String toString(){ return descr; }
+		public int getValue(){ return value; }
+		//public String toString(){ return descr; }
 	}
 	
 }

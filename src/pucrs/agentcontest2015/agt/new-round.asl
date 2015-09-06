@@ -9,6 +9,7 @@
 	: true
 <-
 	+free;
+	+max_bid_time(1000);
 	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
 	+shopsList([]);
@@ -66,6 +67,4 @@
 			-+compositeMaterials([ProductId|CompositeList]);
 		}
 	}
-	?compositeMaterials(Nova);
-//	.print("---------  Nova lista de materiais compostos: ", Nova);	
 	.	

@@ -29,3 +29,7 @@ findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- not .member(item(I
 count(ItemId,[],Aux,Qty) :- Qty = Aux.
 count(ItemId,[ItemId|ListAssemble],Aux,Qty) :- Aux2 = Aux+1 & count(ItemId,ListAssemble,Aux2,Qty).
 count(ItemId,[ItemId2|ListAssemble],Aux,Qty) :- count(ItemId,ListAssemble,Aux,Qty).
+
+selectBid([],bid(AuxBid,AuxBidId),bid(BidWinner,BidIdWinner)) :- BidWinner = AuxBid & BidIdWinner = AuxBidId.
+selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- Bid < AuxBid & selectBid(Bids,bid(Bid,BidId),BidWinner).
+selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- selectBid(Bids,bid(AuxBid,AuxBidId),BidWinner).
