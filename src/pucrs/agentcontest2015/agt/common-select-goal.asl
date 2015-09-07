@@ -227,12 +227,88 @@
 	-auxList(_);
 	+auxList([]);
 	!goto(StorageId);
-	.		
+	.
 
+/*
++lastActionResult(give, successful)
+	: true
+<-
+	-hasToGive(ItemId,Qtd);
+	-item(ItemId,Qtd);
+	.
+*/
+
+// Give item to other agent
+// TODO: message
++!select_goal
+    : false & inFacility(dump1) & hasToGive(ItemId, Qty)
+<-
+    .print("I am giving item ", ItemId, "(", Qty, ") to agent a4");
+    !give(a4, ItemId, Qty);
+    ?item(ItemId, NewQty);
+    if(NewQty < Qty){
+    	-hasToGive(ItemId, Qty)
+    }
+	.
+
+// Receive item from other agent
+// TODO: message
++!select_goal
+    : false & inFacility(dump1) & hasToReceive(ItemId, Qty)
+<-
+    .print("I am retrieving item ", ItemId, "(", Qty, ") from agent a1");
+    !receive;
+    ?item(ItemId, NewQty);
+    if(NewQty > Qty){
+    	-hasToReceive(ItemId, Qty)
+    }
+	.
+
+// Giver goto meeting place
++!select_goal
+    : false & not going(_) & roled("Car", _, _, _, _) & item(ItemId, Qty) & Qty > 0
+<-
+    //.print(">>>>>>>>> I am going to ", FacilityId, " to give/retrieve item(", ItemId, Qty, ") to agent ", AgentId);
+    .print("I am going to ", dump1, " to give/retrieve item(", ItemId, Qty, ") to agent ?");
+    //!goto(FacilityId);
+    +hasToGive(ItemId, Qty);
+    !goto(dump1);
+	.
+
+// Receiver goto meeting place
++!select_goal
+    : false & not going(_) & roled("Truck", _, _, _, _) & item(ItemId, Qty) & Qty > 0
+<-
+    //.print(">>>>>>>>> I am going to ", FacilityId, " to give/retrieve item(", ItemId, Qty, ") to agent ", AgentId);
+    .print("I am going to ", dump1, " to give/retrieve item(", ItemId, Qty, ") to agent ?");
+    //!goto(FacilityId);
+    +hasToReceive(ItemId, Qty);
+    !goto(dump1);
+	.
+
+// Dump if in facility, not working and have any item different from a tool
++!select_goal
+	: item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & inFacility(DumpId) & dumpList(DumpList) & .member(DumpId,DumpList)
+<- 
+	.print("Dumping ", ItemId, "(", Qty, ")");
+	!dump(ItemId, Qty);
+	-item(ItemId, Qty);
+	.
+
+// Goto dump facility if not working and have any item different from a tool
++!select_goal
+	: free & item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & dumpList(DumpList)
+<-
+	?closestFacility(DumpList, DumpId);
+	.print("I am going to ", DumpId);
+	!goto(DumpId);
+	.
+
+// Default action is to skip
 @skipAction
-+!select_goal 
++!select_goal
 	: true
 <-
 	.print("Nothing to do at this step");
 	!skip;
-	.	
+	.

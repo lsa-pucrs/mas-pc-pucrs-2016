@@ -94,6 +94,13 @@
 	:  workshopList(List) & not .member(WorkshopId,List) 
 <- 
 	-+workshopList([WorkshopId|List]);
+	.
+	
+@dumpList[atomic]
++dump(DumpId,Lat,Lng,Price) 
+	:  dumpList(List) & not .member(DumpId,List) 
+<- 
+	-+dumpList([DumpId|List]);
 	.	
 
 +working(JobId,Items2,StorageId)

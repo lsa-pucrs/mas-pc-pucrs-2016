@@ -12,6 +12,7 @@
 	+max_bid_time(1000);
 	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
+	+dumpList([]);
 	+shopsList([]);
 	+workshopList([]);
 	+assembleList([]);

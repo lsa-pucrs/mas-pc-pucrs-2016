@@ -1,2 +1,10 @@
 /bin
 /bin/
+backup/
+cache/
+graphs/
+log/
+*.raw
+*.log
+xmls/
+*~

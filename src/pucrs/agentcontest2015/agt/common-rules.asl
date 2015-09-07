@@ -33,3 +33,5 @@ count(ItemId,[ItemId2|ListAssemble],Aux,Qty) :- count(ItemId,ListAssemble,Aux,Qt
 selectBid([],bid(AuxBid,AuxBidId),bid(BidWinner,BidIdWinner)) :- BidWinner = AuxBid & BidIdWinner = AuxBidId.
 selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- Bid < AuxBid & selectBid(Bids,bid(Bid,BidId),BidWinner).
 selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- selectBid(Bids,bid(AuxBid,AuxBidId),BidWinner).
+
+isTool(ItemId) :- ItemId == tool1 | ItemId == tool2 | ItemId == tool3 | ItemId == tool4.
