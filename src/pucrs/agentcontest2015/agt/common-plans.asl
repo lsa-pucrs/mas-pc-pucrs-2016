@@ -102,6 +102,23 @@
 <- 
 	-+dumpList([DumpId|List]);
 	.	
+
++working(JobId,Items2,StorageId)
+	: shopsList(List) & baseListJob(Items)
+<-
+	for ( .member(item(ItemId,Qty),Items) )
+	{
+		?findShops(ItemId,List,[],Result);
+		?bestShop(Result,Shop);
+		if (buyList(ItemId,Qty2,Shop))
+		{
+			-buyList(ItemId,Qty2,Shop);
+			+buyList(ItemId,Qty+Qty2,Shop);			
+		} else {
+			+buyList(ItemId,Qty,Shop);		
+		}
+	}
+	.	
 	
 @decomp
 +!decomp(Items)

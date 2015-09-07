@@ -5,6 +5,7 @@
 { include("common-select-goal.asl") }
 { include("end-round.asl") }
 { include("new-round.asl") }
+{ include("bidder.asl") }
 { include("props.asl") }           // might not be needed when we make the change to obs. prop. in Cartago
 
 !register_freeconn.
@@ -34,9 +35,11 @@
 	if (N == vehicle1)
 	{
 		pucrs.agentcontest2015.actions.include("initiator.asl");
-		!test;
+		!create_taskboard;
 	};
 	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
+	focusWhenAvailable("task_board");
+	.print("Task board located.");	
 	.
 	
 +role(Role)
