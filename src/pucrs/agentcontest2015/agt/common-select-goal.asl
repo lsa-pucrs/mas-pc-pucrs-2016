@@ -19,10 +19,10 @@
 
 @postBid
 +!select_goal
-	: bid(JobId,Bid,Items,StorageId) & not postedBid(JobId) & going(Facility)
+	: bid(JobId,Bid,Items,StorageId,MaxBid) & not postedBid(JobId) & going(Facility)
 <-
 	!bid_for_job(JobId,Bid);
-	.print("Posted bid ",Bid," for job: ",JobId);
+	.print("Had to stop to post bid ",Bid," for job: ",JobId," which had max bid of ",MaxBid);
 	+auctionJob(JobId,Items,StorageId);
 	+postedBid(JobId);
 	+remember(Facility);
@@ -30,10 +30,10 @@
 
 @postBidAlt
 +!select_goal
-	: bid(JobId,Bid,Items,StorageId) & not postedBid(JobId)
+	: bid(JobId,Bid,Items,StorageId,MaxBid) & not postedBid(JobId)
 <-
 	!bid_for_job(JobId,Bid);
-	.print("Posted bid ",Bid," for job: ",JobId);
+	.print("Posted bid ",Bid," for job: ",JobId," which had max bid of ",MaxBid);
 	+auctionJob(JobId,Items,StorageId);
 	+postedBid(JobId);
 	.
@@ -93,7 +93,59 @@
 		+item(ItemId,0);
 	}
 	.
-
+	
+@storeItem
++!select_goal 
+	: inFacility(Facility) & storageList(List) & .member(Facility,List) & storeList(Items) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+<- 
+	!store(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2-Qty);
+	-storeList(Items);
+	.delete(0,Items,ItemsNew);
+	+storeList(ItemsNew);	
+	.
+	
+@retrieveItem
++!select_goal 	
+	: inFacility(Facility) & storageList(List) & .member(Facility,List) & retrieveList(Items) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+<- 
+	!retrieve(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2+Qty);
+	-retrieveList(Items);
+	.delete(0,Items,ItemsNew);
+	+retrieveList(ItemsNew);		
+	.	
+	
+@retrieveDeliveredPartial
++!select_goal 	
+	: partial(JobId,Items,StorageId) & inFacility(StorageId) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+<- 
+	!retrieve_delivered(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2+Qty);
+	-partial(JobId,Items,StorageId);
+	.delete(0,Items,ItemsNew);
+	+partial(JobId,ItemsNew,StorageId);
+	.	
+	
+@retrieveDeliveredJob
++!select_goal 	
+	: delivered(JobId,Items,StorageId) & inFacility(StorageId) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+<- 
+	!retrieve_delivered(ItemId,Qty);
+	?item(IdemId,Qty2);
+	-item(ItemId,Qty2);
+	+item(ItemId,Qty2+Qty);
+	-delivered(JobId,Items,StorageId);
+	.delete(0,Items,ItemsNew);
+	+delivered(JobId,ItemsNew,StorageId);
+	.		
+	
 @assistAssemble
 +!select_goal
 	: helpAssemble(ItemId,Qty,Tool,Facility,Agent) & inFacility(Facility)

@@ -21,6 +21,14 @@
 	+jcm__ws(WSname2,WSid2);
 	.
 	
+@goHorse[atomic]	
++lastStep(Step)
+	: steps(TotalSteps) & Step >= TotalSteps - 20 & not goHorse
+<-
+	+goHorse;
+	.print("|||GOHORSE|||");
+	.
+	
 +charge(Battery)
 	: charging & chargeTotal(BatteryTotal) & BatteryTotal == Battery
 <-
@@ -82,17 +90,32 @@
 	-+shopsList([shop(ShopId,Items)|List]);
 	.
 	
+@storageList[atomic]
++storage(StorageId, Lat, Lng, Price, TotCap, UsedCap, Items)
+	: storageList(List) & not .member(StorageId,List)
+<-
+	-+storageList([StorageId|List]);
+	.	
+	
 @chargingList[atomic]
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
-	:  chargingList(List) & not .member(ChargingId,List) 
+	:  chargingList(List) & not .member(ChargingId,List) & chargingPrice(Price2,Rate2)
 <- 
+	if (Price > Price2)
+	{
+		-+chargingPrice(Price,Rate);
+	}	
 	-+chargingList([ChargingId|List]);
 	.
 	
 @workshopList[atomic]
 +workshop(WorkshopId,Lat,Lng,Price) 
-	:  workshopList(List) & not .member(WorkshopId,List) 
+	:  workshopList(List) & not .member(WorkshopId,List)  & workshopPrice(Price2)
 <- 
+	if (Price > Price2)
+	{
+		-+workshopPrice(Price);
+	}
 	-+workshopList([WorkshopId|List]);
 	.
 	
@@ -159,6 +182,7 @@
 					!decomp_2(ItemId2,Qty2,BaseList2);
 				}
 			}
-	}.
+	}
+	.
 	
 	

@@ -24,7 +24,7 @@
     <location lat="51.805171"  lon="10.350020"/>
   </facility>
 
-  <facility type="charging" cost="1" concurrent="2" id="charging1" rate="80">
+  <facility type="charging" cost="10" concurrent="2" id="charging1" rate="80">
     <location lat="51.800248" lon="10.339205"/>
   </facility>
 

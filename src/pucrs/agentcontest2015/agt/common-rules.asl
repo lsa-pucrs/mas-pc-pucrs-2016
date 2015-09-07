@@ -1,5 +1,5 @@
 //lowBattery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
-lowBattery :- charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closestFacility(List, Facility, RouteLen)
+lowBattery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closestFacility(List, Facility, RouteLen)
               & (RouteLen / Speed * 10 > Battery - 20) .
               // Battery to the closest station > Battery w/ margin => Time to recharge
               // It waste 10 of battery per motion
