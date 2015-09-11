@@ -103,9 +103,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 <-
 	for ( .member(item(ItemId,Qty),Items) )
 	{
-		for ( .range(I,1,Qty) ) {
-			!allocate_task(ItemId,1000,Items,JobId,StorageId,TestPriced);
-		}
+		!allocate_task(item(ItemId,Qty),1000,Items,JobId,StorageId,TestPriced);
 	}
 	.
 	
@@ -133,7 +131,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 		.print("Got bids (",.length(Bids),")");
 		?selectBid(ListNew,bid(99999,99999),bid(Bid,BidId));
 		.print("Bid that won: ",Bid," Bid id: ",BidId);
-		award(BidId,CNPBoardName,item(Task,1),JobId,StorageId)[artifact_name(CNPBoardName)];
+		award(BidId,CNPBoardName,Task,JobId,StorageId)[artifact_name(CNPBoardName)];
 		-listBids(_);
 	}
 	else {
