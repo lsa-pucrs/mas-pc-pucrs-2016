@@ -9,7 +9,8 @@
 	: true
 <-
 	+free;
-	+max_bid_time(1000);
+	+maxBidders(3);
+	+max_bid_time(500);
 	+workshopPrice(0);
 	+chargingPrice(0,0);
 	+compositeMaterials([]);			// criada para auxiliar o assist job

@@ -70,10 +70,18 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
-	: not working(_,_,_) & not jobDone(JobId) & not pricedJob(JobId,Items,StorageId)
+	: not working(_,_,_) & not jobDone(JobId) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max)
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
-	!separate_tasks(Items,JobId,StorageId,true);
+	if ( .length(Items,NumberTasks) &  NumberTasks <= Max)
+	{
+		!separate_tasks(Items,JobId,StorageId,true);
+		
+	}
+	else {
+		.print("Too many tasks, not enough agents!");
+	}
+	
 	.	
 	
 @basesPrice	
@@ -99,11 +107,11 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	.
 
 +!separate_tasks(Items,JobId,StorageId,TestPriced)
-	: true
+	: max_bid_time(Time)
 <-
 	for ( .member(item(ItemId,Qty),Items) )
 	{
-		!allocate_task(item(ItemId,Qty),1000,Items,JobId,StorageId,TestPriced);
+		!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId,TestPriced);
 	}
 	.
 	
