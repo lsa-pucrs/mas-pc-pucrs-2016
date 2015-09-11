@@ -37,7 +37,45 @@
 	+auctionJob(JobId,Items,StorageId);
 	+postedBid(JobId);
 	.
-
+	
+@assembleTool
++!select_goal 
+	: assembleToolsList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verifyItems(Bases) 
+<- 
+	.print("Assembling tool ", ItemId, " in workshop ", Facility);	
+	!assemble(ItemId);
+	-assembleToolsList(ListAssemble);
+	.delete(0,ListAssemble,ListAssembleNew);
+	+assembleToolsList(ListAssembleNew);
+	?item(ItemId,Qty);
+	-item(ItemId,Qty);
+	+item(ItemId,Qty+1);
+	for (.member(consumed(ItemIdBase,QtyBase),Bases))  {
+		?item(ItemIdBase,Qty2);
+		-item(ItemIdBase,Qty2);
+		+item(ItemIdBase,Qty2-QtyBase);
+	};
+	.
+	
+@gotoWorkshopToAssembleTool
++!select_goal 
+	: assembleToolsList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verifyTools(Inter,[],ToolsMissing)
+<-
+	if (ToolsMissing \== [])
+	{
+		?serverName(Name);
+	    for (.member(assemble(ItemId,Tool),ToolsMissing))
+	    {
+	  		?count(ItemId,ListAssemble,0,Qty);
+	  		.print("I need help assembling ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
+	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));	  		
+	    }
+	    +waitingForAssistAssemble;
+	}
+	.print("I'm going to workshop ", Facility);
+	!goto(Facility);
+	.
+	
 @buyTools
 +!select_goal
 	: inFacility(Facility) & tools(Tools) & Tools \== [] & .nth(0,Tools,Tool) &  shopsList(List) & findShops(Tool,List,[],Result) & .member(Facility,Result) & not item(Tool,1)

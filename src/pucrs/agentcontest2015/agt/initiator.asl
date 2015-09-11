@@ -81,7 +81,6 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	else {
 		.print("Too many tasks, not enough agents!");
 	}
-	
 	.	
 	
 @basesPrice	

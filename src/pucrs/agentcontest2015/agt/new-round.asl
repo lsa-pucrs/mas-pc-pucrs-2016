@@ -13,6 +13,7 @@
 	+max_bid_time(500);
 	+workshopPrice(0);
 	+chargingPrice(0,0);
+	+assembleToolsList([]);
 	+compositeMaterials([]);			// criada para auxiliar o assist job
 	+chargingList([]);
 	+dumpList([]);
@@ -53,8 +54,8 @@
 					+buyList(ItemId,Qty,Shop);		
 				}	
 			}
-			?assembleList(ListAssemble);
-			-+assembleList([Tool|ListAssemble]);
+			?assembleToolsList(ListAssemble);
+			-+assembleToolsList([Tool|ListAssemble]);
 			-tools(Tools);
 			.delete(Tool,Tools,ToolsNew);
 			+tools(ToolsNew);						
