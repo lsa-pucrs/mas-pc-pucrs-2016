@@ -37,8 +37,8 @@ public class ContractNetBoard extends Artifact {
 		}
 	}
 
-	@OPERATION void award(int bidId, String Items, String JobId, String StorageId){
-		this.defineObsProperty("winner", bidId,Literal.parseLiteral(Items),Literal.parseLiteral(JobId),Literal.parseLiteral(StorageId));
+	@OPERATION void award(int bidId, String Task, String Items, String JobId, String StorageId){
+		this.defineObsProperty("winner", bidId,Task,Literal.parseLiteral(Items),Literal.parseLiteral(JobId),Literal.parseLiteral(StorageId));
 	}
 	
 	@INTERNAL_OPERATION void checkDeadline(long dt){

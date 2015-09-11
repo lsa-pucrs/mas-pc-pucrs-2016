@@ -133,7 +133,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 		.print("Got bids (",.length(Bids),")");
 		?selectBid(ListNew,bid(99999,99999),bid(Bid,BidId));
 		.print("Bid that won: ",Bid," Bid id: ",BidId);
-		award(BidId,item(Task,1),JobId,StorageId)[artifact_name(CNPBoardName)];
+		award(BidId,CNPBoardName,item(Task,1),JobId,StorageId)[artifact_name(CNPBoardName)];
 		-listBids(_);
 	}
 	else {
