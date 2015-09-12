@@ -68,9 +68,10 @@
 	    {
 	  		?count(ItemId,ListAssemble,0,Qty);
 	  		.print("I need help assembling ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
-	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));	  		
+	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));
+	  		+waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name); 		
 	    }
-	    +waitingForAssistAssemble;
+	    
 	}
 	.print("I'm going to workshop ", Facility);
 	!goto(Facility);
@@ -268,9 +269,10 @@
 	
 @waitingForAssistAssemble
 +!select_goal
-	: waitingForAssistAssemble
+	: waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name)
 <-
 	.print("I am waiting for help to assemble some items.");
+	.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));	
 	!skip;	
 	.
 	
@@ -293,9 +295,10 @@
 	    {
 	  		?count(ItemId,ListAssemble,0,Qty);
 	  		.print("I need help assembling ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
-	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));	  		
+	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));	
+	  		+waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name);  		
 	    }
-	    +waitingForAssistAssemble;
+	    
 	}
 	.print("I'm going to workshop ", Facility);
 	!goto(Facility);

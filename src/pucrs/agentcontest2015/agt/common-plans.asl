@@ -49,9 +49,10 @@
 	.print("I am free.");
 	+free;
 	.	
-	
+
+@helpAssemble[atomic]
 +helpAssemble(ItemId,Qty,Tool,Facility,Agent)
-	: item(Tool,1) & free & not working(_,_,_)
+	: item(Tool,1) & free & not working(_,_,_) & not helping
 <-
 	+helping;
 	+warnAgent;
@@ -79,7 +80,7 @@
 +iAmHere[source(X)]
 	: true
 <-	
-	-waitingForAssistAssemble;
+	-waitingForAssistAssemble(_,_,_,_,_);
 	.		
 
 @shopsList[atomic]
