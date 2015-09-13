@@ -34,4 +34,9 @@ selectBid([],bid(AuxBid,AuxBidId),bid(BidWinner,BidIdWinner)) :- BidWinner = Aux
 selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- Bid \== 0 & Bid < AuxBid & selectBid(Bids,bid(Bid,BidId),BidWinner).
 selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- selectBid(Bids,bid(AuxBid,AuxBidId),BidWinner).
 
+calculateBasesLoad([],Qty,Aux,LoadB) :- LoadB = Qty * Aux.
+calculateBasesLoad([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 == [] & calculateBasesLoad(BaseList,Qty,Volume * Qty2 + Aux,LoadB).
+calculateBasesLoad([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 \== [] & calculateBasesLoad(BaseList2,Qty,Aux,LoadB2) & calculateBasesLoad(BaseList,Qty,LoadB2,LoadB).
+calculateBasesLoad([tools(ToolId,Qty2)|BaseList],Qty,Aux,LoadB) :- calculateBasesLoad(BaseList,Qty,Aux,LoadB).
+
 isTool(ItemId) :- ItemId == tool1 | ItemId == tool2 | ItemId == tool3 | ItemId == tool4.

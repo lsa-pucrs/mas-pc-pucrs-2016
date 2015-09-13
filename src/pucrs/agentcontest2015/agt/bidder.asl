@@ -48,12 +48,23 @@
 +!create_bid(item(ItemId,Qty),Bid)
 	: max_bid_time(Timeout) & product(ItemId, Volume, BaseList) & loadExpected(LoadE) & load(Load) & loadTotal(LoadCap)
 <- 
-	if (LoadCap - Load >= Volume * Qty + LoadE)
+	?calculateBasesLoad(BaseList,Qty,0,LoadB);
+	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB + LoadE) )
+	{
+		-+loadExpected(LoadB + LoadE);
+		Bid = math.round(math.random(Timeout)) * 1;		
+	}
+	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB + LoadE) ) 
+	{
+		Bid = math.round(math.random(Timeout)) * 0;
+	}	
+	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty + LoadE) )
 	{
 		-+loadExpected(Volume * Qty + LoadE);
 		Bid = math.round(math.random(Timeout)) * 1;
 	}
-	else {
+	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty + LoadE) )
+	{
 		Bid = math.round(math.random(Timeout)) * 0;
 	}
 	.	
