@@ -121,16 +121,23 @@
 
 @deliverJob
 +!select_goal 
-	: working(JobId,Items,StorageId) & inFacility(StorageId) & verifyItems(Items)
+	: working(JobId,Items,StorageId) & inFacility(StorageId) & verifyItems(Items) & loadExpected(LoadE)
 <- 
 	!deliver_job(JobId);
 	-working(JobId,Items,StorageId);
 	+jobDone(JobId);
 	.print("Job ", JobId, " has been delivered.");
+	+countAux(0);
 	for ( .member(item(ItemId,Qty),Items))  {
+		?product(ItemId,Volume,BaseList);
 		-item(ItemId,Qty);
 		+item(ItemId,0);
+		?countAux(X);
+		-+countAux(X + Qty * Volume);
 	}
+	?countAux(X);
+	-countAux(X);
+	-+loadExpected(LoadE-X);
 	.
 	
 @storeItem
@@ -391,7 +398,7 @@
 
 // Goto dump facility if not working and have any item different from a tool
 +!select_goal
-	: free & item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & dumpList(DumpList)
+	: free & item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & dumpList(DumpList) & not working(_,_,_)
 <-
 	?closestFacility(DumpList, DumpId);
 	.print("I am going to ", DumpId);

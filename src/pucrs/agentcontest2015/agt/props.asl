@@ -13,6 +13,8 @@
 	
 +charge(Battery)[artifact_id(_)] <- -+charge(Battery).	
 
++load(Load)[artifact_id(_)] <- -+load(Load).	
+
 +inFacility(Facility)[artifact_id(_)]
 	: helpAssemble(ItemId,Qty,Tool,FacilityHelp,Agent)[source(X)] &  FacilityHelp == Facility & warnAgent
 <- 

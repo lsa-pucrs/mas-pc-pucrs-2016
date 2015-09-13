@@ -2,6 +2,7 @@
 
 package pucrs.agentcontest2015.cnp;
 
+import jason.asSyntax.Literal;
 import cartago.*;
 
 public class TaskBoard extends Artifact {
@@ -18,7 +19,7 @@ public class TaskBoard extends Artifact {
 		try {
 			String artifactName = "cnp_board_"+taskId;
 			makeArtifact(artifactName, "pucrs.agentcontest2015.cnp.ContractNetBoard", new ArtifactConfig(taskDescr,duration));
-			defineObsProperty("task", taskDescr, artifactName);
+			defineObsProperty("task", Literal.parseLiteral(taskDescr), artifactName);
 			id.set(artifactName);
 		} catch (Exception ex){
 			failed("announce_failed");

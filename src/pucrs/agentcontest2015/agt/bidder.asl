@@ -18,10 +18,11 @@
 	+working(JobId,[Items],StorageId);
 	.
 @winner2[atomic]	
-+winner(BidId,Task,Items,JobId,StorageId) 
-	: my_bid(X,Y) & not my_bid(BidId,Task)
++winner(BidId,Task,item(ItemId,Qty),JobId,StorageId) 
+	: my_bid(X,Y) & not my_bid(BidId,Task) & product(ItemId, Volume, BaseList) & loadExpected(LoadE)
 <- 
 	.print("Not awarded.");
+	-+loadExpected(LoadE - Volume * Qty);
 	.
 	
 +!make_bid(Task,BoardId,CNPBoard)
@@ -43,8 +44,16 @@
 	.drop_all_intentions;
 	.
 	
-+!create_bid(Task,Bid)
-	: max_bid_time(Timeout)
+@create_bid[atomic]	
++!create_bid(item(ItemId,Qty),Bid)
+	: max_bid_time(Timeout) & product(ItemId, Volume, BaseList) & loadExpected(LoadE) & load(Load) & loadTotal(LoadCap)
 <- 
-	Bid = math.round(math.random(Timeout));
+	if (LoadCap - Load >= Volume * Qty + LoadE)
+	{
+		-+loadExpected(Volume * Qty + LoadE);
+		Bid = math.round(math.random(Timeout)) * 1;
+	}
+	else {
+		Bid = math.round(math.random(Timeout)) * 0;
+	}
 	.	
