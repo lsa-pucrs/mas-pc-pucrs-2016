@@ -47,18 +47,15 @@ public class ContractNetBoard extends Artifact {
 		log("bidding stage closed.");
 	}
 	
-	@OPERATION void getBids(OpFeedbackParam<int[]> bidList,OpFeedbackParam<int[]> bidIdList){
+	@OPERATION void getBids(OpFeedbackParam<Literal[]> bidList){
 		await("biddingClosed");
 		int i = 0;
-		int[] vect = new int[bids.size()];
-		int[] vect2 = new int[bids.size()];
+		Literal[] aux= new Literal[bids.size()];
 		for (Bid p: bids){
-			vect[i] = p.getValue();
-			vect2[i] = p.getId();
+			aux[i] = Literal.parseLiteral("bid("+p.getValue()+","+p.getId()+")");
 			i++;
 		}
-		bidList.set(vect);
-		bidIdList.set(vect2);
+		bidList.set(aux);
 	}
 	
 	@GUARD boolean biddingClosed(){

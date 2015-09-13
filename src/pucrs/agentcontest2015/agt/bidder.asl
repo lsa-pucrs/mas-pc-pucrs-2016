@@ -1,3 +1,4 @@
+@task[atomic]
 +task(Task,CNPBoard) 
 	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & Role \== "Truck"
 <- 
@@ -7,6 +8,7 @@
 	!make_bid(Task,BoardId,CNPBoard);
 	.
 
+@winner[atomic]
 +winner(BidId,Task,Items,JobId,StorageId) 
 	: my_bid(BidId,Task)
 <- 
@@ -15,9 +17,9 @@
 	!decomp([Items]);
 	+working(JobId,[Items],StorageId);
 	.
-	
+@winner2[atomic]	
 +winner(BidId,Task,Items,JobId,StorageId) 
-	: my_bid(X,Y) & not my_bid(BidId,Task) & .my_name(N) & N \== vehicle1
+	: my_bid(X,Y) & not my_bid(BidId,Task)
 <- 
 	.print("Not awarded.");
 	.

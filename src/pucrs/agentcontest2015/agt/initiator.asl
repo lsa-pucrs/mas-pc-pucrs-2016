@@ -75,7 +75,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	if ( .length(Items,NumberTasks) &  NumberTasks <= Max)
 	{
-		!separate_tasks(Items,JobId,StorageId,true);
+		!separate_tasks(Items,JobId,StorageId);
 	}
 	else {
 		.print("Too many tasks, not enough agents!");
@@ -104,39 +104,27 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	.print("Created taskboard.");
 	.
 
-+!separate_tasks(Items,JobId,StorageId,TestPriced)
++!separate_tasks(Items,JobId,StorageId)
 	: max_bid_time(Time)
 <-
 	for ( .member(item(ItemId,Qty),Items) )
 	{
-		!!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId,TestPriced);
+		!!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId);
 	}
 	.
 	
-+!allocate_task(item(ItemId,Qty),Timeout,Items,JobId,StorageId,TestPriced)
++!allocate_task(item(ItemId,Qty),Timeout,Items,JobId,StorageId)
 	: true
 <- 
 	announce(item(ItemId,Qty),Timeout,CNPBoardName);
 	+cnp(CNPBoardName);
 	.print("Announced: ",Qty,"x of ",ItemId," on ",CNPBoardName);
-	getBids(Bids,BidsIds) [artifact_name(CNPBoardName)];
+	getBids(Bids) [artifact_name(CNPBoardName)];
 	if (.length(Bids) \== 0)
 	{		
-		if (TestPriced)
-		{
-			+pricedJob(JobId,Items,StorageId);
-		}
-		+listBids(CNPBoardName,[]);
-		for (.range(I,0,.length(Bids)-1))
-		{
-			?listBids(CNPBoardName,List);
-			.nth(I,Bids,MBid);
-			.nth(I,BidsIds,MBidId);
-			-+listBids(CNPBoardName,[bid(MBid,MBidId)|List]);
-		}
-		?listBids(CNPBoardName,ListNew);
-		.print("Got bids (",.length(Bids),")");
-		?selectBid(ListNew,bid(99999,99999),bid(Bid,BidId));
+		+pricedJob(JobId,Items,StorageId);
+		.print("Got bids (",.length(Bids),") for task ",CNPBoardName," List ",Bids);
+		?selectBid(Bids,bid(99999,99999),bid(Bid,BidId));
 		.print("Bid that won: ",Bid," Bid id: ",BidId);
 		award(BidId,CNPBoardName,item(ItemId,Qty),JobId,StorageId)[artifact_name(CNPBoardName)];
 		-listBids(CNPBoardName,_);
