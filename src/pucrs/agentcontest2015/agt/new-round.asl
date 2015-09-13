@@ -9,7 +9,7 @@
 	: true
 <-
 	+free;
-	+maxBidders(3);
+	+maxBidders(4);
 	+max_bid_time(500);
 	+workshopPrice(0);
 	+chargingPrice(0,0);

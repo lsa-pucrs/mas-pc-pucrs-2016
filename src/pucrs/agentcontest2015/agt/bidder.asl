@@ -1,6 +1,6 @@
 @task[atomic]
 +task(Task,CNPBoard) 
-	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & Role \== "Truck"
+	: roled(Role, Speed, LoadCap, BatteryCap, Tools)
 <- 
 	.print("Found a task: ",Task);
 	lookupArtifact(CNPBoard,BoardId);
