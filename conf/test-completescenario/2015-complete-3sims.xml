@@ -30,7 +30,7 @@
 				maxLon="10.3641" maxLat="51.8122" proximity="0.0002" cellSize="0.001">
 
 				<roles>
-					<role name="Car" speed="3" loadCapacity="550" batteryCapacity="5000">
+					<role name="Car" speed="3" loadCapacity="10000" batteryCapacity="5000">
 						<roads>
 							<road name="road" />
 						</roads>
@@ -39,7 +39,7 @@
 							<tool id="tool2" />
 						</tools>
 					</role>
-					<role name="Drone" speed="5" loadCapacity="1000"
+					<role name="Drone" speed="5" loadCapacity="10000"
 						batteryCapacity="2500">
 						<roads>
 							<road name="air" />
@@ -49,7 +49,7 @@
 							<tool id="tool1" />
 						</tools>
 					</role>
-					<role name="Motorcycle" speed="4" loadCapacity="30000"
+					<role name="Motorcycle" speed="4" loadCapacity="10000"
 						batteryCapacity="3500">
 						<roads>
 							<road name="road" />
@@ -59,7 +59,7 @@
 							<tool id="tool3" />
 						</tools>
 					</role>
-					<role name="Truck" speed="1" loadCapacity="30000"
+					<role name="Truck" speed="1" loadCapacity="10000"
 						batteryCapacity="10000">
 						<roads>
 							<road name="road" />
@@ -133,7 +133,7 @@
 				maxLon="-0.0354" maxLat="51.5223" proximity="0.0002" cellSize="0.001">
 
 				<roles>
-					<role name="Car" speed="3" loadCapacity="550" batteryCapacity="5000">
+					<role name="Car" speed="3" loadCapacity="10000" batteryCapacity="5000">
 						<roads>
 							<road name="road" />
 						</roads>
@@ -142,7 +142,7 @@
 							<tool id="tool2" />
 						</tools>
 					</role>
-					<role name="Drone" speed="5" loadCapacity="1000"
+					<role name="Drone" speed="5" loadCapacity="10000"
 						batteryCapacity="2500">
 						<roads>
 							<road name="air" />
@@ -152,7 +152,7 @@
 							<tool id="tool1" />
 						</tools>
 					</role>
-					<role name="Motorcycle" speed="4" loadCapacity="30000"
+					<role name="Motorcycle" speed="4" loadCapacity="10000"
 						batteryCapacity="3500">
 						<roads>
 							<road name="road" />
@@ -162,7 +162,7 @@
 							<tool id="tool3" />
 						</tools>
 					</role>
-					<role name="Truck" speed="1" loadCapacity="30000"
+					<role name="Truck" speed="1" loadCapacity="10000"
 						batteryCapacity="10000">
 						<roads>
 							<road name="road" />
@@ -235,7 +235,7 @@
 				maxLon="9.7686" maxLat="52.3783" proximity="0.0002" cellSize="0.001">
 
 				<roles>
-					<role name="Car" speed="3" loadCapacity="550" batteryCapacity="5000">
+					<role name="Car" speed="3" loadCapacity="10000" batteryCapacity="5000">
 						<roads>
 							<road name="road" />
 						</roads>
@@ -244,7 +244,7 @@
 							<tool id="tool2" />
 						</tools>
 					</role>
-					<role name="Drone" speed="5" loadCapacity="1000"
+					<role name="Drone" speed="5" loadCapacity="10000"
 						batteryCapacity="2500">
 						<roads>
 							<road name="air" />
@@ -254,7 +254,7 @@
 							<tool id="tool1" />
 						</tools>
 					</role>
-					<role name="Motorcycle" speed="4" loadCapacity="30000"
+					<role name="Motorcycle" speed="4" loadCapacity="10000"
 						batteryCapacity="3500">
 						<roads>
 							<road name="road" />
@@ -264,7 +264,7 @@
 							<tool id="tool3" />
 						</tools>
 					</role>
-					<role name="Truck" speed="1" loadCapacity="30000"
+					<role name="Truck" speed="1" loadCapacity="10000"
 						batteryCapacity="10000">
 						<roads>
 							<road name="road" />
