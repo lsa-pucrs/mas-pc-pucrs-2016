@@ -67,7 +67,7 @@
 	    for (.member(assemble(ItemId,Tool),ToolsMissing))
 	    {
 	  		?count(ItemId,ListAssemble,0,Qty);
-	  		.print("I need help assembling ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
+	  		.print("I need help assembling tool ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
 	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));
 	  		+waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name); 		
 	    }
@@ -195,9 +195,9 @@
 
 @assembleItemWithAssist
 +!select_goal 
-	: assembleList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & iAmHere
+	: assembleList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & iAmHere(ItemId,_,Tool,FacilityHelp,Agent)
 <- 
-	.print("Assembling item ", ItemId, " in workshop ", Facility);	
+	.print("Assembling, with assist, item ", ItemId, " in workshop ", Facility);	
 	!assemble(ItemId);
 	-assembleList(ListAssemble);
 	.delete(0,ListAssemble,ListAssembleNew);
@@ -294,11 +294,12 @@
 	    for (.member(assemble(ItemId,Tool),ToolsMissing))
 	    {
 	  		?count(ItemId,ListAssemble,0,Qty);
-	  		.print("I need help assembling ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
-	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));	
 	  		+waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name);  		
 	    }
-	    
+	    .nth(0,ToolsMissing,assemble(ItemId2,Tool2));
+	    ?count(ItemId2,ListAssemble,0,Qty2);
+  		.print("I need help assembling ",Qty2,"x: ",ItemId2, " with ",Tool2," in ",Facility);
+  		.broadcast(tell,helpAssemble(ItemId2,Qty2,Tool2,Facility,Name));	
 	}
 	.print("I'm going to workshop ", Facility);
 	!goto(Facility);
@@ -310,10 +311,10 @@
 <-
 	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
 	// let agents know you do not need help anymore
-	for (iAmHere[source(X)])
+	for (iAmHere(ItemId,Qty,Tool,FacilityHelp,Agent)[source(X)])
 	{
-		-iAmHere[source(X)];
-		.send(X,untell,helpAssemble(_,_,_,_,_));
+		-iAmHere(ItemId,Qty,Tool,FacilityHelp,Agent)[source(X)];
+		.send(X,untell,helpAssemble(ItemId,Qty,Tool,FacilityHelp,Agent));
 	}
 	// clearing bases used to assemble
 	-baseListJob(_);

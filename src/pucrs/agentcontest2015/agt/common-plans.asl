@@ -77,10 +77,10 @@
 	-helping;
 	.		
 	
-+iAmHere[source(X)]
++iAmHere(ItemId,Qty,Tool,FacilityHelp,Agent)[source(X)]
 	: true
 <-	
-	-waitingForAssistAssemble(_,_,_,_,_);
+	-waitingForAssistAssemble(ItemId,Qty,Tool,FacilityHelp,Agent);
 	.		
 
 @shopsList[atomic]

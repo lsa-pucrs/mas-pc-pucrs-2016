@@ -21,7 +21,7 @@
 	};
 	-+inFacility(Facility);
 	-warnAgent;
-	.send(X,tell,iAmHere);
+	.send(X,tell,iAmHere(ItemId,Qty,Tool,FacilityHelp,Agent));
 	.
 
 +inFacility(Facility)[artifact_id(_)]
