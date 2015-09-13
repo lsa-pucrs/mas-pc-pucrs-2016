@@ -25,8 +25,8 @@ public class TaskBoard extends Artifact {
 		}
 	}
 	
-	@OPERATION void clear(String id){
-		String artifactName = "cnp_board_"+taskId;
+	@OPERATION void clear(String artifactName){
+		//String artifactName = "cnp_board_"+taskId;
 		this.removeObsPropertyByTemplate("task", null, artifactName);
 	}
 	

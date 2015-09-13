@@ -32,7 +32,7 @@
 	pucrs.agentcontest2015.actions.tolower(Role, File);
 	.concat(File, ".asl", FileExt);
 	pucrs.agentcontest2015.actions.include(FileExt);
-	if (N == vehicle1)
+	if (Role == "Truck")
 	{
 		pucrs.agentcontest2015.actions.include("initiator.asl");
 		!create_taskboard;

@@ -1,5 +1,5 @@
 +task(Task,CNPBoard) 
-	: true & .my_name(N) & N \== vehicle1
+	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & Role \== "Truck"
 <- 
 	.print("Found a task: ",Task);
 	lookupArtifact(CNPBoard,BoardId);

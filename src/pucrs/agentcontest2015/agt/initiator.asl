@@ -70,13 +70,12 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
-	: not working(_,_,_) & not jobDone(JobId) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max)
+	: not working(_,_,_) & not jobDone(JobId) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max) & not cnp(_)
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	if ( .length(Items,NumberTasks) &  NumberTasks <= Max)
 	{
 		!separate_tasks(Items,JobId,StorageId,true);
-		
 	}
 	else {
 		.print("Too many tasks, not enough agents!");
@@ -110,15 +109,16 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 <-
 	for ( .member(item(ItemId,Qty),Items) )
 	{
-		!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId,TestPriced);
+		!!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId,TestPriced);
 	}
 	.
 	
-+!allocate_task(Task,Timeout,Items,JobId,StorageId,TestPriced)
++!allocate_task(item(ItemId,Qty),Timeout,Items,JobId,StorageId,TestPriced)
 	: true
 <- 
-	announce(Task,Timeout,CNPBoardName);
-	.print("Announced: ",Task," on ",CNPBoardName);
+	announce(item(ItemId,Qty),Timeout,CNPBoardName);
+	+cnp(CNPBoardName);
+	.print("Announced: ",Qty,"x of ",ItemId," on ",CNPBoardName);
 	getBids(Bids,BidsIds) [artifact_name(CNPBoardName)];
 	if (.length(Bids) \== 0)
 	{		
@@ -126,25 +126,26 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 		{
 			+pricedJob(JobId,Items,StorageId);
 		}
-		+listBids([]);
+		+listBids(CNPBoardName,[]);
 		for (.range(I,0,.length(Bids)-1))
 		{
-			?listBids(List);
+			?listBids(CNPBoardName,List);
 			.nth(I,Bids,MBid);
 			.nth(I,BidsIds,MBidId);
-			-+listBids([bid(MBid,MBidId)|List]);
+			-+listBids(CNPBoardName,[bid(MBid,MBidId)|List]);
 		}
-		?listBids(ListNew);
+		?listBids(CNPBoardName,ListNew);
 		.print("Got bids (",.length(Bids),")");
 		?selectBid(ListNew,bid(99999,99999),bid(Bid,BidId));
 		.print("Bid that won: ",Bid," Bid id: ",BidId);
-		award(BidId,CNPBoardName,Task,JobId,StorageId)[artifact_name(CNPBoardName)];
-		-listBids(_);
+		award(BidId,CNPBoardName,item(ItemId,Qty),JobId,StorageId)[artifact_name(CNPBoardName)];
+		-listBids(CNPBoardName,_);
 	}
 	else {
 		.print("No bids.");
 	}
-	clear(Task);
+	-cnp(CNPBoardName);
+	clear(CNPBoardName);
 	.
 	
 @count_composite[atomic]
