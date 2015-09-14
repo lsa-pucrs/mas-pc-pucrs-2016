@@ -46,25 +46,29 @@
 	
 @create_bid[atomic]	
 +!create_bid(item(ItemId,Qty),Bid)
-	: max_bid_time(Timeout) & product(ItemId, Volume, BaseList) & loadExpected(LoadE) & load(Load) & loadTotal(LoadCap)
+	: product(ItemId, Volume, BaseList) & loadExpected(LoadE) & load(Load) & loadTotal(LoadCap) & workshopList(WList) & .nth(0,WList,WorkshopId) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & storageList(StList) & .nth(0,StList,StorageId) & roled(_, Speed, _, _, _)
 <- 
+	?closestFacility([WorkshopId], FacilityA, RouteLenWorkshop);
+	?closestFacility([ShopId], FacilityB, RouteLenShop);
+	?closestFacility([StorageId], FacilityC, RouteLenStorage);	
 	?calculateBasesLoad(BaseList,Qty,0,LoadB);
+	
 	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB + LoadE) )
 	{
 		-+loadExpected(LoadB + LoadE);
-		Bid = math.round(math.random(Timeout)) * 1;		
+		Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed));		
 	}
 	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB + LoadE) ) 
 	{
-		Bid = math.round(math.random(Timeout)) * 0;
+		Bid = 0;
 	}	
 	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty + LoadE) )
 	{
 		-+loadExpected(Volume * Qty + LoadE);
-		Bid = math.round(math.random(Timeout)) * 1;
+		Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed));
 	}
 	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty + LoadE) )
 	{
-		Bid = math.round(math.random(Timeout)) * 0;
+		Bid = 0;
 	}
 	.	
