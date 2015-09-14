@@ -10,7 +10,7 @@ closestFacility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.age
 
 bestShop(Shops,Shop) :- .nth(0,Shops,Shop).
 
-verifyItems([item(ItemId,Qty)|List]) :- item(ItemId,Qty) & verifyItems(List).
+verifyItems([item(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verifyItems(List).
 verifyItems([consumed(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verifyItems(List).
 verifyItems([tools(ItemId,Qty)|List]) :- item(ItemId,Qty) & verifyItems(List).
 

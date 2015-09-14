@@ -11,16 +11,16 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 
 @jobTaken[atomic]
 +jobTaken(JobId)
-	: auctionJob(JobId,Items,StorageId) & not working(_,_,_) & not jobDone(JobId)
+	: auctionJob(JobId,Items,StorageId) & not working(_,_,_)
 <-
 	.print("We won the auction for job ",JobId,"!");
 	-auctionJob(JobId,Items,StorageId);
-	!separate_tasks(Items,JobId,StorageId,false);
+	!separate_tasks(Items,JobId,StorageId);
 	.
 
 @auctionJob[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
-	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate)
+	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate)
 <- 
 	+count_comp(0);
 	for ( .member(item(ItemId,Qty),Items) )
@@ -47,7 +47,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 // got an auction too soon, do not have lists ready yet just make a simple bid
 @auctionJob2[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
-	: not working(_,_,_) & not jobDone(JobId) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price)
+	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price)
 <- 
 	+count_comp(0);
 	for ( .member(item(ItemId,Qty),Items) )
@@ -70,7 +70,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
-	: not working(_,_,_) & not jobDone(JobId) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max) & not cnp(_)
+	: not working(_,_,_) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max) & not cnp(_)
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	if ( .length(Items,NumberTasks) &  NumberTasks <= Max)

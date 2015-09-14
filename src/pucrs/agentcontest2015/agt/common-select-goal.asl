@@ -125,7 +125,6 @@
 <- 
 	!deliver_job(JobId);
 	-working(JobId,Items,StorageId);
-	+jobDone(JobId);
 	.print("Job ", JobId, " has been delivered.");
 	+countAux(0);
 	for ( .member(item(ItemId,Qty),Items))  {
