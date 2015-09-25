@@ -128,6 +128,7 @@ public class EISArtifact extends Artifact {
 	@INTERNAL_OPERATION
 	void receiving() throws JasonException {
 		// Set<Percept> leader_percepts = new HashSet<Percept>();
+		boolean filterIsFiltered = false;
 		while (receiving) {
 			// leader_percepts.clear();
 			for (String agent : ei.getAgents()) {
@@ -153,6 +154,14 @@ public class EISArtifact extends Artifact {
 					e.printStackTrace();
 				}
 			}
+			/* Filtering the filter */
+			if(!filterIsFiltered){
+				for(String f:another_agent_filter.keySet())
+					another_agent_filter.put(f, true);
+				
+				filterIsFiltered = true;
+			}
+			
 			signal("ok");
 /*
 			for (Percept percept : leader_percepts) {
@@ -215,6 +224,14 @@ public class EISArtifact extends Artifact {
 		return list;
 	}
 */	
+	static Map<String, Boolean> another_agent_filter = new HashMap<String, Boolean>();
+	static{
+		another_agent_filter.put("dump", false);
+		another_agent_filter.put("storage", false);
+		another_agent_filter.put("workshop", false);
+		another_agent_filter.put("chargingStation", false);
+	}
+	
 	static List<String> agent_filter = Arrays.asList(new String[]{
 		"charge",
 //		"entity",
@@ -252,6 +269,10 @@ public class EISArtifact extends Artifact {
 		List<Percept> list = new ArrayList<Percept>();
 		for(Percept perception : perceptions){
 			if(agent_filter.contains(perception.getName())){
+				/* Filtering the filter */
+				if(another_agent_filter.containsKey(perception.getName()) && !another_agent_filter.get(perception.getName()))
+					continue;
+				
 				list.add(perception);
 			}
 		}
