@@ -105,7 +105,6 @@
 	for(.member(item(NItem,Price,Qty,Load),Items))
 	{
 		+item_qty(ShopId, NItem, Qty);
-		.print("@@@@  QTY   ",Qty);
 	}
 	.
 	
