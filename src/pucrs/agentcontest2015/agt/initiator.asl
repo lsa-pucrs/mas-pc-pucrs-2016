@@ -1,6 +1,3 @@
-items_has_price([item(NItem,Price,Qty,Load)]):- Price\==0.
-items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.
-
 auction_gain(Cost,Bid,MaxBid,WorkshopFee,BatteryFee):- Bid =  MaxBid*30/100 + Cost + WorkshopFee + BatteryFee. // % profit of 30% + expenses
 
 calculateBid(Items,Bid,MaxBid,WorkshopFee,BatteryFee):- calculateCost(Items,Cost) & auction_gain(Cost,Bid,MaxBid,WorkshopFee,BatteryFee).

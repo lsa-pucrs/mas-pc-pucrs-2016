@@ -81,7 +81,20 @@
 	: true
 <-	
 	-waitingForAssistAssemble(ItemId,Qty,Tool,FacilityHelp,Agent);
-	.		
+	.
+	
++shop(ShopId, Lat, Lng, Items)
+	: items_has_price(Items) //& .nth(0,Items,item(ItemId,P,Q,L)) & item_qty(ShopId,ItemId,Q2) & Q \== Q2 THIS NEEDS TO BE OPTIMIZED!!!!
+<-  for(.member(item(NItem,Price,Qty,Load),Items))
+	{
+		?item_qty(ShopId, NItem, Qty2);
+		if (Qty2 \== Qty)
+		{
+			-item_qty(ShopId, NItem, Qty2);
+			+item_qty(ShopId, NItem, Qty);
+		}
+	}
+	.
 
 @shopsList[atomic]
 +shop(ShopId, Lat, Lng, Items)
@@ -89,6 +102,11 @@
 <-
 	.print("-> Shop: ", ShopId, " | Items: ", Items);
 	-+shopsList([shop(ShopId,Items)|List]);
+	for(.member(item(NItem,Price,Qty,Load),Items))
+	{
+		+item_qty(ShopId, NItem, Qty);
+		.print("@@@@  QTY   ",Qty);
+	}
 	.
 	
 @storageList[atomic]

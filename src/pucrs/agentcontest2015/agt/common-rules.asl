@@ -40,3 +40,6 @@ calculateBasesLoad([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(It
 calculateBasesLoad([tools(ToolId,Qty2)|BaseList],Qty,Aux,LoadB) :- calculateBasesLoad(BaseList,Qty,Aux,LoadB).
 
 isTool(ItemId) :- ItemId == tool1 | ItemId == tool2 | ItemId == tool3 | ItemId == tool4.
+
+items_has_price([item(NItem,Price,Qty,Load)]):- Price\==0.
+items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.

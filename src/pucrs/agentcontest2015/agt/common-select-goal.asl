@@ -102,7 +102,7 @@
 	
 @buyAction
 +!select_goal
-	: buyList(Item,Qty,Shop) & inFacility(Shop) & item(Item,Qty2)
+	: buyList(Item,Qty,Shop) & inFacility(Shop) & item(Item,Qty2) & item_qty(Shop,Item,Qty3) & Qty3 >= Qty
 <-
 	.print("Buying ",Qty,"x item ",Item);
 	!buy(Item,Qty);
@@ -110,6 +110,14 @@
 	+item(Item,Qty+Qty2);
 	-buyList(Item,Qty,Shop);
 	.
+	
+@buyActionSkip
++!select_goal
+	: buyList(Item,Qty,Shop) & inFacility(Shop) & item_qty(Shop,Item,Qty3) & Qty3 < Qty
+<-
+	.print("Not enough items on the shop, skipping my action to try again next step.");
+	!skip;
+	.	
 
 @chargeAction
 +!select_goal 
