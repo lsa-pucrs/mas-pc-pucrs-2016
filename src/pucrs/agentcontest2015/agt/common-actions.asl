@@ -208,6 +208,7 @@
 // AuctionSteps must be an integer
 // StorageId must be a string
 // Items must be a string "item1=item_id1 amount1=10 item2=item_id2 amount2=5 ..."
+// Example: !post_job_auction(1000, 50, 1, 10, storage1, .list(item(base1,10), item(base2,20), item(base3,30)));
 +!post_job_auction(MaxPrice, Fine, ActiveSteps, AuctionSteps, StorageId, Items)
 	: true
 <-
@@ -218,9 +219,8 @@
 			fine(Fine),
 			active_steps(ActiveSteps),
 			auction_steps(AuctionSteps), 
-			storage(StorageId)
-			// TODO items: custom parse
-			// [item(id(item_id1), amount(10)), ... ]
+			storage(StorageId),
+			Items
 		)
 	);
 	.

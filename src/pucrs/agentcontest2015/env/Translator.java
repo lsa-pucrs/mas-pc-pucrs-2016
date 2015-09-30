@@ -115,10 +115,23 @@ public class Translator {
 		Literal literal = Literal.parseLiteral(actionlitstr);
 		LinkedList<Parameter> list = new LinkedList<Parameter>();
 		String act = "";
-		for (Term term : literal.getTerms()) {
-			Literal termlit = (Literal) term;
-			act = act + termlit.getFunctor() + "=" + termlit.getTerm(0) + " ";
-//			list.add(new Identifier(act));			
+		if(literal.getFunctor().equals("post_job")){
+			Literal items = (Literal) literal.getTerms().remove(literal.getTerms().size()-1);
+			for (Term term : literal.getTerms()) {
+				Literal termlit = (Literal) term;
+				act = act + termlit.getFunctor() + "=" + termlit.getTerm(0) + " ";
+			}
+			int index = 1;
+			for(Term t: items.getTerms()){
+				Literal item = (Literal) t;
+				act = act + "item" + index + "=" + item.getTerm(0) + " amount" + index + "=" + item.getTerm(1) + " ";
+				index++;
+			}
+		} else {
+			for (Term term : literal.getTerms()) {
+				Literal termlit = (Literal) term;
+				act = act + termlit.getFunctor() + "=" + termlit.getTerm(0) + " ";
+			}
 		}
 		list.add(new Identifier(act));
 		return new Action(literal.getFunctor(), list);
