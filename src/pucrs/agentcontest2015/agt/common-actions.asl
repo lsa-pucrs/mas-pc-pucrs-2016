@@ -230,6 +230,7 @@
 // ActiveSteps must be an integer
 // StorageId must be a string
 // Items must be a string "item1=item_id1 amount1=10 item2=item_id2 amount2=5 ..."
+// Example: !post_job_priced(1000, 50, storage1, .list(item(base1,10), item(base2,20), item(base3,30)));
 +!post_job_priced(Price, ActiveSteps, StorageId, Items)
 	: true
 <-
@@ -238,7 +239,8 @@
 			type(priced),
 			price(Price),
 			active_steps(ActiveSteps), 
-			storage(StorageId)
+			storage(StorageId),
+			Items
 			// TODO items: custom parse
 			// [item(id(item_id1), amount(10)), ... ]
 		)
