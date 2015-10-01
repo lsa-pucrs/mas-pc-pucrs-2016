@@ -67,15 +67,27 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
-	: not working(_,_,_) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max) & not cnp(_)
+	: not working(_,_,_) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max) & not cnp(_) & lastStep(Step) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_))
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
+	
+	?closestFacilityDrone([Workshop], FacilityA, RouteLenWorkshop);
+	?closestFacilityDrone([ShopId], FacilityB, RouteLenShop);
+	?closestFacilityDrone([StorageId], FacilityC, RouteLenStorage);
+	
+	if (math.round(RouteLenWorkshop/5+RouteLenShop/5+RouteLenStorage/5) >  End-Step)
+	{
+		.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
+		+pricedJob(JobId,Items,StorageId);
+	}
+	else {
 	if ( .length(Items,NumberTasks) &  NumberTasks <= Max)
 	{
 		!separate_tasks(Items,JobId,StorageId);
 	}
 	else {
 		.print("Too many tasks, not enough agents!");
+	}
 	}
 	.	
 	

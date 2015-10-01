@@ -7,6 +7,7 @@ lowBattery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargin
 
 closestFacility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility).
 closestFacility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
+closestFacilityDrone(List, Facility, RouteLen) :- Role = "drone" & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 
 bestShop(Shops,Shop) :- .nth(0,Shops,Shop).
 
