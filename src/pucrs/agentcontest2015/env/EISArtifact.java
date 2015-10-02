@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -70,6 +71,10 @@ public class EISArtifact extends Artifact {
 	protected void init() throws IOException {
 		receiving = true;
 		execInternalOp("receiving");
+	}
+	
+	public static Set<String> getRegisteredAgents(){
+		return agentToEntity.keySet();
 	}
 	
 /*

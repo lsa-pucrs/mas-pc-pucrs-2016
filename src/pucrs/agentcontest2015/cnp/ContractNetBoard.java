@@ -7,6 +7,7 @@ import jason.asSyntax.Literal;
 import java.util.ArrayList;
 import java.util.List;
 
+import pucrs.agentcontest2015.env.EISArtifact;
 import cartago.*;
 
 public class ContractNetBoard extends Artifact {
@@ -24,7 +25,8 @@ public class ContractNetBoard extends Artifact {
 		this.defineObsProperty("state","open");
 		bids = new ArrayList<Bid>();
 		bidId = 0;
-		this.execInternalOp("checkDeadline",duration);
+		this.execInternalOp("checkDeadline", duration);
+		this.execInternalOp("checkAllBids");
 	}
 	
 	@OPERATION void bid(int bid, OpFeedbackParam<Integer> id){
@@ -43,8 +45,20 @@ public class ContractNetBoard extends Artifact {
 	
 	@INTERNAL_OPERATION void checkDeadline(long dt){
 		await_time(dt);
-		getObsProperty("state").updateValue("closed");
-		log("bidding stage closed.");
+		if(!isClosed()){
+			getObsProperty("state").updateValue("closed");
+			log("bidding stage closed by deadline.");
+		}
+	}
+	
+	@INTERNAL_OPERATION void checkAllBids(){
+		while(!isClosed() && !allAgentsMadeTheirBid()){
+			await_time(50);
+		}
+		if(!isClosed()){
+			getObsProperty("state").updateValue("closed");
+			log("bidding stage closed by all agents bids.");
+		}
 	}
 	
 	@OPERATION void getBids(OpFeedbackParam<Literal[]> bidList){
@@ -59,7 +73,15 @@ public class ContractNetBoard extends Artifact {
 	}
 	
 	@GUARD boolean biddingClosed(){
-		return this.getObsProperty("state").stringValue().equals("closed");
+		return isClosed();
+	}
+	
+	private boolean isClosed(){
+		return this.getObsProperty("state").stringValue().equals("closed");		
+	}
+	
+	private boolean allAgentsMadeTheirBid(){
+		 return bids.size() == EISArtifact.getRegisteredAgents().size();
 	}
 	
 	static public class Bid {

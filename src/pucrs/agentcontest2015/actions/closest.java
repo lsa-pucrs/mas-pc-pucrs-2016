@@ -1,17 +1,15 @@
 package pucrs.agentcontest2015.actions;
 
-import massim.competition2015.scenario.Route;
 import jason.JasonException;
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
-import jason.asSyntax.Atom;
 import jason.asSyntax.ListTerm;
 import jason.asSyntax.Literal;
 import jason.asSyntax.NumberTermImpl;
 import jason.asSyntax.StringTerm;
-import jason.asSyntax.StringTermImpl;
 import jason.asSyntax.Term;
+import massim.competition2015.scenario.Route;
 import pucrs.agentcontest2015.env.MapHelper;
 
 public class closest extends DefaultInternalAction {
