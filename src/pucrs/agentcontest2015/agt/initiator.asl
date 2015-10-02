@@ -40,7 +40,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 		+bid(JobId,Bid,Items,StorageId,MaxBid);		
 	}
 	.
-
+/* 
 // got an auction too soon, do not have item prices ready yet just make a simple bid
 @auctionJob2[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
@@ -67,7 +67,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 		+bid(JobId,Bid,Items,StorageId,MaxBid);		
 	}
 	.
-	
+*/	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
 	: not working(_,_,_) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max) & not cnp(_) & lastStep(Step) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_))
