@@ -53,10 +53,20 @@
 	?closestFacility([StorageId], FacilityC, RouteLenStorage);	
 	?calculateBasesLoad(BaseList,Qty,0,LoadB);
 	
+	?verifyTools([ItemId],[],ToolsMissing);
+	if (ToolsMissing \== [])
+	{
+		.length(ToolsMissing,L);
+		ToolFactor = 2 ** L;
+	}
+	else {
+		ToolFactor = 1;
+	}
+	
 	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB + LoadE) )
 	{
 		-+loadExpected(LoadB + LoadE);
-		Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed));		
+		Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed) * ToolFactor);		
 	}
 	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB + LoadE) ) 
 	{
@@ -65,7 +75,7 @@
 	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty + LoadE) )
 	{
 		-+loadExpected(Volume * Qty + LoadE);
-		Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed));
+		Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed) * ToolFactor);
 	}
 	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty + LoadE) )
 	{
