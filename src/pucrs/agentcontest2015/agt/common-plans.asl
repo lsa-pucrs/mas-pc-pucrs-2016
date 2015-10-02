@@ -84,8 +84,9 @@
 	.
 	
 +shop(ShopId, Lat, Lng, Items)
-	: items_has_price(Items) //& .nth(0,Items,item(ItemId,P,Q,L)) & item_qty(ShopId,ItemId,Q2) & Q \== Q2 THIS NEEDS TO BE OPTIMIZED!!!!
-<-  for(.member(item(NItem,Price,Qty,Load),Items))
+	: items_has_price(Items) & roled(Role, _, _, _, _) & Role \== "Truck" //& .nth(0,Items,item(ItemId,P,Q,L)) & item_qty(ShopId,ItemId,Q2) & Q \== Q2 THIS NEEDS TO BE OPTIMIZED!!!!
+<-  
+	for(.member(item(NItem,Price,Qty,Load),Items))
 	{
 		?item_qty(ShopId, NItem, Qty2);
 		if (Qty2 \== Qty)
@@ -95,6 +96,26 @@
 		}
 	}
 	.
+	
++shop(ShopId, Lat, Lng, Items)
+	: items_has_price(Items) & roled(Role, _, _, _, _) & Role == "Truck" //& .nth(0,Items,item(ItemId,P,Q,L)) & item_qty(ShopId,ItemId,Q2) & Q \== Q2 THIS NEEDS TO BE OPTIMIZED!!!!
+<-  
+	for(.member(item(NItem,Price,Qty,Load),Items))
+	{
+		?item_qty(ShopId, NItem, Qty2);
+		if (Qty2 \== Qty)
+		{
+			-item_qty(ShopId, NItem, Qty2);
+			+item_qty(ShopId, NItem, Qty);
+		}
+		if(not(item_price(NItem,Price2)) | (item_price(NItem,Price2) & Price > Price2))
+		{
+			-item_price(NItem,Price2);
+			+item_price(NItem,Price);
+		}		 
+		!!calculate_materials_prices;
+	}
+	.	
 
 @shopsList[atomic]
 +shop(ShopId, Lat, Lng, Items)

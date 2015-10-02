@@ -17,7 +17,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 
 @auctionJob[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
-	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate)
+	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate) & item_price(_,_)
 <- 
 	+count_comp(0);
 	for ( .member(item(ItemId,Qty),Items) )
@@ -41,10 +41,10 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	}
 	.
 
-// got an auction too soon, do not have lists ready yet just make a simple bid
+// got an auction too soon, do not have item prices ready yet just make a simple bid
 @auctionJob2[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
-	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price)
+	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate)
 <- 
 	+count_comp(0);
 	for ( .member(item(ItemId,Qty),Items) )
@@ -54,7 +54,10 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	}
 	?count_comp(NumberOfComp);
 	-count_comp(NumberOfComp);
-	?calculateBid(Items,Bid,MaxBid,NumberOfComp*Price,1);
+	?closestFacility([Workshop], FacilityA, RouteLenWorkshop);
+	?closestFacility([ShopId], FacilityB, RouteLenShop);
+	?closestFacility([StorageId], FacilityC, RouteLenStorage);
+	?auction_gain(0,Bid,MaxBid,NumberOfComp*Price,math.round((RouteLenWorkshop / Speed * 10) + (RouteLenShop / Speed * 10) + (RouteLenStorage / Speed * 10) / Rate) * PriceC);
 	if (Bid > MaxBid)
 	{
 		.print("Ignoring auction job ",JobId," since our bid of ",Bid," is higher then the max bid of ",MaxBid);
@@ -90,21 +93,6 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	}
 	}
 	.	
-	
-@basesPrice	
-+shop(Name,Lat,Long,Items)
-	: items_has_price(Items)
-<- 
-	for(.member(item(NItem,Price,Qty,Load),Items))
-	{
-		if(not(item_price(NItem,Price2)) | (item_price(NItem,Price2) & Price > Price2))
-		{
-			-item_price(NItem,Price2);
-			+item_price(NItem,Price);
-		}		 
-	}
-	!!calculate_materials_prices;
-	.
 
 +!create_taskboard
 	: true

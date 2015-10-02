@@ -42,7 +42,7 @@
 	.print("Task board located.");	
 	.
 	
-+role(Role)
++role(Role, Speed, LoadCap, BatteryCap, Tools)
 	: not roled(_, _, _, _, _)
 <-
 	.print("I do not have any plan for role: ", Role);
