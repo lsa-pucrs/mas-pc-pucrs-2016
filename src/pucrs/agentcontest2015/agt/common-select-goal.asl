@@ -1,3 +1,31 @@
+@postAuctionJob
++!select_goal
+	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items) & going(Facility)
+<-
+	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
+	.print("Posted an auction job.");
+	-post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
+	+remember(Facility);
+	.
+	
+@postAuctionJobAlt
++!select_goal
+	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items)
+<-
+	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
+	.print("Posted an auction job.");
+	-post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
+	.	
+
+@postPricedJob
++!select_goal
+	: post_job_priced(Reward, JobActive, StorageId, Items)
+<-
+	!post_job_priced(Reward, JobActive, StorageId, Items);
+	.print("Posted a priced job.");
+	-post_job_priced(Reward, JobActive, StorageId, Items);
+	.	
+
 @abort
 +!select_goal
 	: going(Facility) & abort

@@ -1,8 +1,8 @@
 +step(Step) 
 	: roled(_, _, _, _, _)
 <-
-	.wait({+ok});
  	-+lastStep(Step);
+	.wait({+ok});
 	!select_goal;
 	.
 
