@@ -17,8 +17,10 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 
 @auctionJob[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
-	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate) & item_price(_,_)
+	: not working(_,_,_) & not auctionJob(JobId,Items,StorageId) & not bid(JobId,Bid,Items,StorageId,MaxBid) & workshopPrice(Price) & workshopList(WList) & .nth(0,WList,Workshop) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & roled(_, Speed, _, _, _) & chargingPrice(PriceC,Rate) & item_price(_,_)  & lastStep(Step)
 <- 
+	.print("New auction job: ",JobId," Items: ",Items, " Storage: ", StorageId, " End: ",End);
+
 	+count_comp(0);
 	for ( .member(item(ItemId,Qty),Items) )
 	{
@@ -27,19 +29,31 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	}
 	?count_comp(NumberOfComp);
 	-count_comp(NumberOfComp);
-	?closestFacility([Workshop], FacilityA, RouteLenWorkshop);
-	?closestFacility([ShopId], FacilityB, RouteLenShop);
-	?closestFacility([StorageId], FacilityC, RouteLenStorage);	
-	?calculateBid(Items,Bid,MaxBid,NumberOfComp*Price,math.round((RouteLenWorkshop / Speed * 10) + (RouteLenShop / Speed * 10) + (RouteLenStorage / Speed * 10) / Rate) * PriceC);
-	if (Bid > MaxBid)
+	
+	?closestFacilityDrone([Workshop], FacilityD, RouteLenWorkshopDrone);
+	?closestFacilityDrone([ShopId], FacilityE, RouteLenShopDrone);
+	?closestFacilityDrone([StorageId], FacilityF, RouteLenStorageDrone);
+	if (math.round(RouteLenWorkshopDrone/5+RouteLenShopDrone/5+RouteLenStorageDrone/5) >  End-Step)
 	{
-		.print("Ignoring auction job ",JobId," since our bid of ",Bid," is higher then the max bid of ",MaxBid);
+		.print("Ignoring auction job ",JobId," deadline is too short.");
 		+auctionJob(JobId,Items,StorageId);
 	}
 	else {
-		+bid(JobId,Bid,Items,StorageId,MaxBid);		
+		?closestFacility([Workshop], FacilityA, RouteLenWorkshop);
+		?closestFacility([ShopId], FacilityB, RouteLenShop);
+		?closestFacility([StorageId], FacilityC, RouteLenStorage);	
+		?calculateBid(Items,Bid,MaxBid,NumberOfComp*Price,math.round((RouteLenWorkshop / Speed * 10) + (RouteLenShop / Speed * 10) + (RouteLenStorage / Speed * 10) / Rate) * PriceC);
+		if (Bid > MaxBid)
+		{
+			.print("Ignoring auction job ",JobId," either our bid of ",Bid," is higher then the max bid of ",MaxBid," or it has a short deadline");
+			+auctionJob(JobId,Items,StorageId);
+		}
+		else {
+			+bid(JobId,Bid,Items,StorageId,MaxBid);		
+		}				
 	}
 	.
+	
 /* 
 // got an auction too soon, do not have item prices ready yet just make a simple bid
 @auctionJob2[atomic]

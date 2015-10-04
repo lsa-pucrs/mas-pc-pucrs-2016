@@ -19,12 +19,22 @@
 
 @postPricedJob
 +!select_goal
+	: post_job_priced(Reward, JobActive, StorageId, Items) & going(Facility)
+<-
+	!post_job_priced(Reward, JobActive, StorageId, Items);
+	.print("Posted a priced job.");
+	-post_job_priced(Reward, JobActive, StorageId, Items);
+	+remember(Facility);
+	.
+	
+@postPricedJobAlt
++!select_goal
 	: post_job_priced(Reward, JobActive, StorageId, Items)
 <-
 	!post_job_priced(Reward, JobActive, StorageId, Items);
 	.print("Posted a priced job.");
 	-post_job_priced(Reward, JobActive, StorageId, Items);
-	.	
+	.
 
 @abort
 +!select_goal
