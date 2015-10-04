@@ -1,4 +1,5 @@
 { include("common-cartago.asl") }
+{ include("$jacamoJar/templates/common-moise.asl") }
 { include("common-rules.asl") }
 { include("common-actions.asl") }
 { include("common-plans.asl") }
@@ -11,10 +12,10 @@
 !register_freeconn.
 
 +!register_freeconn
-	: true
+	: jcm__art(WorkspaceName, "eis", ArtId)
 <-
 	.print("Registering...");
-	register_freeconn;
+	register_freeconn[artifact_id(ArtId)];
 	.
 	
 +serverName(Name)[artifact_id(_)]
@@ -25,15 +26,17 @@
 .	
 
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
-	: not roled(_, _, _, _, _) & .my_name(N)
+	: not roled(_, _, _, _, _) & jcm__art(WorkspaceName, "team1", ArtId)
 <-
 	.print("Got role: ", Role);
-	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);
 	pucrs.agentcontest2015.actions.tolower(Role, File);
+	adoptRole(File)[artifact_id(ArtId)];
+	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);	
 	.concat(File, ".asl", FileExt);
 	pucrs.agentcontest2015.actions.include(FileExt);
 	if (Role == "Truck")
 	{
+		adoptRole(initiator)[artifact_id(ArtId)];
 		pucrs.agentcontest2015.actions.include("initiator.asl");
 		!create_taskboard;
 	};

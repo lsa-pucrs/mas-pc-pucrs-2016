@@ -10,15 +10,17 @@
 //  <- println("I perceived a pin for ", ShopId, ", and its available items are: ", ItemsInformation).
 
 +simEnd
-	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art(WS,Art,ArtId) & jcm__ws(WSname2,WSid2) & serverName(ServerName)
+	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art("puc",Art1,ArtId1) & jcm__art("city",Art2,ArtId2) & jcm__ws("puc",WSid1) & jcm__ws("city",WSid2) & serverName(ServerName)
 <-
 	!end_round;
 	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);
 	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
 	+serverName(ServerName);	
-	+current_wsp(WSid,WSname,WScode); 
-	+jcm__art(WS,Art,ArtId);
-	+jcm__ws(WSname2,WSid2);
+	+current_wsp(WSid,WSname,WScode);	
+	+jcm__ws("puc",WSid1);
+	+jcm__ws("city",WSid2);
+	+jcm__art("puc",Art1,ArtId1);
+	+jcm__art("city",Art2,ArtId2);	
 	.
 	
 @goHorse[atomic]	

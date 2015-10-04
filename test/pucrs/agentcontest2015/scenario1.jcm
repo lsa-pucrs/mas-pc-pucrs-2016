@@ -7,12 +7,24 @@ mas scenario1 {
 
 	agent vehicle: vehicle.asl {
 		ag-arch: pucrs.agentcontest2015.env.EISAgArch
-		focus: eis
+		join: city, puc
+		focus: city.eis, puc.team1
 		instances: 4
+		roles: bidder in puc.team1
 	}
 
 	workspace city {
 		artifact eis: pucrs.agentcontest2015.env.EISArtifact
 	}
+	
+	 organisation puc: pucteam-os.xml {
+          group team1: team {
+             //responsible-for: s1                       // the group will be responsible for the scheme s1
+            // owner: alice
+          	debug                                     // starts GUI for this group          
+          }             
+          
+       //   scheme s1 : wpscheme                         // instance of scheme identified by wpscheme (in o1.xml)  
+       }
 
 }
