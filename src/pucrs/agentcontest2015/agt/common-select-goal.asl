@@ -368,6 +368,11 @@
 		-iAmHere(ItemId,Qty,Tool,FacilityHelp,Agent)[source(X)];
 		.send(X,untell,helpAssemble(ItemId,Qty,Tool,FacilityHelp,Agent));
 	}
+	for (iAmGoing(ItemId2,Qty2,Tool2,FacilityHelp2,Agent2)[source(X)])
+	{
+		-iAmGoing(ItemId2,Qty2,Tool2,FacilityHelp2,Agent2)[source(X)];
+		.send(X,untell,helpAssemble(ItemId,Qty,Tool,FacilityHelp,Agent));
+	}
 	// clearing bases used to assemble
 	-baseListJob(_);
 	-auxList(_);

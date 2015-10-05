@@ -53,11 +53,12 @@
 	.	
 
 @helpAssemble[atomic]
-+helpAssemble(ItemId,Qty,Tool,Facility,Agent)
++helpAssemble(ItemId,Qty,Tool,Facility,Agent)[source(X)]
 	: item(Tool,1) & free & not working(_,_,_) & not helping
 <-
 	+helping;
 	+warnAgent;
+	.send(X,tell,iAmGoing(ItemId,Qty,Tool,Facility,Agent));
 	.print("I can help, I have ",Tool);
 	.
 
@@ -70,7 +71,12 @@
 -helpAssemble(ItemId,Qty,Tool,Facility,Agent)[source(X)]
 	: helping & going(Facility)
 <-
+	for (helpAssemble(_,_,_,_,_)[source(X)])
+	{
+		-helpAssemble(_,_,_,_,_)[source(X)];
+	}
 	+abort;
+	-helping;
 	.	
 	
 -helpAssemble(ItemId,Qty,Tool,Facility,Agent)[source(X)]
