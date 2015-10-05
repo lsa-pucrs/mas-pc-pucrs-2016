@@ -121,8 +121,8 @@
 			-item_price(NItem,Price2);
 			+item_price(NItem,Price);
 		}		 
-		!!calculate_materials_prices;
 	}
+	!!calculate_materials_prices;
 	.	
 
 @shopsList[atomic]
