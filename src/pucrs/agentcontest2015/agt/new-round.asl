@@ -24,7 +24,7 @@
 	+shopsList([]);
 	+workshopList([]);
 	+assembleList([]);
-	+verifyItems([]);
+	+verify_items([]);
 	+auxList([]);                    // lista para limpar as bases compostas
 	+tools(Tools);
 	+chargeTotal(BatteryCap);
@@ -45,8 +45,8 @@
 			-baseListJob(_);
 			for ( .member(item(ItemId,Qty),Items) )
 			{
-				?findShops(ItemId,List,[],Result);
-				?bestShop(Result,Shop);
+				?find_shops(ItemId,List,Result);
+				?best_shop(Result,Shop);
 				if (buyList(ItemId,Qty2,Shop))
 				{
 					-buyList(ItemId,Qty2,Shop);

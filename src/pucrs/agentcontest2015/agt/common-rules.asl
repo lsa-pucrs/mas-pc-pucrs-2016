@@ -1,46 +1,46 @@
-//lowBattery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
-lowBattery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closestFacility(List, Facility, RouteLen)
+//low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
+low_battery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closest_facility(List, Facility, RouteLen)
               & (RouteLen / Speed * 10 > Battery - 20) .
               // Battery to the closest station > Battery w/ margin => Time to recharge
               // It waste 10 of battery per motion
               // TODO keep watching if 10 will remain the same for all roles
 
-closestFacility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility).
-closestFacility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
-closestFacilityDrone(List, Facility, RouteLen) :- Role = "drone" & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
+closest_facility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility).
+closest_facility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
+closest_facility_drone(List, Facility, RouteLen) :- Role = "drone" & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 
-bestShop(Shops,Shop) :- .nth(0,Shops,Shop).
+best_shop([Shop|_],Shop).
 
-verifyItems([item(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verifyItems(List).
-verifyItems([consumed(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verifyItems(List).
-verifyItems([tools(ItemId,Qty)|List]) :- item(ItemId,Qty) & verifyItems(List).
+verify_items([item(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verify_items(List).
+verify_items([consumed(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verify_items(List).
+verify_items([tools(ItemId,Qty)|List]) :- item(ItemId,Qty) & verify_items(List).
 
-verifyTools([],Aux,Result) :- Result = Aux.
-verifyTools([ItemId|List],Aux,Result) :- product(ItemId, Volume, BaseList) & getMissingTools(BaseList,[],ListTools,ItemId) & .concat(ListTools,Aux,ResultAux) & verifyTools(List,ResultAux,Result).
+verify_tools([],Aux,Result) :- Result = Aux.
+verify_tools([ItemId|List],Aux,Result) :- product(ItemId, Volume, BaseList) & get_missing_tools(BaseList,[],ListTools,ItemId) & .concat(ListTools,Aux,ResultAux) & verify_tools(List,ResultAux,Result).
 
-getMissingTools([],Aux,ListTools,ItemId) :- ListTools = Aux.
-getMissingTools([tools(ToolId,Qty)|List],Aux,ListTools,ItemId) :- item(ToolId,0) & .concat([assemble(ItemId,ToolId)],Aux,ResultAux) & getMissingTools(List,ResultAux,ListTools,ItemId).
-getMissingTools([tools(ToolId,Qty)|List],Aux,ListTools,ItemId) :- item(ToolId,1) & getMissingTools(List,Aux,ListTools,ItemId).
-getMissingTools([consumed(ItemId2,Qty)|List],Aux,ListTools,ItemId) :- getMissingTools(List,Aux,ListTools,ItemId).
+get_missing_tools([],Aux,ListTools,ItemId) :- ListTools = Aux.
+get_missing_tools([tools(ToolId,Qty)|List],Aux,ListTools,ItemId) :- item(ToolId,0) & .concat([assemble(ItemId,ToolId)],Aux,ResultAux) & get_missing_tools(List,ResultAux,ListTools,ItemId).
+get_missing_tools([tools(ToolId,Qty)|List],Aux,ListTools,ItemId) :- item(ToolId,1) & get_missing_tools(List,Aux,ListTools,ItemId).
+get_missing_tools([consumed(ItemId2,Qty)|List],Aux,ListTools,ItemId) :- get_missing_tools(List,Aux,ListTools,ItemId).
 
-findShops(ItemId,[],Aux,Result) :- Result = Aux.
-findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- .member(item(ItemId,_,_,_),ListItems) & .concat([ShopId],Aux,ResultAux) & findShops(ItemId,List,ResultAux,Result).
-findShops(ItemId,[shop(ShopId,ListItems)|List],Aux,Result) :- not .member(item(ItemId,_,_,_),ListItems) & findShops(ItemId,List,Aux,Result).
+find_shops(ItemId,[],[]).
+find_shops(ItemId,[shop(ShopId,ListItems)|List],[ShopId|Result]) :- .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
+find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
 
 count(ItemId,[],Aux,Qty) :- Qty = Aux.
 count(ItemId,[ItemId|ListAssemble],Aux,Qty) :- Aux2 = Aux+1 & count(ItemId,ListAssemble,Aux2,Qty).
 count(ItemId,[ItemId2|ListAssemble],Aux,Qty) :- count(ItemId,ListAssemble,Aux,Qty).
 
-selectBid([],bid(AuxBid,AuxBidId),bid(BidWinner,BidIdWinner)) :- BidWinner = AuxBid & BidIdWinner = AuxBidId.
-selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- Bid \== 0 & Bid < AuxBid & selectBid(Bids,bid(Bid,BidId),BidWinner).
-selectBid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- selectBid(Bids,bid(AuxBid,AuxBidId),BidWinner).
+select_bid([],bid(AuxBid,AuxBidId),bid(BidWinner,BidIdWinner)) :- BidWinner = AuxBid & BidIdWinner = AuxBidId.
+select_bid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- Bid \== 0 & Bid < AuxBid & select_bid(Bids,bid(Bid,BidId),BidWinner).
+select_bid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- select_bid(Bids,bid(AuxBid,AuxBidId),BidWinner).
 
-calculateBasesLoad([],Qty,Aux,LoadB) :- LoadB = Qty * Aux.
-calculateBasesLoad([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 == [] & calculateBasesLoad(BaseList,Qty,Volume * Qty2 + Aux,LoadB).
-calculateBasesLoad([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 \== [] & calculateBasesLoad(BaseList2,Qty,Aux,LoadB2) & calculateBasesLoad(BaseList,Qty,LoadB2,LoadB).
-calculateBasesLoad([tools(ToolId,Qty2)|BaseList],Qty,Aux,LoadB) :- calculateBasesLoad(BaseList,Qty,Aux,LoadB).
+calculate_bases_load([],Qty,Aux,LoadB) :- LoadB = Qty * Aux.
+calculate_bases_load([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 == [] & calculate_bases_load(BaseList,Qty,Volume * Qty2 + Aux,LoadB).
+calculate_bases_load([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 \== [] & calculate_bases_load(BaseList2,Qty,Aux,LoadB2) & calculate_bases_load(BaseList,Qty,LoadB2,LoadB).
+calculate_bases_load([tools(ToolId,Qty2)|BaseList],Qty,Aux,LoadB) :- calculate_bases_load(BaseList,Qty,Aux,LoadB).
 
-isTool(ItemId) :- ItemId == tool1 | ItemId == tool2 | ItemId == tool3 | ItemId == tool4.
+is_tool(ItemId) :- ItemId == tool1 | ItemId == tool2 | ItemId == tool3 | ItemId == tool4.
 
 items_has_price([item(NItem,Price,Qty,Load)]):- Price\==0.
 items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.

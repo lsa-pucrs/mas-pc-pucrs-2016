@@ -46,14 +46,14 @@
 	
 @create_bid[atomic]	
 +!create_bid(item(ItemId,Qty),Bid)
-	: product(ItemId, Volume, BaseList) & loadExpected(LoadE) & load(Load) & loadTotal(LoadCap) & workshopList(WList) & .nth(0,WList,WorkshopId) & shopsList(SList) & .nth(0,SList,shop(ShopId,_)) & storageList(StList) & .nth(0,StList,StorageId) & roled(_, Speed, _, _, _)
+	: product(ItemId, Volume, BaseList) & loadExpected(LoadE) & load(Load) & loadTotal(LoadCap) & workshopList([WorkshopId|_]) & shopsList([shop(ShopId,_)|_]) & storageList([StorageId|_]) & roled(_, Speed, _, _, _)
 <- 
-	?closestFacility([WorkshopId], FacilityA, RouteLenWorkshop);
-	?closestFacility([ShopId], FacilityB, RouteLenShop);
-	?closestFacility([StorageId], FacilityC, RouteLenStorage);	
-	?calculateBasesLoad(BaseList,Qty,0,LoadB);
+	?closest_facility([WorkshopId], FacilityA, RouteLenWorkshop);
+	?closest_facility([ShopId], FacilityB, RouteLenShop);
+	?closest_facility([StorageId], FacilityC, RouteLenStorage);	
+	?calculate_bases_load(BaseList,Qty,0,LoadB);
 	
-	?verifyTools([ItemId],[],ToolsMissing);
+	?verify_tools([ItemId],[],ToolsMissing);
 	if (ToolsMissing \== [])
 	{
 		.length(ToolsMissing,L);

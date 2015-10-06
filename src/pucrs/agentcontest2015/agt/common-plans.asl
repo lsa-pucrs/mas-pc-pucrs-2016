@@ -92,7 +92,7 @@
 	.
 	
 +shop(ShopId, Lat, Lng, Items)
-	: items_has_price(Items) & roled(Role, _, _, _, _) & Role \== "Truck" //& .nth(0,Items,item(ItemId,P,Q,L)) & item_qty(ShopId,ItemId,Q2) & Q \== Q2 THIS NEEDS TO BE OPTIMIZED!!!!
+	: items_has_price(Items) & roled(Role, _, _, _, _) & Role \== "Truck" // this could be optimized
 <-  
 	for(.member(item(NItem,Price,Qty,Load),Items))
 	{
@@ -106,7 +106,7 @@
 	.
 	
 +shop(ShopId, Lat, Lng, Items)
-	: items_has_price(Items) & roled(Role, _, _, _, _) & Role == "Truck" //& .nth(0,Items,item(ItemId,P,Q,L)) & item_qty(ShopId,ItemId,Q2) & Q \== Q2 THIS NEEDS TO BE OPTIMIZED!!!!
+	: items_has_price(Items) & roled(Role, _, _, _, _) & Role == "Truck" // this could be optimized
 <-  
 	for(.member(item(NItem,Price,Qty,Load),Items))
 	{
@@ -178,8 +178,8 @@
 <-
 	for ( .member(item(ItemId,Qty),Items) )
 	{
-		?findShops(ItemId,List,[],Result);
-		?bestShop(Result,Shop);
+		?find_shops(ItemId,List,Result);
+		?best_shop(Result,Shop);
 		if (buyList(ItemId,Qty2,Shop))
 		{
 			-buyList(ItemId,Qty2,Shop);

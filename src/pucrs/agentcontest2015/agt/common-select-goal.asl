@@ -78,13 +78,11 @@
 	
 @assembleTool
 +!select_goal 
-	: assembleToolsList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verifyItems(Bases) 
+	: assembleToolsList([ItemId|ListAssemble]) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verify_items(Bases) 
 <- 
 	.print("Assembling tool ", ItemId, " in workshop ", Facility);	
 	!assemble(ItemId);
-	-assembleToolsList(ListAssemble);
-	.delete(0,ListAssemble,ListAssembleNew);
-	+assembleToolsList(ListAssembleNew);
+	-+assembleToolsList(ListAssemble);
 	?item(ItemId,Qty);
 	-item(ItemId,Qty);
 	+item(ItemId,Qty+1);
@@ -97,7 +95,7 @@
 	
 @gotoWorkshopToAssembleTool
 +!select_goal 
-	: assembleToolsList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verifyTools(Inter,[],ToolsMissing)
+	: assembleToolsList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closest_facility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verify_tools(Inter,[],ToolsMissing)
 <-
 	if (ToolsMissing \== [])
 	{
@@ -117,23 +115,21 @@
 	
 @buyTools
 +!select_goal
-	: inFacility(Facility) & tools(Tools) & Tools \== [] & .nth(0,Tools,Tool) &  shopsList(List) & findShops(Tool,List,[],Result) & .member(Facility,Result) & not item(Tool,1)
+	: inFacility(Facility) & tools([Tool|Tools]) &  shopsList(List) & find_shops(Tool,List,Result) & .member(Facility,Result) & not item(Tool,1)
 <-
 	.print("Buying tool: ",Tool);
 	!buy(Tool,1);
 	-item(Tool,0);
 	+item(Tool,1);
-	-tools(Tools);
-	.delete(0,Tools,ToolsNew);
-	+tools(ToolsNew);
+	-+tools(Tools);
 	.
 		
 @goBuyTools
 +!select_goal
-	: tools(Tools) & Tools \== [] & shopsList(List) & not going(_) & .nth(0,Tools,Tool) & product(Tool, Vol, BaseList) & BaseList == []
+	: tools([Tool|_]) & shopsList(List) & not going(_) & product(Tool, Vol, BaseList) & BaseList == []
 <-
-	?findShops(Tool,List,[],Result);
-	?bestShop(Result,Shop);
+	?find_shops(Tool,List,Result);
+	?best_shop(Result,Shop);
 	.print("Going to shop: ",Shop," to buy tool: ",Tool);
 	!goto(Shop);
 	.
@@ -159,7 +155,7 @@
 
 @chargeAction
 +!select_goal 
-	: lowBattery & inFacility(Facility) & chargingList(List) & .member(Facility,List) & not charging  
+	: low_battery & inFacility(Facility) & chargingList(List) & .member(Facility,List) & not charging  
 <- 
 	.print("Began charging.");
 	!charge;
@@ -167,7 +163,7 @@
 
 @deliverJob
 +!select_goal 
-	: working(JobId,Items,StorageId) & inFacility(StorageId) & verifyItems(Items) & loadExpected(LoadE)
+	: working(JobId,Items,StorageId) & inFacility(StorageId) & verify_items(Items) & loadExpected(LoadE)
 <- 
 	!deliver_job(JobId);
 	-working(JobId,Items,StorageId);
@@ -187,54 +183,46 @@
 	
 @storeItem
 +!select_goal 
-	: inFacility(Facility) & storageList(List) & .member(Facility,List) & storeList(Items) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+	: inFacility(Facility) & storageList(List) & .member(Facility,List) & storeList([item(ItemId,Qty)|Items])
 <- 
 	!store(ItemId,Qty);
 	?item(IdemId,Qty2);
 	-item(ItemId,Qty2);
 	+item(ItemId,Qty2-Qty);
-	-storeList(Items);
-	.delete(0,Items,ItemsNew);
-	+storeList(ItemsNew);	
+	-+storeList(Items);
 	.
 	
 @retrieveItem
 +!select_goal 	
-	: inFacility(Facility) & storageList(List) & .member(Facility,List) & retrieveList(Items) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+	: inFacility(Facility) & storageList(List) & .member(Facility,List) & retrieveList([item(ItemId,Qty)|Items])
 <- 
 	!retrieve(ItemId,Qty);
 	?item(IdemId,Qty2);
 	-item(ItemId,Qty2);
 	+item(ItemId,Qty2+Qty);
-	-retrieveList(Items);
-	.delete(0,Items,ItemsNew);
-	+retrieveList(ItemsNew);		
+	-+retrieveList(Items);	
 	.	
 	
 @retrieveDeliveredPartial
 +!select_goal 	
-	: partial(JobId,Items,StorageId) & inFacility(StorageId) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+	: partial(JobId,[item(ItemId,Qty)|Items],StorageId) & inFacility(StorageId)
 <- 
 	!retrieve_delivered(ItemId,Qty);
 	?item(IdemId,Qty2);
 	-item(ItemId,Qty2);
 	+item(ItemId,Qty2+Qty);
-	-partial(JobId,Items,StorageId);
-	.delete(0,Items,ItemsNew);
-	+partial(JobId,ItemsNew,StorageId);
+	-+partial(JobId,Items,StorageId);
 	.	
 	
 @retrieveDeliveredJob
 +!select_goal 	
-	: delivered(JobId,Items,StorageId) & inFacility(StorageId) & Items \== [] & .nth(0,Items,item(ItemId,Qty))
+	: delivered(JobId,[item(ItemId,Qty)|Items],StorageId) & inFacility(StorageId)
 <- 
 	!retrieve_delivered(ItemId,Qty);
 	?item(IdemId,Qty2);
 	-item(ItemId,Qty2);
 	+item(ItemId,Qty2+Qty);
-	-delivered(JobId,Items,StorageId);
-	.delete(0,Items,ItemsNew);
-	+delivered(JobId,ItemsNew,StorageId);
+	-+delivered(JobId,Items,StorageId);
 	.		
 	
 @assistAssemble
@@ -247,13 +235,11 @@
 
 @assembleItemWithAssist
 +!select_goal 
-	: assembleList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & iAmHere(ItemId,_,Tool,FacilityHelp,Agent)
+	: assembleList([ItemId|ListAssemble]) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & iAmHere(ItemId,_,Tool,FacilityHelp,Agent)
 <- 
 	.print("Assembling, with assist, item ", ItemId, " in workshop ", Facility);	
 	!assemble(ItemId);
-	-assembleList(ListAssemble);
-	.delete(0,ListAssemble,ListAssembleNew);
-	+assembleList(ListAssembleNew);
+	-+assembleList(ListAssemble);
 	?item(ItemId,Qty);
 	-item(ItemId,Qty);
 	+item(ItemId,Qty+1);
@@ -266,13 +252,11 @@
 	
 @assembleItem
 +!select_goal 
-	: assembleList(ListAssemble) & ListAssemble \== [] & .nth(0,ListAssemble,ItemId) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verifyItems(Bases) 
+	: assembleList([ItemId|ListAssemble]) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verify_items(Bases) 
 <- 
 	.print("Assembling item ", ItemId, " in workshop ", Facility);	
 	!assemble(ItemId);
-	-assembleList(ListAssemble);
-	.delete(0,ListAssemble,ListAssembleNew);
-	+assembleList(ListAssembleNew);
+	-+assembleList(ListAssemble);
 	?item(ItemId,Qty);
 	-item(ItemId,Qty);
 	+item(ItemId,Qty+1);
@@ -293,7 +277,7 @@
 	
 @gotoCharging	
 +!select_goal 
-	: lowBattery & chargingList(List) & closestFacility(List,Facility) 
+	: low_battery & chargingList(List) & closest_facility(List,Facility) 
 <- 
 	.print("Going to charging station ",Facility);
 	if (going(Facility))
@@ -303,13 +287,21 @@
 	!goto(Facility);
 	.	
 	
-@continueGoto
+@continueGotoFacility
 +!select_goal 
-	: going(Facility) 
+	: going(Facility)
 <-
 	.print("Continuing to location ",Facility); 
 	!continue;
-	.		
+	.
+	
+@continueGotoLatLon
++!select_goal 
+	: going(Lat,Lon)
+<-
+	.print("Continuing to latitude ",Lat," and longitude ",Lon); 
+	!continue;
+	.	
 	
 @gotoShop
 +!select_goal
@@ -338,7 +330,7 @@
 	
 @gotoWorkshop
 +!select_goal
-	: assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closestFacility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verifyTools(Inter,[],ToolsMissing)
+	: assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closest_facility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verify_tools(Inter,[],ToolsMissing)
 <-
 	if (ToolsMissing \== [])
 	{
@@ -359,7 +351,7 @@
 
 @gotoStorageToDeliverJob
 +!select_goal
-	: working(JobId,Items,StorageId) & verifyItems(Items) & not going(_) & not buyList(_,_,_) & baseListJob(Bases) & auxList(Aux)
+	: working(JobId,Items,StorageId) & verify_items(Items) & not going(_) & not buyList(_,_,_) & baseListJob(Bases) & auxList(Aux)
 <-
 	.print("I have all items for job ",JobId,", now I'm going to deliver the job at ", StorageId);
 	// let agents know you do not need help anymore
@@ -439,7 +431,7 @@
 
 // Dump if in facility, not working and have any item different from a tool
 +!select_goal
-	: item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & inFacility(DumpId) & dumpList(DumpList) & .member(DumpId,DumpList)
+	: item(ItemId,Qty) & Qty > 0 & not is_tool(ItemId) & inFacility(DumpId) & dumpList(DumpList) & .member(DumpId,DumpList)
 <- 
 	.print("Dumping ", ItemId, "(", Qty, ")");
 	!dump(ItemId, Qty);
@@ -448,9 +440,9 @@
 
 // Goto dump facility if not working and have any item different from a tool
 +!select_goal
-	: free & item(ItemId,Qty) & Qty > 0 & not isTool(ItemId) & dumpList(DumpList) & not working(_,_,_)
+	: free & item(ItemId,Qty) & Qty > 0 & not is_tool(ItemId) & dumpList(DumpList) & not working(_,_,_)
 <-
-	?closestFacility(DumpList, DumpId);
+	?closest_facility(DumpList, DumpId);
 	.print("I am going to ", DumpId);
 	!goto(DumpId);
 	.
