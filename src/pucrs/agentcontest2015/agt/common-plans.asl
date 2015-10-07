@@ -2,7 +2,7 @@
 	: roled(_, _, _, _, _)
 <-
  	-+lastStep(Step);
-	.wait({+ok});
+//	.wait({+ok});
 	!select_goal;
 	.
 

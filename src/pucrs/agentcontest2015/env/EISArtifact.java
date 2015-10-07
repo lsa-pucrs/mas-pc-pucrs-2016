@@ -138,6 +138,7 @@ public class EISArtifact extends Artifact {
 			// leader_percepts.clear();
 			for (String agent : ei.getAgents()) {
 				try {
+					Literal step = null;
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
 					// leader_percepts.addAll(agentise(agent, percepts));
 					filterLocations(agent, percepts);
@@ -153,8 +154,13 @@ public class EISArtifact extends Artifact {
 									pinShopAvailableItems(percept, p);
 						}*/
 						Literal literal = Translator.perceptToLiteral(percept);
-						signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
+						if (literal.getFunctor().equals("step"))
+							step = literal;
+						else
+							signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
 					}
+					if (step != null)
+						signal(agentIds.get(agent), step.getFunctor(), (Object[]) step.getTermsArray());
 				} catch (PerceiveException | NoEnvironmentException | JasonException e) {
 					e.printStackTrace();
 				}
@@ -167,7 +173,7 @@ public class EISArtifact extends Artifact {
 				filterIsFiltered = true;
 			}
 			
-			signal("ok");
+//			signal("ok");
 /*
 			for (Percept percept : leader_percepts) {
 				String name = percept.getName();
@@ -175,14 +181,14 @@ public class EISArtifact extends Artifact {
 				signal(leader, name, (Object[]) literal.getTermsArray());
 			}
 */
-			/* exemplo de propriedade observavel
+/* 			exemplo de propriedade observavel
 			private String propertyName = "set_a_name"; //nome da propriedade
 			defineObsProperty(propertyName, 0); //define a new observable property and sets initial value
 			...
 			ObsProperty prop = getObsProperty(propertyName); //get current value of observable property
 			prop.updateValues(0); //updates current value of property (I am almost sure that this command generates a signal automatically)
 			signal(propertyName);
-			*/
+*/
 			await_time(100);
 		}
 	}
