@@ -47,6 +47,7 @@ public class EISArtifact extends Artifact {
 
 	private EnvironmentInterfaceStandard ei;
 	private boolean receiving;
+	private boolean test = true;
 	private String agent;
 	private String entity;
 	
@@ -70,7 +71,7 @@ public class EISArtifact extends Artifact {
 			ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
 			
 			logger.info("Registering " + agent + " to entity " + entity);
-			
+
 			if (ei.isInitSupported())
 				ei.init(new HashMap<String, Parameter>());
 			if (ei.getState() != EnvironmentState.PAUSED)
@@ -80,7 +81,7 @@ public class EISArtifact extends Artifact {
 			
 			ei.registerAgent(agent);
 			ei.associateEntity(agent, entity);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -138,6 +139,12 @@ public class EISArtifact extends Artifact {
 		boolean filterIsFiltered = false;
 		while (receiving) {
 			// leader_percepts.clear();
+			if(test)
+				{
+					await_time(500);
+					signal("serverName", Literal.parseLiteral(entity.substring(10).toLowerCase()));
+					test = false;
+				}
 			try {
 				Literal step = null;
 				Collection<Percept> percepts = ei.getAllPercepts(this.agent).get(this.entity);
@@ -158,10 +165,10 @@ public class EISArtifact extends Artifact {
 					if (literal.getFunctor().equals("step"))
 						step = literal;
 					else
-						signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
+						signal(name, (Object[]) literal.getTermsArray());
 				}
 				if (step != null)
-					signal(agentIds.get(agent), step.getFunctor(), (Object[]) step.getTermsArray());
+					signal(step.getFunctor(), (Object[]) step.getTermsArray());
 			} catch (PerceiveException | NoEnvironmentException | JasonException e) {
 //				e.printStackTrace();
 			}
