@@ -39,15 +39,15 @@
 <-
 	.print("Got role: ", Role);
 	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
-	pucrs.agentcontest2015.actions.tolower(Role, File);
+	.lower_case(Role,File);
 	adoptRole(File)[artifact_id(ArtId)];
 	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);	
 	.concat(File, ".asl", FileExt);
-	pucrs.agentcontest2015.actions.include(FileExt);
+	.include(FileExt);
 	if (Role == "Truck")
 	{
 		adoptRole(initiator)[artifact_id(ArtId)];
-		pucrs.agentcontest2015.actions.include("initiator.asl");
+		.include("initiator.asl");
 		!create_taskboard;
 	};
 	focusWhenAvailable("task_board");

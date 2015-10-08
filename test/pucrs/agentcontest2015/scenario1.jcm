@@ -38,4 +38,7 @@ mas scenario1 {
 		// scheme s1 : wpscheme    // instance of scheme identified by wpscheme (in o1.xml)  
 	}
 
+	asl-path: src/pucrs/agentcontest2015/agt
+
+
 }
