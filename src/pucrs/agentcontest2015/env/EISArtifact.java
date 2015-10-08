@@ -12,7 +12,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 import massim.competition2015.scenario.Location;
@@ -39,6 +42,8 @@ public class EISArtifact extends Artifact {
 	private Logger logger = Logger.getLogger(EISArtifact.class.getName());
 
 	private static Map<String, AgentId> agentIds = new ConcurrentHashMap<String, AgentId>();
+	
+	private static Set<String> agents = new ConcurrentSkipListSet<String>();
 
 	private EnvironmentInterfaceStandard ei;
 	private boolean receiving;
@@ -57,6 +62,8 @@ public class EISArtifact extends Artifact {
 		this.agent = agent;
 		this.entity = entity;
 		this.receiving = true;
+		
+		agents.add(agent);
 		
 		try {
 			
@@ -81,8 +88,8 @@ public class EISArtifact extends Artifact {
 		execInternalOp("receiving");
 	}
 	
-	public static Collection<String> getRegisteredAgents(){
-		return agentIds.keySet();
+	public static Set<String> getRegisteredAgents(){
+		return agents;
 	}
 
 	@OPERATION
