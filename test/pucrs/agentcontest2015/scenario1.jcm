@@ -1,30 +1,41 @@
 mas scenario1 {
-	
-//	agent connectionA1: car.asl {
-//		ag-arch: pucrs.agentcontest2015.env.EISAgArch
-//		focus: eis
-//	}
-
-	agent vehicle: vehicle.asl {
+		
+	agent vehicle1: vehicle.asl {
 		ag-arch: pucrs.agentcontest2015.env.EISAgArch
-		join: city, puc
-		focus: city.eis, puc.team1
-		instances: 4
+		join: puc
+		focus: puc.team1
 		roles: bidder in puc.team1
+		goals: register("connectionA1")
 	}
-
-	workspace city {
-		artifact eis: pucrs.agentcontest2015.env.EISArtifact
+	agent vehicle2: vehicle.asl {
+		ag-arch: pucrs.agentcontest2015.env.EISAgArch
+		join: puc
+		focus: puc.team1
+		roles: bidder in puc.team1
+		goals: register("connectionA2")
+	}
+	agent vehicle3: vehicle.asl {
+		ag-arch: pucrs.agentcontest2015.env.EISAgArch
+		join: puc
+		focus: puc.team1
+		roles: bidder in puc.team1
+		goals: register("connectionA3")
+	}
+	agent vehicle4: vehicle.asl {
+		ag-arch: pucrs.agentcontest2015.env.EISAgArch
+		join: puc
+		focus: puc.team1
+		roles: bidder in puc.team1
+		goals: register("connectionA4")
 	}
 	
-	 organisation puc: pucteam-os.xml {
-          group team1: team {
-             //responsible-for: s1                       // the group will be responsible for the scheme s1
-            // owner: alice
-          	debug                                     // starts GUI for this group          
-          }             
-          
-       //   scheme s1 : wpscheme                         // instance of scheme identified by wpscheme (in o1.xml)  
-       }
+	organisation puc: pucteam-os.xml {
+    	group team1: team {
+			// responsible-for: s1 // the group will be responsible for the scheme s1
+			// owner: alice
+			debug                  // starts GUI for this group          
+		}             
+		// scheme s1 : wpscheme    // instance of scheme identified by wpscheme (in o1.xml)  
+	}
 
 }

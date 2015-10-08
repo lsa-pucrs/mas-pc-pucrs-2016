@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -26,8 +25,6 @@ import eis.EILoader;
 import eis.EnvironmentInterfaceStandard;
 import eis.exceptions.ActException;
 import eis.exceptions.AgentException;
-import eis.exceptions.EntityException;
-import eis.exceptions.ManagementException;
 import eis.exceptions.NoEnvironmentException;
 import eis.exceptions.PerceiveException;
 import eis.exceptions.RelationException;
@@ -41,76 +38,73 @@ public class EISArtifact extends Artifact {
 
 	private Logger logger = Logger.getLogger(EISArtifact.class.getName());
 
-	private static EnvironmentInterfaceStandard ei;
-	private static Map<String, AgentId> agentIds;
-	private static Map<String, String> agentToEntity;
+	private static Map<String, AgentId> agentIds = new ConcurrentHashMap<String, AgentId>();
 
+	private EnvironmentInterfaceStandard ei;
 	private boolean receiving;
-
-	public EISArtifact() throws IOException {
-		agentIds = new ConcurrentHashMap<String, AgentId>();
-		agentToEntity = new ConcurrentHashMap<String, String>();
-
+	private String agent;
+	private String entity;
+	
+	static {
 		String maps[] = new String[] { "clausthal", "hannover", "london" };
-
 		MapHelper.init(maps[0], 0.001, 0.0002);
+	}
+	
+	public EISArtifact() throws IOException {		
+	}
 
+	protected void init(String agent, String entity) throws IOException {
+		this.agent = agent;
+		this.entity = entity;
+		this.receiving = true;
+		
 		try {
+			
 			ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
+			
+			logger.info("Registering " + agent + " to entity " + entity);
+			
 			if (ei.isInitSupported())
 				ei.init(new HashMap<String, Parameter>());
 			if (ei.getState() != EnvironmentState.PAUSED)
 				ei.pause();
 			if (ei.isStartSupported())
 				ei.start();
-		} catch (IOException | ManagementException e) {
+			
+			ei.registerAgent(agent);
+			ei.associateEntity(agent, entity);
+			
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	protected void init() throws IOException {
-		receiving = true;
+		}		
+		
 		execInternalOp("receiving");
 	}
 	
-	public static Set<String> getRegisteredAgents(){
-		return agentToEntity.keySet();
+	public Collection<String> getRegisteredAgents(){
+		return ei.getAgents();
 	}
-	
-/*
-	private static AgentId leader;
-	
-	@OPERATION
-	void register_leader() throws EntityException {
-		leader = getOpUserId();
-		System.out.println("Registering leader: " + leader.getAgentName());
-	}
-*/
 
 	@OPERATION
-	void register() throws EntityException {
+	void register() {
+		ge
 		try {
 			String agent = getOpUserId().getAgentName();
 			ei.registerAgent(agent);
 			ei.associateEntity(agent, agent);
-			agentToEntity.put(agent, agent);
-			agentIds.put(agent, getOpUserId());
 			System.out.println("Registering: " + agent);
-		} catch (AgentException e) {
-			e.printStackTrace();
-		} catch (RelationException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@OPERATION
-	void register_freeconn() throws EntityException {
+	void register_freeconn() {
 		try {
 			String agent = getOpUserId().getAgentName();
 			ei.registerAgent(agent);
 			String entity = ei.getFreeEntities().iterator().next();
 			ei.associateEntity(agent, entity);
-			agentToEntity.put(agent, entity);
 			agentIds.put(agent, getOpUserId());
 			System.out.println("Registering " + agent + " to entity " + entity);
 			signal(agentIds.get(agent), "serverName", Literal.parseLiteral(entity.substring(10).toLowerCase()));
@@ -121,10 +115,12 @@ public class EISArtifact extends Artifact {
 		}
 	}
 
-	public static void action(String agent, String action) throws NoValueException {
+	@OPERATION
+	void action(String action) throws NoValueException {
 		try {
+			String agent = getOpUserId().getAgentName();
 			Action a = Translator.literalToAction(action);
-			ei.performAction(agent, a, agentToEntity.get(agent));
+			ei.performAction(agent, a, entity);
 		} catch (ActException e) {
 			e.printStackTrace();
 		}
@@ -136,34 +132,31 @@ public class EISArtifact extends Artifact {
 		boolean filterIsFiltered = false;
 		while (receiving) {
 			// leader_percepts.clear();
-			for (String agent : ei.getAgents()) {
-				try {
-					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
-					// leader_percepts.addAll(agentise(agent, percepts));
-					filterLocations(agent, percepts);
-					
-					// TODO change map when round finish
-					
-					for (Percept percept : filter(percepts)) {
-						String name = percept.getName();
-						/*Verifying available items in a nearby shop
-						if(name.equals("shop")){
-							for(Parameter p: percept.getParameters())
-								if(p.toString().contains("availableItem"))
-									pinShopAvailableItems(percept, p);
-						}*/
-						Literal literal = Translator.perceptToLiteral(percept);
-						signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
-					}
-				} catch (PerceiveException | NoEnvironmentException | JasonException e) {
-					e.printStackTrace();
+			try {
+				Collection<Percept> percepts = ei.getAllPercepts(this.agent).get(this.entity);
+				// leader_percepts.addAll(agentise(agent, percepts));
+				filterLocations(agent, percepts);
+				
+				// TODO change map when round finish
+				
+				for (Percept percept : filter(percepts)) {
+					String name = percept.getName();
+					/*Verifying available items in a nearby shop
+					if(name.equals("shop")){
+						for(Parameter p: percept.getParameters())
+							if(p.toString().contains("availableItem"))
+								pinShopAvailableItems(percept, p);
+					}*/
+					Literal literal = Translator.perceptToLiteral(percept);
+					signal(agentIds.get(agent), name, (Object[]) literal.getTermsArray());
 				}
+			} catch (PerceiveException | NoEnvironmentException | JasonException e) {
+//				e.printStackTrace();
 			}
 			/* Filtering the filter */
 			if(!filterIsFiltered){
 				for(String f:another_agent_filter.keySet())
 					another_agent_filter.put(f, true);
-				
 				filterIsFiltered = true;
 			}
 			

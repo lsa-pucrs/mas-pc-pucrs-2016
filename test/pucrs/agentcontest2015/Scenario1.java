@@ -45,15 +45,6 @@ public class Scenario1 {
 			e.printStackTrace();
 		}
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// SimpleDebugStreamAgent.actionconfformat =
-				// "conf/team-b/actionconf/%1$s-%2$d";
-				App.main(new String[] { "./conf/team-b/javaagentsconfig.xml" });
-			}
-		}).start();
-
 		try {
 			JaCaMoLauncher runner = new JaCaMoLauncher();
 			runner.init(new String[] { "test/pucrs/agentcontest2015/scenario1.jcm" });

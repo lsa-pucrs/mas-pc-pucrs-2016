@@ -7,10 +7,20 @@
 { include("end-round.asl") }
 { include("new-round.asl") }
 { include("bidder.asl") }
-{ include("props.asl") }           // might not be needed when we make the change to obs. prop. in Cartago
+{ include("props.asl") } // might not be needed when we make the change to obs. prop. in Cartago
 
-!register_freeconn.
-
++!register(E)
+	: true
+<-
+    .print("Registering...");
+    .my_name(Me);
+    .concat("eis_art_", Me, ArtName);
+    .term2string(Me, MeS);
+    makeArtifact(ArtName, "pucrs.agentcontest2015.env.EISArtifact", [MeS, E], AId);
+    focus(AId);
+    register;
+	.
+	
 +!register_freeconn
 	: jcm__art(WorkspaceName, "eis", ArtId)
 <-
@@ -26,7 +36,7 @@
 .	
 
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
-	: not roled(_, _, _, _, _) & jcm__art(WorkspaceName, "team1", ArtId)
+	: not roled(_, _, _, _, _) & jcm__art("puc", "team1", ArtId)
 <-
 	.print("Got role: ", Role);
 	pucrs.agentcontest2015.actions.tolower(Role, File);

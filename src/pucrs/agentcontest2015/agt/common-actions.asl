@@ -257,5 +257,5 @@
 +!commitAction(Action) : true 
 <- 
 	.my_name(Ag);
-	cartago.invoke_obj("pucrs.agentcontest2015.env.EISArtifact", action(Ag, Action));
+	action(Action);
 	.
