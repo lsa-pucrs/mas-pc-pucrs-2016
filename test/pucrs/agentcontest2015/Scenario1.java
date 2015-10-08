@@ -3,7 +3,6 @@ package pucrs.agentcontest2015;
 import jacamo.infra.JaCaMoLauncher;
 import jason.JasonException;
 import massim.competition2015.monitor.GraphMonitor;
-import massim.javaagents.App;
 import massim.server.Server;
 import massim.test.InvalidConfigurationException;
 

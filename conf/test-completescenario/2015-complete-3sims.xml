@@ -99,7 +99,7 @@
 					team="red">
 					<configuration roleName="Truck" lon="10.349" lat="51.809" />
 				</agent>
-
+<!--  
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
@@ -121,6 +121,7 @@
 					team="blue">
 					<configuration roleName="Truck" lon="10.349" lat="51.809" />
 				</agent>
+-->
 			</agents>
 		
 
@@ -202,7 +203,7 @@
 					team="red">
 					<configuration roleName="Truck" lon="-0.1612" lat="51.4748" />
 				</agent>
-
+<!-- 
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
@@ -224,6 +225,7 @@
 					team="blue">
 					<configuration roleName="Truck" lon="-0.1612" lat="51.4748" />
 				</agent>
+-->				
 			</agents>
 
 		</simulation>
@@ -304,7 +306,7 @@
 					team="red">
 					<configuration roleName="Truck" lon="9.7447" lat="52.3560" />
 				</agent>
-
+<!-- 
 				<agent agentclass="massim.competition2015.MapSimulationAgent"
 					agentcreationclass="massim.competition2015.configuration.MapSimulationAgentParameter"
 					team="blue">
@@ -326,6 +328,7 @@
 					team="blue">
 					<configuration roleName="Truck" lon="9.7447" lat="52.3560" />
 				</agent>
+-->
 			</agents>
 
 		</simulation>

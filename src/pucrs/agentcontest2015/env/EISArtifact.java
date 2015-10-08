@@ -81,13 +81,12 @@ public class EISArtifact extends Artifact {
 		execInternalOp("receiving");
 	}
 	
-	public Collection<String> getRegisteredAgents(){
-		return ei.getAgents();
+	public static Collection<String> getRegisteredAgents(){
+		return agentIds.keySet();
 	}
 
 	@OPERATION
 	void register() {
-		ge
 		try {
 			String agent = getOpUserId().getAgentName();
 			ei.registerAgent(agent);

@@ -18,7 +18,6 @@
     .term2string(Me, MeS);
     makeArtifact(ArtName, "pucrs.agentcontest2015.env.EISArtifact", [MeS, E], AId);
     focus(AId);
-    register;
 	.
 	
 +!register_freeconn
