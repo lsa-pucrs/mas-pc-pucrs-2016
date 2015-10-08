@@ -41,9 +41,9 @@
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/apltk-0.1.jar"/>
-	<classpathentry kind="lib" path="lib/agentcontest-2015-0.4-sources.jar"/>
-	<classpathentry kind="lib" path="lib/agentcontest-2015-0.4.jar" sourcepath="lib/agentcontest-2015-0.4-sources.jar"/>
-	<classpathentry kind="lib" path="lib/eismassim-2.5-sources.jar"/>
-	<classpathentry kind="lib" path="lib/eismassim-2.5.jar" sourcepath="lib/eismassim-2.5-sources.jar"/>
+	<classpathentry kind="lib" path="lib/agentcontest-2015-0.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/agentcontest-2015-0.6.2.jar" sourcepath="lib/agentcontest-2015-0.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/eismassim-2.6-sources.jar"/>
+	<classpathentry kind="lib" path="lib/eismassim-2.6.jar" sourcepath="lib/eismassim-2.6-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

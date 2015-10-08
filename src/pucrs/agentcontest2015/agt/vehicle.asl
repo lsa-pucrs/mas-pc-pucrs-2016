@@ -39,6 +39,7 @@
 	: not roled(_, _, _, _, _) & jcm__art("puc", "team1", ArtId)
 <-
 	.print("Got role: ", Role);
+	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
 	pucrs.agentcontest2015.actions.tolower(Role, File);
 	adoptRole(File)[artifact_id(ArtId)];
 	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);	
@@ -50,7 +51,6 @@
 		pucrs.agentcontest2015.actions.include("initiator.asl");
 		!create_taskboard;
 	};
-	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
 	focusWhenAvailable("task_board");
 	.print("Task board located.");	
 	.

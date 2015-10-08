@@ -224,8 +224,6 @@
 			active_steps(ActiveSteps), 
 			storage(StorageId),
 			Items
-			// TODO items: custom parse
-			// [item(id(item_id1), amount(10)), ... ]
 		)
 	);
 	.

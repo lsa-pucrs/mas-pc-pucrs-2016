@@ -26,7 +26,7 @@
 -!jcm__focus_env_art(L,Try)
 	: true
 <-
-	.wait(100);
+//	.wait(100);
 	!jcm__focus_env_art(L,Try-1);
 	.
 

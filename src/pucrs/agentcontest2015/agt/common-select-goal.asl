@@ -183,7 +183,7 @@
 	
 @storeItem
 +!select_goal 
-	: inFacility(Facility) & storageList(List) & .member(Facility,List) & storeList([item(ItemId,Qty)|Items])
+	: false & inFacility(Facility) & storageList(List) & .member(Facility,List) & storeList([item(ItemId,Qty)|Items])
 <- 
 	!store(ItemId,Qty);
 	?item(IdemId,Qty2);
@@ -194,7 +194,7 @@
 	
 @retrieveItem
 +!select_goal 	
-	: inFacility(Facility) & storageList(List) & .member(Facility,List) & retrieveList([item(ItemId,Qty)|Items])
+	: false & inFacility(Facility) & storageList(List) & .member(Facility,List) & retrieveList([item(ItemId,Qty)|Items])
 <- 
 	!retrieve(ItemId,Qty);
 	?item(IdemId,Qty2);
@@ -205,7 +205,7 @@
 	
 @retrieveDeliveredPartial
 +!select_goal 	
-	: partial(JobId,[item(ItemId,Qty)|Items],StorageId) & inFacility(StorageId)
+	: false & partial(JobId,[item(ItemId,Qty)|Items],StorageId) & inFacility(StorageId)
 <- 
 	!retrieve_delivered(ItemId,Qty);
 	?item(IdemId,Qty2);
@@ -216,7 +216,7 @@
 	
 @retrieveDeliveredJob
 +!select_goal 	
-	: delivered(JobId,[item(ItemId,Qty)|Items],StorageId) & inFacility(StorageId)
+	: false & delivered(JobId,[item(ItemId,Qty)|Items],StorageId) & inFacility(StorageId)
 <- 
 	!retrieve_delivered(ItemId,Qty);
 	?item(IdemId,Qty2);
@@ -431,7 +431,7 @@
 
 // Dump if in facility, not working and have any item different from a tool
 +!select_goal
-	: item(ItemId,Qty) & Qty > 0 & not is_tool(ItemId) & inFacility(DumpId) & dumpList(DumpList) & .member(DumpId,DumpList)
+	: false & item(ItemId,Qty) & Qty > 0 & not is_tool(ItemId) & inFacility(DumpId) & dumpList(DumpList) & .member(DumpId,DumpList)
 <- 
 	.print("Dumping ", ItemId, "(", Qty, ")");
 	!dump(ItemId, Qty);
@@ -440,7 +440,7 @@
 
 // Goto dump facility if not working and have any item different from a tool
 +!select_goal
-	: free & item(ItemId,Qty) & Qty > 0 & not is_tool(ItemId) & dumpList(DumpList) & not working(_,_,_)
+	: false & free & item(ItemId,Qty) & Qty > 0 & not is_tool(ItemId) & dumpList(DumpList) & not working(_,_,_)
 <-
 	?closest_facility(DumpList, DumpId);
 	.print("I am going to ", DumpId);
