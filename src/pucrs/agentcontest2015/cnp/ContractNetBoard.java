@@ -6,17 +6,20 @@ import jason.asSyntax.Literal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import pucrs.agentcontest2015.env.EISArtifact;
 import cartago.*;
 
 public class ContractNetBoard extends Artifact {
 	
+	private Logger logger = null;
+	
 	private List<Bid> bids;
 	private int bidId;
 	
-	
 	void init(String taskDescr, long duration){
+		logger = Logger.getLogger(ContractNetBoard.class.getName()+"_"+taskDescr);
 		this.defineObsProperty("task_description", taskDescr);
 		long started = System.currentTimeMillis();
 		this.defineObsProperty("created", started);
@@ -47,7 +50,7 @@ public class ContractNetBoard extends Artifact {
 		await_time(dt);
 		if(!isClosed()){
 			getObsProperty("state").updateValue("closed");
-			log("bidding stage closed by deadline.");
+			logger.info("bidding stage closed by deadline.");
 		}
 	}
 	
@@ -57,7 +60,7 @@ public class ContractNetBoard extends Artifact {
 		}
 		if(!isClosed()){
 			getObsProperty("state").updateValue("closed");
-			log("bidding stage closed by all agents bids.");
+			logger.info("bidding stage closed by all agents bids.");
 		}
 	}
 	
@@ -96,7 +99,6 @@ public class ContractNetBoard extends Artifact {
 		
 		public int getId(){ return id; }
 		public int getValue(){ return value; }
-		//public String toString(){ return descr; }
 	}
 	
 }

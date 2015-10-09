@@ -2,15 +2,20 @@
 
 package pucrs.agentcontest2015.cnp;
 
+import java.util.logging.Logger;
+
+import pucrs.agentcontest2015.env.EISArtifact;
 import jason.asSyntax.Literal;
 import cartago.*;
 
 public class TaskBoard extends Artifact {
 	
+	private Logger logger = Logger.getLogger(TaskBoard.class.getName());
+	
 	private int taskId;
 	
 	void init(){
-		System.out.println(" Artifact created!");
+		logger.info("TaskBoard Artifact created!");
 		taskId = 0;
 	}
 	
@@ -22,12 +27,11 @@ public class TaskBoard extends Artifact {
 			defineObsProperty("task", Literal.parseLiteral(taskDescr), artifactName);
 			id.set(artifactName);
 		} catch (Exception ex){
-			failed("announce_failed");
+			logger.info("announce_failed");
 		}
 	}
 	
 	@OPERATION void clear(String artifactName){
-		//String artifactName = "cnp_board_"+taskId;
 		this.removeObsPropertyByTemplate("task", null, artifactName);
 	}
 	

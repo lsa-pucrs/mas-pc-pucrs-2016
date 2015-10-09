@@ -1,3 +1,4 @@
+/* 
 @postAuctionJob
 +!select_goal
 	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items) & going(Facility)
@@ -372,15 +373,6 @@
 	!goto(StorageId);
 	.
 
-/*
-+lastActionResult(give, successful)
-	: true
-<-
-	-hasToGive(ItemId,Qtd);
-	-item(ItemId,Qtd);
-	.
-*/
-
 // Give item to other agent
 // TODO: message
 +!select_goal
@@ -446,6 +438,7 @@
 	.print("I am going to ", DumpId);
 	!goto(DumpId);
 	.
+*/
 
 // Default action is to skip
 @skipAction

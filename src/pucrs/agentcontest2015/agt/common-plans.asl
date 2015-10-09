@@ -1,14 +1,10 @@
 +step(Step) 
-	: roled(_, _, _, _, _)
+	: true
 <-
  	-+lastStep(Step);
-//	.wait({+ok});
 	!select_goal;
 	.
-
-//+availableItems(ShopId,ItemsInformation)
-//  <- println("I perceived a pin for ", ShopId, ", and its available items are: ", ItemsInformation).
-
+/* 
 +simEnd
 	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art("puc",Art1,ArtId1) & jcm__art("city",Art2,ArtId2) & jcm__ws("puc",WSid1) & jcm__ws("city",WSid2) & serverName(ServerName)
 <-
@@ -231,5 +227,6 @@
 			}
 	}
 	.
+*/
 	
 	

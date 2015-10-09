@@ -1,3 +1,4 @@
+/* 
 //low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
 low_battery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closest_facility(List, Facility, RouteLen)
               & (RouteLen / Speed * 10 > Battery - 20) .
@@ -44,3 +45,4 @@ is_tool(ItemId) :- ItemId == tool1 | ItemId == tool2 | ItemId == tool3 | ItemId 
 
 items_has_price([item(NItem,Price,Qty,Load)]):- Price\==0.
 items_has_price([item(NItem,Price,Qty,Load)|L]):- Price\==0.
+*/

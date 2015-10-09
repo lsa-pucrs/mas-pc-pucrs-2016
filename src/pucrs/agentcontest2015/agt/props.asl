@@ -1,3 +1,4 @@
+/* 
 +product(ProductId, Volume, BaseList)[artifact_id(_)]
 	: not product(ProductId, Volume, BaseList)
 <-
@@ -36,3 +37,4 @@
 	}
 	-+inFacility(Facility);
 	.
+*/

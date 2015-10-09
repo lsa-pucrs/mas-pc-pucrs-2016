@@ -1,3 +1,4 @@
+/* 
 +lastStep(Step)
 	: Step == 0 & tools(Tools) & compositeMaterials(CompositeList)
 <-
@@ -76,4 +77,5 @@
 			-+compositeMaterials([ProductId|CompositeList]);
 		}
 	}
-	.	
+	.
+*/

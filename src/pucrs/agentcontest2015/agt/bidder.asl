@@ -1,3 +1,4 @@
+/* 
 @task[atomic]
 +task(Task,CNPBoard) 
 	: roled(Role, Speed, LoadCap, BatteryCap, Tools)
@@ -81,4 +82,5 @@
 	{
 		Bid = 0;
 	}
-	.	
+	.	 
+*/

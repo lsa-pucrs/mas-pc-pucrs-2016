@@ -1,3 +1,11 @@
++!create_taskboard
+	: true
+<-
+	makeArtifact("task_board","pucrs.agentcontest2015.cnp.TaskBoard",[]);
+	.print("Created taskboard.");
+	.
+
+/* 
 auction_gain(Cost,Bid,MaxBid,WorkshopFee,BatteryFee):- Bid =  MaxBid*30/100 + Cost + WorkshopFee + BatteryFee. // % profit of 30% + expenses
 
 calculateBid(Items,Bid,MaxBid,WorkshopFee,BatteryFee):- calculateCost(Items,Cost) & auction_gain(Cost,Bid,MaxBid,WorkshopFee,BatteryFee).
@@ -54,7 +62,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	}
 	.
 	
-/* 
+ 
 // got an auction too soon, do not have item prices ready yet just make a simple bid
 @auctionJob2[atomic]
 +auctionJob(JobId, StorageId, Begin, End, Fine, MaxBid, Items)
@@ -81,7 +89,7 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 		+bid(JobId,Bid,Items,StorageId,MaxBid);		
 	}
 	.
-*/	
+	
 @pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
 	: not working(_,_,_) & not pricedJob(JobId,Items,StorageId) & maxBidders(Max) & not cnp(_) & lastStep(Step) & workshopList([Workshop|_]) & shopsList([shop(ShopId,_)|_])
@@ -107,13 +115,6 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	}
 	}
 	.	
-
-+!create_taskboard
-	: true
-<-
-	makeArtifact("task_board","pucrs.agentcontest2015.cnp.TaskBoard",[]);
-	.print("Created taskboard.");
-	.
 
 +!separate_tasks(Items,JobId,StorageId)
 	: max_bid_time(Time)
@@ -188,3 +189,4 @@ calculateCost([item(Id,Qty)|L],Cost):- 	item_price(Id,Price) &  Temp = Price * Q
 	
 @materialsPrice2	
 +!calculate_materials_prices.
+*/
