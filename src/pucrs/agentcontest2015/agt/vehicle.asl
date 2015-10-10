@@ -42,7 +42,7 @@
 	.print("Got role: ", Role);
 	.lower_case(Role,File);
 	//adoptRole(File)[artifact_id(ArtId)];
-	//!new_round(Role, Speed, LoadCap, BatteryCap, Tools);	
+	!new_round;	
 	.concat(File, ".asl", FileExt);
 	.include(FileExt);
 	if (Role == "Truck")

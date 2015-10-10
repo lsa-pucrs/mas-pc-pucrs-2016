@@ -4,6 +4,54 @@
  	-+lastStep(Step);
 	!select_goal;
 	.
+	
+@shopList[atomic]
++shop(ShopId, Lat, Lng, Items)
+	: shopList(List) & not .member(shop(ShopId,_),List)
+<-
+	-+shopList([shop(ShopId,Items)|List]);
+//	for(.member(item(NItem,Price,Qty,Load),Items))
+//	{
+//		+item_qty(ShopId, NItem, Qty);
+//	}
+	.
+	
+@storageList[atomic]
++storage(StorageId, Lat, Lng, Price, TotCap, UsedCap, Items)
+	: storageList(List) & not .member(StorageId,List)
+<-
+	-+storageList([StorageId|List]);
+	.	
+	
+@chargingList[atomic]
++chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
+	:  chargingList(List) & not .member(ChargingId,List) //& chargingPrice(Price2,Rate2)
+<- 
+//	if (Price > Price2)
+//	{
+//		-+chargingPrice(Price,Rate);
+//	}	
+	-+chargingList([ChargingId|List]);
+	.
+	
+@workshopList[atomic]
++workshop(WorkshopId,Lat,Lng,Price) 
+	:  workshopList(List) & not .member(WorkshopId,List)  //& workshopPrice(Price2)
+<- 
+//	if (Price > Price2)
+//	{
+//		-+workshopPrice(Price);
+//	}
+	-+workshopList([WorkshopId|List]);
+	.
+	
+@dumpList[atomic]
++dump(DumpId,Lat,Lng,Price) 
+	:  dumpList(List) & not .member(DumpId,List) 
+<- 
+	-+dumpList([DumpId|List]);
+	.		
+	
 /* 
 +simEnd
 	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art("puc",Art1,ArtId1) & jcm__art("city",Art2,ArtId2) & jcm__ws("puc",WSid1) & jcm__ws("city",WSid2) & serverName(ServerName)
@@ -119,54 +167,6 @@
 		}		 
 	}
 	!!calculate_materials_prices;
-	.	
-
-@shopsList[atomic]
-+shop(ShopId, Lat, Lng, Items)
-	: shopsList(List) & not .member(shop(ShopId,_),List)
-<-
-	.print("-> Shop: ", ShopId, " | Items: ", Items);
-	-+shopsList([shop(ShopId,Items)|List]);
-	for(.member(item(NItem,Price,Qty,Load),Items))
-	{
-		+item_qty(ShopId, NItem, Qty);
-	}
-	.
-	
-@storageList[atomic]
-+storage(StorageId, Lat, Lng, Price, TotCap, UsedCap, Items)
-	: storageList(List) & not .member(StorageId,List)
-<-
-	-+storageList([StorageId|List]);
-	.	
-	
-@chargingList[atomic]
-+chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
-	:  chargingList(List) & not .member(ChargingId,List) & chargingPrice(Price2,Rate2)
-<- 
-	if (Price > Price2)
-	{
-		-+chargingPrice(Price,Rate);
-	}	
-	-+chargingList([ChargingId|List]);
-	.
-	
-@workshopList[atomic]
-+workshop(WorkshopId,Lat,Lng,Price) 
-	:  workshopList(List) & not .member(WorkshopId,List)  & workshopPrice(Price2)
-<- 
-	if (Price > Price2)
-	{
-		-+workshopPrice(Price);
-	}
-	-+workshopList([WorkshopId|List]);
-	.
-	
-@dumpList[atomic]
-+dump(DumpId,Lat,Lng,Price) 
-	:  dumpList(List) & not .member(DumpId,List) 
-<- 
-	-+dumpList([DumpId|List]);
 	.	
 
 +working(JobId,Items2,StorageId)

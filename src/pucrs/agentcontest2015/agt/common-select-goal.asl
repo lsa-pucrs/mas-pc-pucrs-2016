@@ -1,42 +1,51 @@
-/* 
 @postAuctionJob
 +!select_goal
 	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items) & going(Facility)
 <-
-	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
-	.print("Posted an auction job.");
 	-post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	+remember(Facility);
+	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
+	.print("Posted an auction job.");
 	.
 	
 @postAuctionJobAlt
 +!select_goal
 	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items)
 <-
+	-post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	.print("Posted an auction job.");
-	-post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	.	
 
 @postPricedJob
 +!select_goal
 	: post_job_priced(Reward, JobActive, StorageId, Items) & going(Facility)
 <-
-	!post_job_priced(Reward, JobActive, StorageId, Items);
-	.print("Posted a priced job.");
 	-post_job_priced(Reward, JobActive, StorageId, Items);
 	+remember(Facility);
+	!post_job_priced(Reward, JobActive, StorageId, Items);
+	.print("Posted a priced job.");
 	.
 	
 @postPricedJobAlt
 +!select_goal
 	: post_job_priced(Reward, JobActive, StorageId, Items)
 <-
+	-post_job_priced(Reward, JobActive, StorageId, Items);
 	!post_job_priced(Reward, JobActive, StorageId, Items);
 	.print("Posted a priced job.");
-	-post_job_priced(Reward, JobActive, StorageId, Items);
 	.
 
+// Default action is to skip
+@skipAction
++!select_goal
+	: true
+<-
+	!skip;
+	.print("Nothing to do at this step");
+	.
+
+/* 
 @abort
 +!select_goal
 	: going(Facility) & abort
@@ -439,12 +448,3 @@
 	!goto(DumpId);
 	.
 */
-
-// Default action is to skip
-@skipAction
-+!select_goal
-	: true
-<-
-	.print("Nothing to do at this step");
-	!skip;
-	.

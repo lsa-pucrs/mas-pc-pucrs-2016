@@ -1,7 +1,7 @@
 // Goto (option 1)
 // FacilityId must be a string
 +!goto(FacilityId)
-	: not inFacility(FacilityId)
+	: true
 <-
 	!commitAction(
 		goto(
@@ -14,7 +14,7 @@
 // Goto (option 2)
 // Lat and Lon must be floats
 +!goto(Lat, Lon)
-	: true // TODO context must test battery and if [Id_lat, Id_Lon] != [self.lat, self.lon]
+	: true
 <-
 	!commitAction(
 		goto(
@@ -252,8 +252,8 @@
 	!commitAction(abort);
 	.
 @commitAction[atomic]
-+!commitAction(Action) : true 
++!commitAction(Action) 
+	: true 
 <- 
-	.my_name(Ag);
 	action(Action);
 	.

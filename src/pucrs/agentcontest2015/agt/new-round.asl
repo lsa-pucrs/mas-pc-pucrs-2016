@@ -1,3 +1,13 @@
++!new_round
+	: true
+<-
+	+chargingList([]);
+	+dumpList([]);
+	+storageList([]);
+	+shopList([]);
+	+workshopList([]);
+	.	
+
 /* 
 +lastStep(Step)
 	: Step == 0 & tools(Tools) & compositeMaterials(CompositeList)
@@ -17,13 +27,8 @@
 	+chargingPrice(0,0);
 	+assembleToolsList([]);
 	+compositeMaterials([]);			// criada para auxiliar o assist job
-	+chargingList([]);
-	+dumpList([]);
-	+storageList([]);
 	+storeList([]);
 	+retrieveList([]);
-	+shopsList([]);
-	+workshopList([]);
 	+assembleList([]);
 	+verify_items([]);
 	+auxList([]);                    // lista para limpar as bases compostas
