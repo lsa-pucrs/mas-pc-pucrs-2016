@@ -6,7 +6,22 @@
 	+storageList([]);
 	+shopList([]);
 	+workshopList([]);
-	.	
+	.
+	
++lastStep(Step)
+	: Step == 1 & role(_, _, _, _, Tools) & shopList(List)
+<-
+	for ( .member(Tool,Tools))
+	{
+		?product(Tool,Volume,BaseList);
+		if (BaseList == [])
+		{
+			?find_shops(Tool,List,Result);
+			?best_shop(Result,Shop);
+			+buyList(Tool,1,Shop);
+		}
+	}
+	.
 
 /* 
 +lastStep(Step)

@@ -21,21 +21,7 @@
     focus(AId);
     register(E);
 	.
-/* 
-+!register_freeconn
-	: jcm__art(WorkspaceName, "eis", ArtId)
-<-
-	.print("Registering...");
-	register_freeconn[artifact_id(ArtId)];
-	.
 
-+serverName(Name)[artifact_id(_)]
-	: true
-<-
-	+serverName(Name);
-	.print("My server name is ",Name);
-.	
-*/
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
 	: true
 <-
@@ -54,3 +40,19 @@
 	focusWhenAvailable("task_board");
 	.print("Task board located.");	
 	.
+	
+/* 
++!register_freeconn
+	: jcm__art(WorkspaceName, "eis", ArtId)
+<-
+	.print("Registering...");
+	register_freeconn[artifact_id(ArtId)];
+	.
+
++serverName(Name)[artifact_id(_)]
+	: true
+<-
+	+serverName(Name);
+	.print("My server name is ",Name);
+.	
+*/	

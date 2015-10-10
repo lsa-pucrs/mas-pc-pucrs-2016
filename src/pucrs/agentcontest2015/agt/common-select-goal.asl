@@ -34,7 +34,7 @@
 	-post_job_priced(Reward, JobActive, StorageId, Items);
 	!post_job_priced(Reward, JobActive, StorageId, Items);
 	.print("Posted a priced job.");
-	.
+	.	
 
 @buyAction
 +!select_goal

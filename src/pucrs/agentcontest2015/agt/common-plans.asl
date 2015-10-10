@@ -16,10 +16,6 @@
 	: shopList(List) & not .member(shop(ShopId,_),List)
 <-
 	-+shopList([shop(ShopId,Items)|List]);
-//	for(.member(item(NItem,Price,Qty,Load),Items))
-//	{
-//		+item_qty(ShopId, NItem, Qty);
-//	}
 	.
 	
 @storageList[atomic]

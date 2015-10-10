@@ -1,3 +1,9 @@
+best_shop([Shop|_],Shop).
+
+find_shops(ItemId,[],[]).
+find_shops(ItemId,[shop(ShopId,ListItems)|List],[ShopId|Result]) :- .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
+find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
+
 /* 
 //low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
 low_battery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closest_facility(List, Facility, RouteLen)
@@ -10,8 +16,6 @@ closest_facility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest
 closest_facility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 closest_facility_drone(List, Facility, RouteLen) :- Role = "drone" & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 
-best_shop([Shop|_],Shop).
-
 verify_items([item(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verify_items(List).
 verify_items([consumed(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verify_items(List).
 verify_items([tools(ItemId,Qty)|List]) :- item(ItemId,Qty) & verify_items(List).
@@ -23,10 +27,6 @@ get_missing_tools([],Aux,ListTools,ItemId) :- ListTools = Aux.
 get_missing_tools([tools(ToolId,Qty)|List],Aux,ListTools,ItemId) :- item(ToolId,0) & .concat([assemble(ItemId,ToolId)],Aux,ResultAux) & get_missing_tools(List,ResultAux,ListTools,ItemId).
 get_missing_tools([tools(ToolId,Qty)|List],Aux,ListTools,ItemId) :- item(ToolId,1) & get_missing_tools(List,Aux,ListTools,ItemId).
 get_missing_tools([consumed(ItemId2,Qty)|List],Aux,ListTools,ItemId) :- get_missing_tools(List,Aux,ListTools,ItemId).
-
-find_shops(ItemId,[],[]).
-find_shops(ItemId,[shop(ShopId,ListItems)|List],[ShopId|Result]) :- .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
-find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
 
 count(ItemId,[],Aux,Qty) :- Qty = Aux.
 count(ItemId,[ItemId|ListAssemble],Aux,Qty) :- Aux2 = Aux+1 & count(ItemId,ListAssemble,Aux2,Qty).
