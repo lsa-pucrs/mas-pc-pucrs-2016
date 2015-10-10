@@ -5,6 +5,12 @@
 	!select_goal;
 	.
 	
++inFacility(Facility)
+	: Facility \== none
+<-
+	-going(Facility);
+	.	
+	
 @shopList[atomic]
 +shop(ShopId, Lat, Lng, Items)
 	: shopList(List) & not .member(shop(ShopId,_),List)

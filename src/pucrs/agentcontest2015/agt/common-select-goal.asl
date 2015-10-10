@@ -36,6 +36,48 @@
 	.print("Posted a priced job.");
 	.
 
+@buyAction
++!select_goal
+	: buyList(Item,Qty,Shop) & inFacility(Shop) & shop(Shop,Lat,Lon,Items) & .member(item(Item,Price,Qty2,Restock),Items) & Qty2 > Qty
+<-
+	-buyList(Item,Qty,Shop);
+	!buy(Item,Qty);
+	.print("Buying ",Qty,"x item ",Item, " in shop ",Shop);
+	.
+	
+@buyActionSkip
++!select_goal
+	: buyList(Item,Qty,Shop) & inFacility(Shop) & shop(Shop,Lat,Lon,Items) & .member(item(Item,Price,Qty2,Restock),Items) & Qty2 < Qty
+<-
+	!skip;
+	.print("Not enough items on the shop, skipping my action to try again next step.");
+	.
+
+@remember
++!select_goal
+	: remember(Facility)
+<- 
+	-remember(Facility);
+	!goto(Facility);
+	.print("Had to stop my continue, initiating go to again to ",Facility);
+	.
+
+@continueGotoFacility
++!select_goal 
+	: going(Facility)
+<-
+	!continue;
+	.print("Continuing to location ",Facility);
+	.
+
+@gotoShop
++!select_goal
+	: buyList(Item,Qty,Shop)
+<-
+	!goto(Shop);
+	.print("Going to ",Shop);
+	.	
+
 // Default action is to skip
 @skipAction
 +!select_goal
@@ -54,15 +96,6 @@
 	-abort;
 	-going(Facility);
 	!abort;
-	.
-
-@remember
-+!select_goal
-	: remember(Facility)
-<-
-	.print("Had to stop my continue, initiating go to again to ",Facility); 
-	-remember(Facility);
-	!goto(Facility);
 	.
 
 @postBid
@@ -142,25 +175,6 @@
 	?best_shop(Result,Shop);
 	.print("Going to shop: ",Shop," to buy tool: ",Tool);
 	!goto(Shop);
-	.
-	
-@buyAction
-+!select_goal
-	: buyList(Item,Qty,Shop) & inFacility(Shop) & item(Item,Qty2) //& item_qty(Shop,Item,Qty3) & Qty3 >= Qty
-<-
-	.print("Buying ",Qty,"x item ",Item);
-	!buy(Item,Qty);
-	-item(Item,Qty2);
-	+item(Item,Qty+Qty2);
-	-buyList(Item,Qty,Shop);
-	.
-	
-@buyActionSkip
-+!select_goal
-	: buyList(Item,Qty,Shop) & inFacility(Shop) & item_qty(Shop,Item,Qty3) & Qty3 < Qty
-<-
-	.print("Not enough items on the shop, skipping my action to try again next step.");
-	!skip;
 	.	
 
 @chargeAction
@@ -295,15 +309,7 @@
 		+remember(Facility);
 	} 
 	!goto(Facility);
-	.	
-	
-@continueGotoFacility
-+!select_goal 
-	: going(Facility)
-<-
-	.print("Continuing to location ",Facility); 
-	!continue;
-	.
+	.		
 	
 @continueGotoLatLon
 +!select_goal 
@@ -311,14 +317,6 @@
 <-
 	.print("Continuing to latitude ",Lat," and longitude ",Lon); 
 	!continue;
-	.	
-	
-@gotoShop
-+!select_goal
-	: buyList(Item,Qty,Shop)
-<-
-	.print("Going to ",Shop);
-	!goto(Shop);
 	.		
 	
 @waitingForAssistAssemble

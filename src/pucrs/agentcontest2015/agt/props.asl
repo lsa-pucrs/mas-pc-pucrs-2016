@@ -21,14 +21,4 @@
 	-warnAgent;
 	.send(X,tell,iAmHere(ItemId,Qty,Tool,FacilityHelp,Agent));
 	.
-
-+inFacility(Facility)[artifact_id(_)]
-	: true
-<- 
-	if (Facility \== none)
-	{
-		-going(Facility);	
-	}
-	-+inFacility(Facility);
-	.
 */
