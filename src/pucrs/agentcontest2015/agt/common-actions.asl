@@ -191,7 +191,7 @@
 // AuctionSteps must be an integer
 // StorageId must be a string
 // Items must be a string "item1=item_id1 amount1=10 item2=item_id2 amount2=5 ..."
-// Example: !post_job_auction(1000, 50, 1, 10, storage1, .list(item(base1,10), item(base2,20), item(base3,30)));
+// Example: !post_job_auction(1000, 50, 1, 10, storage1, [item(base1,1), item(material1,2), item(tool1,3)]);
 +!post_job_auction(MaxPrice, Fine, ActiveSteps, AuctionSteps, StorageId, Items)
 	: true
 <-
@@ -213,7 +213,7 @@
 // ActiveSteps must be an integer
 // StorageId must be a string
 // Items must be a string "item1=item_id1 amount1=10 item2=item_id2 amount2=5 ..."
-// Example: !post_job_priced(1000, 50, storage1, .list(item(base1,10), item(base2,20), item(base3,30)));
+// Example: !post_job_priced(1000, 50, storage1, [item(base1,1), item(material1,2), item(tool1,3)]);
 +!post_job_priced(Price, ActiveSteps, StorageId, Items)
 	: true
 <-
