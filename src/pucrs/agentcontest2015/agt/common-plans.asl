@@ -22,7 +22,14 @@
 <-
 	-assembleList(ItemId,Workshop);
 	.
-	
+
++lastActionResult(Result)
+	: Result == failed_random & lastActionReal(Action) & step(Step) & going(Facility)
+<-
+	.print("Failed to execute action ",Action," on step ",Step," due to the 1% random error.");
+	+remember(Facility);
+	.
+
 +lastActionResult(Result)
 	: Result == failed_random & lastActionReal(Action) & step(Step)
 <-

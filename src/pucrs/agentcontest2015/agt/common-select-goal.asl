@@ -1,37 +1,33 @@
-@postAuctionJob
+/* @postAuctionJob
 +!select_goal
 	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items) & going(Facility)
 <-
-	-post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	+remember(Facility);
 	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	.print("Posted an auction job.");
-	.
+	.*/
 	
 @postAuctionJobAlt
 +!select_goal
 	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items)
 <-
-	-post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	.print("Posted an auction job.");
 	.	
 
-@postPricedJob
+/* @postPricedJob
 +!select_goal
 	: post_job_priced(Reward, JobActive, StorageId, Items) & going(Facility)
 <-
-	-post_job_priced(Reward, JobActive, StorageId, Items);
 	+remember(Facility);
 	!post_job_priced(Reward, JobActive, StorageId, Items);
 	.print("Posted a priced job.");
-	.
+	.*/
 	
 @postPricedJobAlt
 +!select_goal
 	: post_job_priced(Reward, JobActive, StorageId, Items)
 <-
-	-post_job_priced(Reward, JobActive, StorageId, Items);
 	!post_job_priced(Reward, JobActive, StorageId, Items);
 	.print("Posted a priced job.");
 	.	
@@ -66,7 +62,7 @@
 <- 
 	-remember(Facility);
 	!goto(Facility);
-	.print("Had to stop my continue, initiating go to again to ",Facility);
+	.print("Initiating go to again to ",Facility);
 	.
 
 @continueGotoFacility
