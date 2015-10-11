@@ -145,6 +145,7 @@ public class EISArtifact extends Artifact {
 			for (String agent: agentIds.keySet()) {
 				try {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
+					filterLocations(agent, percepts);
 					//logger.info("***"+percepts);
 					if (percepts.isEmpty())
 						break;
@@ -294,7 +295,35 @@ public class EISArtifact extends Artifact {
 		"auctionJob",
 		"lastAction",
 		"lastActionResult",
-	}));	
+	}));
+	
+	static List<String> location_perceptions = Arrays.asList(new String[] { "shop", "storage", "workshop", "chargingStation", "dump", "entity" });
+
+	private void filterLocations(String agent, Collection<Percept> perceptions) {
+		double agLat = Double.NaN, agLon = Double.NaN;
+		for (Percept perception : perceptions) {
+			if(perception.getName().equals("lon")){
+				agLon = Double.parseDouble(perception.getParameters().get(0).toString());
+			}
+			if(perception.getName().equals("lat")){
+				agLat = Double.parseDouble(perception.getParameters().get(0).toString());
+			}
+			if (location_perceptions.contains(perception.getName())) {
+				boolean isEntity = perception.getName().equals("entity"); // Second parameter of entity is the team. :(
+				LinkedList<Parameter> parameters = perception.getParameters();
+				String facility = parameters.get(0).toString();
+				if (!MapHelper.hasLocation(facility)) {
+					String local = parameters.get(0).toString();
+					double lat = Double.parseDouble(parameters.get(isEntity ? 2 : 1).toString());
+					double lon = Double.parseDouble(parameters.get(isEntity ? 3 : 2).toString());
+					MapHelper.addLocation(local, new Location(lon, lat));
+				}
+			}
+		}
+		if(!Double.isNaN(agLat) && !Double.isNaN(agLon)){
+			MapHelper.addLocation(agent, new Location(agLon, agLat));
+		}
+	}	
 	
 /*
 	static List<String> agentise = Arrays.asList(new String[]{
@@ -453,33 +482,7 @@ public class EISArtifact extends Artifact {
 		return list;
 	}
 		
-	static List<String> location_perceptions = Arrays.asList(new String[] { "shop", "storage", "workshop", "chargingStation", "dump", "entity" });
 
-	private void filterLocations(String agent, Collection<Percept> perceptions) {
-		double agLat = Double.NaN, agLon = Double.NaN;
-		for (Percept perception : perceptions) {
-			if(perception.getName().equals("lon")){
-				agLon = Double.parseDouble(perception.getParameters().get(0).toString());
-			}
-			if(perception.getName().equals("lat")){
-				agLat = Double.parseDouble(perception.getParameters().get(0).toString());
-			}
-			if (location_perceptions.contains(perception.getName())) {
-				boolean isEntity = perception.getName().equals("entity"); // Second parameter of entity is the team. :(
-				LinkedList<Parameter> parameters = perception.getParameters();
-				String facility = parameters.get(0).toString();
-				if (!MapHelper.hasLocation(facility)) {
-					String local = parameters.get(0).toString();
-					double lat = Double.parseDouble(parameters.get(isEntity ? 2 : 1).toString());
-					double lon = Double.parseDouble(parameters.get(isEntity ? 3 : 2).toString());
-					MapHelper.addLocation(local, new Location(lon, lat));
-				}
-			}
-		}
-		if(!Double.isNaN(agLat) && !Double.isNaN(agLon)){
-			MapHelper.addLocation(agent, new Location(agLon, agLat));
-		}
-	}
 	
 	//This method defines/updates an observed property for consulting available items (price and amount) in the shops. 
 	// @param Percept percept

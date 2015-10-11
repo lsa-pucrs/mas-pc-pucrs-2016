@@ -103,7 +103,7 @@
 // 		.broadcast(tell,helpAssemble(ItemId2,Qty2,Tool2,Facility,Name));	
 //	}
 	!goto(Workshop);
-	.print("I'm going to workshop ", Workshop);
+	.print("Going to workshop ", Workshop);
 	.	
 
 // Default action is to skip
