@@ -1,11 +1,11 @@
-/* @postAuctionJob
+@postAuctionJob
 +!select_goal
 	: post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items) & going(Facility)
 <-
 	+remember(Facility);
 	!post_job_auction(MaxBid, Fine, JobActive, AuctionActive, StorageId, Items);
 	.print("Posted an auction job.");
-	.*/
+	.
 	
 @postAuctionJobAlt
 +!select_goal
@@ -15,14 +15,14 @@
 	.print("Posted an auction job.");
 	.	
 
-/* @postPricedJob
+@postPricedJob
 +!select_goal
 	: post_job_priced(Reward, JobActive, StorageId, Items) & going(Facility)
 <-
 	+remember(Facility);
 	!post_job_priced(Reward, JobActive, StorageId, Items);
 	.print("Posted a priced job.");
-	.*/
+	.
 	
 @postPricedJobAlt
 +!select_goal
