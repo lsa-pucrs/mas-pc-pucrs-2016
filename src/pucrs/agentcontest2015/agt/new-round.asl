@@ -11,14 +11,37 @@
 +lastStep(Step)
 	: Step == 1 & role(_, _, _, _, Tools) & shopList(List)
 <-
-	for ( .member(Tool,Tools))
+	for ( .member(Tool,Tools) )
 	{
 		?product(Tool,Volume,BaseList);
+		
 		if (BaseList == [])
 		{
 			?find_shops(Tool,List,Result);
 			?best_shop(Result,Shop);
 			+buyList(Tool,1,Shop);
+		}
+		else
+		{
+			.print("Decomposing tool ",Tool);
+			!decomp(BaseList);
+			?baseListJob(Items);
+			-baseListJob(_);
+			for ( .member(item(ItemId,Qty),Items) )
+			{
+				?find_shops(ItemId,List,Result);
+				?best_shop(Result,Shop);
+				if (buyList(ItemId,Qty2,Shop))
+				{
+					-buyList(ItemId,Qty2,Shop);
+					+buyList(ItemId,Qty+Qty2,Shop);			
+				} else {
+					+buyList(ItemId,Qty,Shop);		
+				}	
+			}
+			?workshopList([Workshop|WList]);
+			//?closest_facility(WList, Facility);
+			+assembleList(Tool,Workshop);
 		}
 	}
 	.

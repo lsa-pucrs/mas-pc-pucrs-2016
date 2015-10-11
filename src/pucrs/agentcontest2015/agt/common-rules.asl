@@ -4,6 +4,9 @@ find_shops(ItemId,[],[]).
 find_shops(ItemId,[shop(ShopId,ListItems)|List],[ShopId|Result]) :- .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
 find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
 
+closest_facility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility).
+closest_facility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
+
 /* 
 //low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
 low_battery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closest_facility(List, Facility, RouteLen)
@@ -12,8 +15,7 @@ low_battery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargi
               // It waste 10 of battery per motion
               // TODO keep watching if 10 will remain the same for all roles
 
-closest_facility(List, Facility) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility).
-closest_facility(List, Facility, RouteLen) :- roled(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
+
 closest_facility_drone(List, Facility, RouteLen) :- Role = "drone" & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 
 verify_items([item(ItemId,Qty)|List]) :- item(ItemId,Qty2) & Qty2 >= Qty & verify_items(List).

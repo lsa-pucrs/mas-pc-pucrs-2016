@@ -52,6 +52,15 @@
 	!skip;
 	.print("Not enough items on the shop, skipping my action to try again next step.");
 	.
+	
+@assembleItem
++!select_goal 
+	: assembleList(Item,Workshop) & inFacility(Workshop) //& verify_items(Bases) 
+<- 
+	-assembleList(Item,Workshop);
+	!assemble(Item);
+	.print("Assembling item ", Item, " in workshop ", Workshop);		
+	.	
 
 @remember
 +!select_goal
@@ -72,10 +81,31 @@
 
 @gotoShop
 +!select_goal
-	: buyList(Item,Qty,Shop)
+	: buyList(Item,Qty,Shop) & not going(_)
 <-
 	!goto(Shop);
 	.print("Going to ",Shop);
+	.
+	
+@gotoWorkshop
++!select_goal
+	: assembleList(Item,Workshop) & not going(_) & not buyList(_,_,_) //& compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verify_tools(Inter,[],ToolsMissing)
+<-
+//	if (ToolsMissing \== [])
+//	{
+//		?serverName(Name);
+//	    for (.member(assemble(ItemId,Tool),ToolsMissing))
+//	    {
+//	  		?count(ItemId,ListAssemble,0,Qty);
+//	  		+waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name);  		
+//	    }
+//	    .nth(0,ToolsMissing,assemble(ItemId2,Tool2));
+//	    ?count(ItemId2,ListAssemble,0,Qty2);
+// 		.print("I need help assembling ",Qty2,"x: ",ItemId2, " with ",Tool2," in ",Facility);
+// 		.broadcast(tell,helpAssemble(ItemId2,Qty2,Tool2,Facility,Name));	
+//	}
+	!goto(Workshop);
+	.print("I'm going to workshop ", Workshop);
 	.	
 
 // Default action is to skip
@@ -273,23 +303,6 @@
 		+item(ItemIdBase,Qty2-QtyBase);
 	};
 	.
-	
-@assembleItem
-+!select_goal 
-	: assembleList([ItemId|ListAssemble]) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verify_items(Bases) 
-<- 
-	.print("Assembling item ", ItemId, " in workshop ", Facility);	
-	!assemble(ItemId);
-	-+assembleList(ListAssemble);
-	?item(ItemId,Qty);
-	-item(ItemId,Qty);
-	+item(ItemId,Qty+1);
-	for (.member(consumed(ItemIdBase,QtyBase),Bases))  {
-		?item(ItemIdBase,Qty2);
-		-item(ItemIdBase,Qty2);
-		+item(ItemIdBase,Qty2-QtyBase);
-	};
-	.
 
 @continueCharging
 +!select_goal 
@@ -335,27 +348,6 @@
 	.print("I'm going to workshop ", Facility, " to assist agent ",Agent," in order to make ",Qty,"x of item ",ItemId);
 	!goto(Facility);	
 	.	
-	
-@gotoWorkshop
-+!select_goal
-	: assembleList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closest_facility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verify_tools(Inter,[],ToolsMissing)
-<-
-	if (ToolsMissing \== [])
-	{
-		?serverName(Name);
-	    for (.member(assemble(ItemId,Tool),ToolsMissing))
-	    {
-	  		?count(ItemId,ListAssemble,0,Qty);
-	  		+waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name);  		
-	    }
-	    .nth(0,ToolsMissing,assemble(ItemId2,Tool2));
-	    ?count(ItemId2,ListAssemble,0,Qty2);
-  		.print("I need help assembling ",Qty2,"x: ",ItemId2, " with ",Tool2," in ",Facility);
-  		.broadcast(tell,helpAssemble(ItemId2,Qty2,Tool2,Facility,Name));	
-	}
-	.print("I'm going to workshop ", Facility);
-	!goto(Facility);
-	.
 
 @gotoStorageToDeliverJob
 +!select_goal
