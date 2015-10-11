@@ -7,6 +7,9 @@ find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(Item
 closest_facility(List, Facility) :- role(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility).
 closest_facility(List, Facility, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2015.actions.closest(Role, List, Facility, RouteLen).
 
+compare_jobs(JobId, StorageId, Begin, End, Reward, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Reward,ItemsS,String1) & post_job_priced(Reward2, JobActive2, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2, JobActive2, Reward2, Items2S,String2) & String1 == String2.
+compare_jobs(JobId, StorageId, Begin, End, Fine, MaxBid, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Fine,MaxBid,ItemsS,String1) & post_job_auction(MaxBid2, Fine2, JobActive2, AuctionActive, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2,JobActive2,Fine2,MaxBid2,Items2S,String2) & String1 == String2.
+
 /* 
 //low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
 low_battery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closest_facility(List, Facility, RouteLen)
