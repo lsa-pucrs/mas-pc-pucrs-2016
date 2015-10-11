@@ -38,11 +38,10 @@
 
 @buyAction
 +!select_goal
-	: buyList(Item,Qty,Shop) & inFacility(Shop) & shop(Shop,Lat,Lon,Items) & .member(item(Item,Price,Qty2,Restock),Items) & Qty2 > Qty
+	: buyList(ItemId,Qty,Shop) & inFacility(Shop) & shop(Shop,Lat,Lon,Items) & .member(item(ItemId,Price,Qty2,Restock),Items) & Qty2 > Qty
 <-
-	-buyList(Item,Qty,Shop);
-	!buy(Item,Qty);
-	.print("Buying ",Qty,"x item ",Item, " in shop ",Shop);
+	!buy(ItemId,Qty);
+	.print("Buying ",Qty,"x item ",ItemId, " in shop ",Shop);
 	.
 	
 @buyActionSkip
@@ -55,11 +54,10 @@
 	
 @assembleItem
 +!select_goal 
-	: assembleList(Item,Workshop) & inFacility(Workshop) //& verify_items(Bases) 
+	: assembleList(ItemId,Workshop) & inFacility(Workshop) //& verify_items(Bases) 
 <- 
-	-assembleList(Item,Workshop);
-	!assemble(Item);
-	.print("Assembling item ", Item, " in workshop ", Workshop);		
+	!assemble(ItemId);
+	.print("Assembling item ", ItemId, " in workshop ", Workshop);		
 	.	
 
 @remember

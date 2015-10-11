@@ -262,7 +262,6 @@ public class EISArtifact extends Artifact {
 //	"entity",
 //	"fPosition",
 //	"lastActionParam",
-//	"lastActionResult",
 //	"lat",
 //	"lon",
 //	"requestAction",
@@ -294,6 +293,7 @@ public class EISArtifact extends Artifact {
 		"pricedJob",
 		"auctionJob",
 		"lastAction",
+		"lastActionResult",
 	}));	
 	
 /*

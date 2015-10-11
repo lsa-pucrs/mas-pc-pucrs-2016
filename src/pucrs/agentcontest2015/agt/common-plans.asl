@@ -9,7 +9,25 @@
 	: Facility \== none
 <-
 	-going(Facility);
-	.	
+	.
+	
++item(ItemId,Qty)
+	: buyList(ItemId,Qty,Shop)
+<-
+	-buyList(ItemId,Qty,Shop);
+	.
+
++item(ItemId,1)
+	: assembleList(ItemId,Workshop)
+<-
+	-assembleList(ItemId,Workshop);
+	.
+	
++lastActionResult(Result)
+	: Result == failed_random & lastActionReal(Action) & step(Step)
+<-
+	.print("Failed to execute action ",Action," on step ",Step," due to the 1% random error.");
+	.
 	
 @shopList[atomic]
 +shop(ShopId, Lat, Lng, Items)

@@ -255,5 +255,6 @@
 +!commitAction(Action) 
 	: true 
 <- 
+	-+lastActionReal(Action);
 	action(Action);
 	.
