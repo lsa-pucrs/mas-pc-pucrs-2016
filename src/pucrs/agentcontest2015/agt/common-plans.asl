@@ -120,22 +120,15 @@
 //			}
 	}
 	.
-	
-/* 
+
 +simEnd
-	: roled(Role, Speed, LoadCap, BatteryCap, Tools) & current_wsp(WSid,WSname,WScode) & jcm__art("puc",Art1,ArtId1) & jcm__art("city",Art2,ArtId2) & jcm__ws("puc",WSid1) & jcm__ws("city",WSid2) & serverName(ServerName)
+	: true
 <-
 	!end_round;
-	!new_round(Role, Speed, LoadCap, BatteryCap, Tools);
-	+roled(Role, Speed, LoadCap, BatteryCap, Tools);
-	+serverName(ServerName);	
-	+current_wsp(WSid,WSname,WScode);	
-	+jcm__ws("puc",WSid1);
-	+jcm__ws("city",WSid2);
-	+jcm__art("puc",Art1,ArtId1);
-	+jcm__art("city",Art2,ArtId2);	
+	!new_round;	
 	.
 	
+/* 
 @goHorse[atomic]	
 +lastStep(Step)
 	: steps(TotalSteps) & Step >= TotalSteps - 20 & not goHorse

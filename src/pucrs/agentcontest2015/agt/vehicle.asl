@@ -1,6 +1,6 @@
 //{ include("common-cartago.asl") }
-{ include("$jacamoJar/templates/common-cartago.asl") }
-{ include("$jacamoJar/templates/common-moise.asl") }
+//{ include("$jacamoJar/templates/common-cartago.asl") }
+//{ include("$jacamoJar/templates/common-moise.asl") }
 { include("common-rules.asl") }
 { include("common-actions.asl") }
 { include("common-plans.asl") }
@@ -8,7 +8,6 @@
 { include("end-round.asl") }
 { include("new-round.asl") }
 { include("bidder.asl") }
-{ include("props.asl") } // might not be needed when we make the change to obs. prop. in Cartago
 
 +!register(E)
 	: true

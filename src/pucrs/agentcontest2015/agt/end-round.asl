@@ -1,4 +1,3 @@
-/* 
 +!end_round
 	: true
 <-
@@ -8,4 +7,3 @@
     .drop_all_intentions;
     .drop_all_desires;	
 	.
-*/

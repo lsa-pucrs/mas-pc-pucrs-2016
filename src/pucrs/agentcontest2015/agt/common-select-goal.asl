@@ -142,64 +142,6 @@
 	+auctionJob(JobId,Items,StorageId);
 	+postedBid(JobId);
 	.
-	
-@assembleTool
-+!select_goal 
-	: assembleToolsList([ItemId|ListAssemble]) & inFacility(Facility) & workshopList(ListWorkshop) & .member(Facility,ListWorkshop) & product(ItemId,Volume,Bases) & verify_items(Bases) 
-<- 
-	.print("Assembling tool ", ItemId, " in workshop ", Facility);	
-	!assemble(ItemId);
-	-+assembleToolsList(ListAssemble);
-	?item(ItemId,Qty);
-	-item(ItemId,Qty);
-	+item(ItemId,Qty+1);
-	for (.member(consumed(ItemIdBase,QtyBase),Bases))  {
-		?item(ItemIdBase,Qty2);
-		-item(ItemIdBase,Qty2);
-		+item(ItemIdBase,Qty2-QtyBase);
-	};
-	.
-	
-@gotoWorkshopToAssembleTool
-+!select_goal 
-	: assembleToolsList(ListAssemble) & ListAssemble \== [] & workshopList(WorkshopList) & closest_facility(WorkshopList,Facility) & not going(_) & not buyList(_,_,_) & compositeMaterials(CompositeList) & .intersection(ListAssemble,CompositeList,Inter) & verify_tools(Inter,[],ToolsMissing)
-<-
-	if (ToolsMissing \== [])
-	{
-		?serverName(Name);
-	    for (.member(assemble(ItemId,Tool),ToolsMissing))
-	    {
-	  		?count(ItemId,ListAssemble,0,Qty);
-	  		.print("I need help assembling tool ",Qty,"x: ",ItemId, " with ",Tool," in ",Facility);
-	  		.broadcast(tell,helpAssemble(ItemId,Qty,Tool,Facility,Name));
-	  		+waitingForAssistAssemble(ItemId,Qty,Tool,Facility,Name); 		
-	    }
-	    
-	}
-	.print("I'm going to workshop ", Facility);
-	!goto(Facility);
-	.
-	
-@buyTools
-+!select_goal
-	: inFacility(Facility) & tools([Tool|Tools]) &  shopsList(List) & find_shops(Tool,List,Result) & .member(Facility,Result) & not item(Tool,1)
-<-
-	.print("Buying tool: ",Tool);
-	!buy(Tool,1);
-	-item(Tool,0);
-	+item(Tool,1);
-	-+tools(Tools);
-	.
-		
-@goBuyTools
-+!select_goal
-	: tools([Tool|_]) & shopsList(List) & not going(_) & product(Tool, Vol, BaseList) & BaseList == []
-<-
-	?find_shops(Tool,List,Result);
-	?best_shop(Result,Shop);
-	.print("Going to shop: ",Shop," to buy tool: ",Tool);
-	!goto(Shop);
-	.	
 
 @chargeAction
 +!select_goal 
