@@ -37,7 +37,7 @@ import eis.iilang.Percept;
 
 public class EISArtifact extends Artifact {
 
-	private Logger logger = null;
+	private Logger logger = Logger.getLogger(EISArtifact.class.getName());
 
 	private Map<String, AgentId> agentIds;
 	private Map<String, String> agentToEntity;
@@ -53,10 +53,12 @@ public class EISArtifact extends Artifact {
 		MapHelper.init(maps[0], 0.001, 0.0002);
 	}
 	
-	public EISArtifact() throws IOException {
+	public EISArtifact() {
 		agentIds      = new ConcurrentHashMap<String, AgentId>();
 		agentToEntity = new ConcurrentHashMap<String, String>();
-		
+	}
+
+	protected void init() throws IOException, InterruptedException {
 		try {
 			ei = EILoader.fromClassName("massim.eismassim.EnvironmentInterface");
 			if (ei.isInitSupported())
@@ -67,10 +69,8 @@ public class EISArtifact extends Artifact {
 				ei.start();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
-	}
-
-	protected void init() throws IOException {
+		}
+		
 		receiving = true;
 		execInternalOp("receiving");
 	}

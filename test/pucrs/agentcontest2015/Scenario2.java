@@ -1,11 +1,10 @@
 package pucrs.agentcontest2015;
 
+import org.junit.Test;
+
 import jacamo.infra.JaCaMoLauncher;
 import jason.JasonException;
-import massim.competition2015.monitor.GraphMonitor;
 import massim.server.Server;
-
-import org.junit.Test;
 
 public class Scenario2 {
 	

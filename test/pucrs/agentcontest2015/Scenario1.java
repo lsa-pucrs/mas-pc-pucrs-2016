@@ -1,13 +1,13 @@
 package pucrs.agentcontest2015;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import jacamo.infra.JaCaMoLauncher;
 import jason.JasonException;
 import massim.competition2015.monitor.GraphMonitor;
 import massim.server.Server;
 import massim.test.InvalidConfigurationException;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class Scenario1 {
 
@@ -21,12 +21,6 @@ public class Scenario1 {
 			}
 		}).start();
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -37,12 +31,6 @@ public class Scenario1 {
 				}
 			}
 		}).start();
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		try {
 			JaCaMoLauncher runner = new JaCaMoLauncher();

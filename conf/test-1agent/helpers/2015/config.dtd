@@ -21,10 +21,10 @@
 
 <!ATTLIST conf
 	backuppath CDATA "backup"
-	launch-sync-type CDATA "key"
+	launch-sync-type CDATA "timer"
 	reportpath CDATA "./backup/"
 	time CDATA "12:15"
-	time-to-launch CDATA "10000"
+	time-to-launch CDATA "1000"
 	tournamentmode CDATA "0"
 	tournamentname CDATA "City2015"
 	debug-level CDATA "normal"

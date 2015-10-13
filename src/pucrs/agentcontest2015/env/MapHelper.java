@@ -3,12 +3,8 @@ package pucrs.agentcontest2015.env;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import massim.competition2015.scenario.Location;
-import massim.competition2015.scenario.Route;
 
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
@@ -17,6 +13,9 @@ import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.util.PointList;
 import com.graphhopper.util.shapes.GHPoint;
 import com.graphhopper.util.shapes.GHPoint3D;
+
+import massim.competition2015.scenario.Location;
+import massim.competition2015.scenario.Route;
 
 public class MapHelper {
 

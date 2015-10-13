@@ -31,7 +31,6 @@
 	<classpathentry kind="lib" path="lib/protobuf-java-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-6.0.26.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.10.jar"/>
 	<classpathentry kind="lib" path="lib/swing-layout-1.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/swing-worker-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/trove4j-3.0.3.jar"/>
@@ -45,5 +44,7 @@
 	<classpathentry kind="lib" path="lib/agentcontest-2015-0.6.2.jar" sourcepath="lib/agentcontest-2015-0.6.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/eismassim-2.6-sources.jar"/>
 	<classpathentry kind="lib" path="lib/eismassim-2.6.jar" sourcepath="lib/eismassim-2.6-sources.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
