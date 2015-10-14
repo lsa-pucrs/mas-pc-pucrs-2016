@@ -43,7 +43,6 @@
 			+assembleList(Tool,Workshop);
 		}
 	}
-	!select_goal;
 	.
 
 /* 
