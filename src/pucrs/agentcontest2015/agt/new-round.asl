@@ -14,7 +14,6 @@
 	for ( .member(Tool,Tools) )
 	{
 		?product(Tool,Volume,BaseList);
-		
 		if (BaseList == [])
 		{
 			?find_shops(Tool,List,Result);
@@ -44,6 +43,7 @@
 			+assembleList(Tool,Workshop);
 		}
 	}
+	!select_goal;
 	.
 
 /* 

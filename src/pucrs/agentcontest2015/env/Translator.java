@@ -127,7 +127,6 @@ public class Translator {
 				act = act + "item" + index + "=" + item.getTerm(0) + " amount" + index + "=" + item.getTerm(1) + " ";
 				index++;
 			}
-			
 		} else {
 			for (Term term : literal.getTerms()) {
 				Literal termlit = (Literal) term;

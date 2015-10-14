@@ -24,7 +24,7 @@
 	launch-sync-type CDATA "timer"
 	reportpath CDATA "./backup/"
 	time CDATA "12:15"
-	time-to-launch CDATA "1000"
+	time-to-launch CDATA "4000"
 	tournamentmode CDATA "0"
 	tournamentname CDATA "City2015"
 	debug-level CDATA "normal"

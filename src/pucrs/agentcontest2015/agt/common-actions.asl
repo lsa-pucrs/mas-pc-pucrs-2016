@@ -251,7 +251,7 @@
 <-
 	!commitAction(abort);
 	.
-@commitAction[atomic]
+
 +!commitAction(Action) 
 	: true 
 <- 

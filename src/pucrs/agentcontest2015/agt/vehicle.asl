@@ -1,9 +1,9 @@
+{ include("new-round.asl") }
+{ include("end-round.asl") }
 { include("common-rules.asl") }
 { include("common-actions.asl") }
 { include("common-plans.asl") }
 { include("common-select-goal.asl") }
-{ include("end-round.asl") }
-{ include("new-round.asl") }
 { include("bidder.asl") }
 
 +!register(E)
