@@ -93,6 +93,7 @@ public class EISArtifact extends Artifact {
 			agentIds.put(agent, getOpUserId());
 			logger = Logger.getLogger(EISArtifact.class.getName()+"_"+agent);
 			logger.info("Registering " + agent + " to entity " + entity);
+			signal(agentIds.get(agent), "serverName", Literal.parseLiteral(entity.substring(10).toLowerCase()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
