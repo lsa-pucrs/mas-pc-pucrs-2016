@@ -264,6 +264,7 @@
 	    .print("Doing ",Action, " for step ",S);
 //    }
 	action(Action); // the action in the artifact
+	-+lastActionReal(Action);
 	.wait({ +step(_) }); // wait next step to continue
 //	if (Action \== skip & not (lastActionResult(successful) | lastActionResult(successful_partial))) {
 //		.print("step ",S,", error executing ", Action, " trying again...");
