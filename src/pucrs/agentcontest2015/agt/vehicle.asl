@@ -3,8 +3,9 @@
 { include("common-rules.asl") }
 { include("common-actions.asl") }
 { include("common-plans.asl") }
-{ include("common-select-goal.asl") }
+//{ include("common-select-goal.asl") }
 { include("bidder.asl") }
+{ include("common-strategies.asl") }
 
 +!register(E)
 	: true

@@ -1,12 +1,5 @@
-+step(Step) 
-	: true
-<-
-	-+lastStep(Step);
-	!select_goal;
-	.
-	
 +inFacility(Facility)
-	: Facility \== none
+	: going(Facility)
 <-
 	-going(Facility);
 	.

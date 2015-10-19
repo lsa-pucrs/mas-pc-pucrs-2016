@@ -1,15 +1,20 @@
 // Goto (option 1)
 // FacilityId must be a string
++!goto(FacilityId) : inFacility(FacilityId).
+
 +!goto(FacilityId)
-	: true
+	: not going(FacilityId)
 <-
-	!commitAction(
-		goto(
-			facility(FacilityId)
-		)
-	);
 	+going(FacilityId);
-.
+	!commitAction( goto(facility(FacilityId)));
+	!goto(FacilityId);
+	.
+
++!goto(FacilityId)
+<-
+	!continue;
+	!goto(FacilityId);
+	.
 
 // Goto (option 2)
 // Lat and Lon must be floats
@@ -251,10 +256,24 @@
 <-
 	!commitAction(abort);
 	.
-
-+!commitAction(Action) 
-	: true 
+ 
++!commitAction(Action)
+    : step(S) 
 <- 
-	-+lastActionReal(Action);
-	action(Action);
+//    if (Action \== skip & Action \== continue) {
+	    .print("Doing ",Action, " for step ",S);
+//    }
+	action(Action); // the action in the artifact
+	.wait({ +step(_) }); // wait next step to continue
+//	if (Action \== skip & not (lastActionResult(successful) | lastActionResult(successful_partial))) {
+//		.print("step ",S,", error executing ", Action, " trying again...");
+//		!commitAction(Action);
+//	}  
+	.
+
++!commitAction(Action)
+    : not step(S) 
+<- 
+	.wait({ +step(_) }); // wait the first step to continue
+	!commitAction(Action)  
 	.
