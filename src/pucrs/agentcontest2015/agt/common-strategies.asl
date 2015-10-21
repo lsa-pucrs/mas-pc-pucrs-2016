@@ -8,7 +8,10 @@
 	for ( buyList(Tool,Qty,Shop) )
 	{ 
 		!goto(Shop);
-		!buy(Tool,Qty);
+		for ( buyList(Tool2,Qty2,Shop) )
+		{
+			!buy(Tool2,Qty2);	
+		}
 	}
 	for ( assembleList(Tool,Workshop) )
 	{
