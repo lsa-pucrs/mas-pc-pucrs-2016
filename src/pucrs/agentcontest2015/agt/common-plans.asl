@@ -26,14 +26,14 @@
 +lastActionResult(Result)
 	: Result == failed_random & lastActionReal(Action) & .substring("goto",Action) & step(Step) & going(Facility)
 <-
-	.print("Failed to execute goto action on step ",Step," due to the 1% random error.");
+	.print("Failed to execute goto action on step ",Step-1," due to the 1% random error.");
 	+remember(Facility);
 	.
 
 +lastActionResult(Result)
 	: Result == failed_random & lastActionReal(Action) & step(Step)
 <-
-	.print("Failed to execute action ",Action," on step ",Step," due to the 1% random error.");
+	.print("Failed to execute action ",Action," on step ",Step-1," due to the 1% random error.");
 	.
 	
 @shopList[atomic]

@@ -10,6 +10,11 @@
 		!goto(Shop);
 		!buy(Tool,Qty);
 	}
+	for ( assembleList(Tool,Workshop) )
+	{
+		!goto(Workshop);
+		!assemble(Tool);
+	}
 	+free;
 	.
 
