@@ -3,7 +3,6 @@
 { include("common-rules.asl") }
 { include("common-actions.asl") }
 { include("common-plans.asl") }
-//{ include("common-select-goal.asl") }
 { include("bidder.asl") }
 { include("common-strategies.asl") }
 
@@ -38,14 +37,7 @@
 	.print("Task board located.");	
 	.
 	
-/* 
-+!register_freeconn
-	: jcm__art(WorkspaceName, "eis", ArtId)
-<-
-	.print("Registering...");
-	register_freeconn[artifact_id(ArtId)];
-	.
-
+/*
 +serverName(Name)[artifact_id(_)]
 	: true
 <-

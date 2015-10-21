@@ -3,7 +3,7 @@
 +!start
 	: true
 <-
-	.wait({ +step(_) });
+ 	.wait({ +step(_) });
 	!get_tools;
 	for ( buyList(Tool,Qty,Shop) )
 	{ 

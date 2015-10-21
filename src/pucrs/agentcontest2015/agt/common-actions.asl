@@ -2,11 +2,17 @@
 // FacilityId must be a string
 +!goto(FacilityId) : inFacility(FacilityId).
 
++!goto(_) 
+	: lastActionResult(Result) & Result == failed_random & lastActionReal(Action) & .substring("goto",Action) & going(FacilityId)
+<-
+	!commitAction(goto(facility(FacilityId)));
+	!goto(FacilityId);
+	.
 +!goto(FacilityId)
 	: not going(FacilityId)
 <-
 	+going(FacilityId);
-	!commitAction( goto(facility(FacilityId)));
+	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
 	.
 
@@ -34,7 +40,7 @@
 // ItemId must be a string
 // Amount must be an integer
 +!buy(ItemId, Amount)
-	: true // TODO check if there is enough capacity to load items
+	: true
 <-
 	!commitAction(
 		buy(
@@ -49,7 +55,7 @@
 // ItemId must be a string
 // Amount must be an integer
 +!give(AgentId, ItemId, Amount)
-	: true // TODO test receiver position
+	: true
 <-
 	!commitAction(
 		give(
@@ -65,7 +71,7 @@
 // ItemId must be a string
 // Amount must be an integer
 +!receive
-	: true // TODO test giver position
+	: true
 <-
 	!commitAction(
 		receive
@@ -76,7 +82,7 @@
 // ItemId must be a string
 // Amount must be an integer
 +!store(ItemId, Amount)
-	: true // TODO check if current location is a storage and item * amount is with agent
+	: true
 <-
 	!commitAction(
 		store(
@@ -90,7 +96,7 @@
 // ItemId must be a string
 // Amount must be an integer
 +!retrieve(ItemId, Amount)
-	: true // TODO check if current location is a storage and if item * amount is there
+	: true
 <-
 	!commitAction(
 		retrieve(
@@ -104,7 +110,7 @@
 // ItemId must be a string
 // Amount must be an integer
 +!retrieve_delivered(ItemId, Amount)
-	: true // TODO check if current location is a storage and if item * amount is there
+	: true
 <-
 	!commitAction(
 		retrieve_delivered(
@@ -118,7 +124,7 @@
 // ItemId must be a string
 // Amount must be an integer
 +!dump(ItemId, Amount)
-	: true // TODO check if current location is a dump location and item * amount is with agent
+	: true
 <-
 	!commitAction(
 		dump(
@@ -131,8 +137,7 @@
 // Assemble
 // ItemId must be a string
 +!assemble(ItemId)
-	: true // TODO check if current location is a workshop
-	// TODO remember that an assistant may be required to obtain items and tools
+	: true
 <-
 	!commitAction(
 		assemble(
@@ -144,8 +149,7 @@
 // Assist assemble
 // AgentId must be a string
 +!assist_assemble(AgentId)
-	: true // TODO check if current location is a workshop
-	// TODO remember that an assembler may be required to obtain items and tools
+	: true
 <-
 	!commitAction(
 		assist_assemble(
@@ -157,7 +161,7 @@
 // Deliver job
 // JobId must be a string
 +!deliver_job(JobId)
-	: true // TODO check if current location is the storage to deliver to
+	: true
 <-
 	!commitAction(
 		deliver_job(
@@ -169,7 +173,7 @@
 // Charge
 // No parameters
 +!charge
-	: true // TODO check if battery is low, current location is a charging station and there is space
+	: true
 <-
 	+charging;
 	!commitAction(charge);
@@ -236,7 +240,7 @@
 // Continue
 // No parameters
 +!continue
-	: true // TODO check if already charging or going
+	: true
 <-
 	!commitAction(continue);
 	.
@@ -261,7 +265,7 @@
     : step(S) 
 <- 
 //    if (Action \== skip & Action \== continue) {
-	    .print("Doing ",Action, " for step ",S);
+	    .print("Action: ",Action, "     -     Step: ",S);
 //    }
 	action(Action); // the action in the artifact
 	-+lastActionReal(Action);
