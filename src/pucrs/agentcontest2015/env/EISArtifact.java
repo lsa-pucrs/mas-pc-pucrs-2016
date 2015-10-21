@@ -3,6 +3,7 @@ package pucrs.agentcontest2015.env;
 import jason.JasonException;
 import jason.NoValueException;
 import jason.asSyntax.Literal;
+import jason.asSyntax.Term;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import eis.exceptions.PerceiveException;
 import eis.iilang.Action;
 import eis.iilang.EnvironmentState;
 import eis.iilang.Parameter;
-import eis.iilang.ParameterList;
 import eis.iilang.Percept;
 
 public class EISArtifact extends Artifact {
@@ -146,6 +146,7 @@ public class EISArtifact extends Artifact {
 				try {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
 					filterLocations(agent, percepts);
+					populateTeamArtifact(percepts);
 					//logger.info("***"+percepts);
 					if (percepts.isEmpty())
 						break;
@@ -171,7 +172,19 @@ public class EISArtifact extends Artifact {
 			}
 		}
 		return -10;
-	}	
+	}
+	
+	private void populateTeamArtifact(Collection<Percept> percepts){
+		for (Percept percept : percepts) {
+			String name = percept.getName();
+			/*Verifying available items in a nearby shop*/
+			if(name.equals("shop")){
+				for(Parameter p: percept.getParameters())
+					if(p.toString().contains("availableItem"))
+						TeamArtifact.addShopItemsPrice(percept.getParameters().get(0).toString(), new ArrayList<Term>());
+			}
+		}
+	}
 
 	private void udpatePerception(String agent, Collection<Percept> previousPercepts, Collection<Percept> percepts) throws JasonException {
 		
