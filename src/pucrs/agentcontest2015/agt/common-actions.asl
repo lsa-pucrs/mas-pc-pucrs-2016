@@ -264,11 +264,11 @@
 +!commitAction(Action)
     : step(S) 
 <- 
-//    if (Action \== skip & Action \== continue) {
-	    .print("Action: ",Action, "     -     Step: ",S);
-//    }
-	action(Action); // the action in the artifact
 	-+lastActionReal(Action);
+    if (Action \== skip & Action \== continue) {
+	    .print("Action: ",Action, "     -     Step: ",S);
+    }
+	action(Action); // the action in the artifact
 	.wait({ +step(_) }); // wait next step to continue
 //	if (Action \== skip & not (lastActionResult(successful) | lastActionResult(successful_partial))) {
 //		.print("step ",S,", error executing ", Action, " trying again...");

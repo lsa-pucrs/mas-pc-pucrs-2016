@@ -114,7 +114,7 @@
 	}
 	.
 	
-+!get_tools
++!find_tools
 	: role(_, _, _, _, Tools) & shopList(List)
 <-
 	for ( .member(Tool,Tools) )

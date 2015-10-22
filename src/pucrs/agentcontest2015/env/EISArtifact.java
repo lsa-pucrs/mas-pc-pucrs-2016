@@ -146,7 +146,7 @@ public class EISArtifact extends Artifact {
 				try {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
 					filterLocations(agent, percepts);
-					populateTeamArtifact(percepts);
+					//populateTeamArtifact(percepts);
 					//logger.info("***"+percepts);
 					if (percepts.isEmpty())
 						break;

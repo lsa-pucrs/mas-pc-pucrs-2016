@@ -1,24 +1,31 @@
-!start.
-
-+!start
++!get_tools
 	: true
 <-
- 	.wait({ +step(_) });
-	!get_tools;
+	!buy_items;
+	!assemble_items;
+	.
+	
++!buy_items
+	: true
+<-
 	for ( buyList(Tool,Qty,Shop) )
 	{ 
 		!goto(Shop);
-		for ( buyList(Tool2,Qty2,Shop) )
+		while ( buyList(Tool2,Qty2,Shop) )
 		{
 			!buy(Tool2,Qty2);	
 		}
 	}
-	for ( assembleList(Tool,Workshop) )
+	.	
+
++!assemble_items
+	: true
+<-
+	while ( assembleList(Tool,Workshop) )
 	{
 		!goto(Workshop);
 		!assemble(Tool);
 	}
-	+free;
 	.
 
 +free
