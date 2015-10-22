@@ -27,6 +27,18 @@
 		!assemble(Tool);
 	}
 	.
+	
++!post_priced
+	: storageList([StorageId|_]) & steps(Steps)
+<-
+	 !post_job_priced(1, Steps, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
+	 .
+	 
++!post_auction
+	: storageList([StorageId|_])
+<-
+	 !post_job_auction(500000, 5000, 1, 3, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
+	 . 
 
 +free
 	: true

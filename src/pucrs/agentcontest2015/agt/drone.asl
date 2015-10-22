@@ -4,6 +4,7 @@
 	: true
 <-
  	.wait({ +step(_) });
+ 	!post_auction;
 	!find_tools;
 	!get_tools;
 	+free;
