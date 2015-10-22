@@ -1,33 +1,33 @@
 mas scenario1 {
 		
 	agent vehicle1: vehicle.asl {
-	//	join: puc
+		join: city
 	//	roles: bidder in puc.team1
-	//	focus: teamArtifact
+		focus: city.teamArtifact
 		goals: register("connectionA1")
 	}
 	agent vehicle2: vehicle.asl {
-	//	join: puc
+		join: city
 	//	roles: bidder in puc.team1
-	//	focus: teamArtifact
+		focus: city.teamArtifact
 		goals: register("connectionA2")
 	}
 	agent vehicle3: vehicle.asl {
-	//	join: puc
+		join: city
 	//	roles: bidder in puc.team1
-	//	focus: teamArtifact
+		focus: city.teamArtifact
 		goals: register("connectionA3")
 	}
 	agent vehicle4: vehicle.asl {
-	//	join: puc
+		join: city
 	//	roles: bidder in puc.team1
-	//	focus: teamArtifact
+		focus: city.teamArtifact
 		goals: register("connectionA4")
 	}
 	
-//	workspace city {
-//		artifact teamArtifact: pucrs.agentcontest2015.env.TeamArtifact
-//	}
+	workspace city {
+		artifact teamArtifact: pucrs.agentcontest2015.env.TeamArtifact
+	}
 	
 	organisation puc: pucteam-os.xml {
     	group team1: team {
@@ -36,5 +36,7 @@ mas scenario1 {
 	}
 
 	asl-path: src/pucrs/agentcontest2015/agt
+	
+	platform: cartago("infrastructure")
 
 }

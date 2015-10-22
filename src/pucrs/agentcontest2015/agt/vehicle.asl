@@ -5,6 +5,7 @@
 { include("common-plans.asl") }
 { include("bidder.asl") }
 { include("common-strategies.asl") }
+{ include("$jacamoJar/templates/common-cartago.asl") }
 
 +!register(E)
 	: true

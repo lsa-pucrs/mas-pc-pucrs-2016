@@ -19,7 +19,7 @@ public class TeamArtifact extends Artifact {
 	}
 	
 	public synchronized static void addShopItemsPrice(String shopId, List<Term> itemsPrice){
-		logger.info("$> Team Artifact (Shop - Items Price): " + shopId);
+		//logger.info("$> Team Artifact (Shop - Items Price): " + shopId);
 		if(shopItemsPrice.containsKey(shopId)){
 			
 		} else {
