@@ -6,6 +6,7 @@
 { include("bidder.asl") }
 { include("common-strategies.asl") }
 { include("$jacamoJar/templates/common-cartago.asl") }
+{ include("$jacamoJar/templates/common-moise.asl") }
 
 +!register(E)
 	: true
@@ -24,13 +25,13 @@
 <-
 	.print("Got role: ", Role);
 	.lower_case(Role,File);
-	//adoptRole(File)[artifact_id(ArtId)];
+	adoptRole(File);
 	!new_round;	
 	.concat(File, ".asl", FileExt);
 	.include(FileExt);
 	if (Role == "Truck")
 	{
-		//adoptRole(initiator)[artifact_id(ArtId)];
+		adoptRole(initiator);
 		.include("initiator.asl");
 		!create_taskboard;
 	};
