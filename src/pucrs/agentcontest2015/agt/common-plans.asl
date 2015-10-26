@@ -71,6 +71,28 @@
 <- 
 	-+dumpList([DumpId|List]);
 	.
+	
+@suspend[atomic]
++!suspend
+	: goalsList(List)
+<-
+	for ( .intend(Goal[Annotation]) )
+	{
+		if ( .sublist([Goal],List) )
+		{
+			+goal(Goal);
+			.suspend(Goal);
+		}
+	}.
+	
+@resume[atomic]
++!resume
+<-
+	for ( goal(Goal) )
+	{
+		-goal(Goal);
+		.resume(Goal);
+	}.	
 
 @decomp
 +!decomp(Items)

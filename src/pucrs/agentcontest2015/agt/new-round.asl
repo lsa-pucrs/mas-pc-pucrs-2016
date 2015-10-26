@@ -1,6 +1,7 @@
 +!new_round
 	: true
 <-
+	+goalsList([find_tools,get_tools,start]);
 	+chargingList([]);
 	+dumpList([]);
 	+storageList([]);

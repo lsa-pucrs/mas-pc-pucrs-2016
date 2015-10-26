@@ -12,7 +12,7 @@
 +step(Step)
 	: Step mod 30 == 0
 <-
-	.suspend(start);
+	!suspend;
 	!post_auction;
-	.resume(start);
+	!resume;
 	.

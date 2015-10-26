@@ -8,12 +8,12 @@
 +!buy_items
 	: true
 <-
-	for ( buyList(Tool,Qty,Shop) )
+	for ( buyList(Item,Qty,Shop) )
 	{ 
 		!goto(Shop);
-		while ( buyList(Tool2,Qty2,Shop) )
+		while ( buyList(Item2,Qty2,Shop) )
 		{
-			!buy(Tool2,Qty2);	
+			!buy(Item2,Qty2);	
 		}
 	}
 	.	
@@ -21,10 +21,10 @@
 +!assemble_items
 	: true
 <-
-	while ( assembleList(Tool,Workshop) )
+	while ( assembleList(Item,Workshop) )
 	{
 		!goto(Workshop);
-		!assemble(Tool);
+		!assemble(Item);
 	}
 	.
 	
