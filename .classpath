@@ -46,5 +46,7 @@
 	<classpathentry kind="lib" path="lib/eismassim-2.6.jar" sourcepath="lib/eismassim-2.6-sources.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.12.jar"/>
+	<classpathentry kind="lib" path="lib/intmas.jar"/>
+	<classpathentry kind="lib" path="lib/jade.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
