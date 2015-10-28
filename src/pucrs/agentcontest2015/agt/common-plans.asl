@@ -64,7 +64,7 @@
 //	}
 	-+workshopList([WorkshopId|List]);
 	.
-	
+
 @dumpList[atomic]
 +dump(DumpId,Lat,Lng,Price) 
 	:  dumpList(List) & not .member(DumpId,List) 
@@ -74,13 +74,13 @@
 	
 @suspend[atomic]
 +!suspend
-	: goalsList(List)
+	: suspendList(List)
 <-
 	for ( .intend(Goal[Annotation]) )
 	{
 		if ( .sublist([Goal],List) )
 		{
-			+goal(Goal);
+			+suspended(Goal);
 			.suspend(Goal);
 		}
 	}.
@@ -88,9 +88,9 @@
 @resume[atomic]
 +!resume
 <-
-	for ( goal(Goal) )
+	for ( suspended(Goal) )
 	{
-		-goal(Goal);
+		-suspended(Goal);
 		.resume(Goal);
 	}.	
 
@@ -135,7 +135,7 @@
 //			}
 	}
 	.
-	
+
 +!find_tools
 	: role(_, _, _, _, Tools) & shopList(List)
 <-
@@ -166,8 +166,8 @@
 					+buyList(ItemId,Qty,Shop);		
 				}	
 			}
-			?workshopList(WList);
-			?closest_facility(WList, Workshop);
+			?workshopList([Workshop|WList]);
+			//?closest_facility(WList, Workshop);
 			+assembleList(Tool,Workshop);
 		}
 	}

@@ -29,15 +29,15 @@
 	.
 	
 +!post_priced
-	: storageList([StorageId|_]) & steps(Steps)
+	: storageList([StorageId|_]) & steps(Steps) & activePricedSteps(Active)
 <-
-	 !post_job_priced(1, Steps, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
+	 !post_job_priced(Active, Steps, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
 	 .
 	 
 +!post_auction
-	: storageList([StorageId|_])
+	: storageList([StorageId|_]) & rewardAuction(Reward) & fineAuction(Fine) & activeAuctionSteps(Active) & auctionSteps(ActiveAuction)
 <-
-	 !post_job_auction(500000, 5000, 1, 3, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
+	 !post_job_auction(Reward, Fine, Active, ActiveAuction, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
 	 . 
 
 +free

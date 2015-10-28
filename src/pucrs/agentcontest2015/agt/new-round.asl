@@ -1,7 +1,12 @@
 +!new_round
 	: true
 <-
-	+goalsList([find_tools,get_tools,start]);
+	+suspendList([find_tools,get_tools,start]);
+	+activePricedSteps(1);
+	+rewardAuction(500000);
+	+fineAuction(5000);
+	+activeAuctionSteps(1);
+	+auctionSteps(3);
 	+chargingList([]);
 	+dumpList([]);
 	+storageList([]);

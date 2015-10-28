@@ -145,14 +145,17 @@ public class EISArtifact extends Artifact {
 			for (String agent: agentIds.keySet()) {
 				try {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
-					filterLocations(agent, percepts);
 					//populateTeamArtifact(percepts);
 					//logger.info("***"+percepts);
 					if (percepts.isEmpty())
 						break;
 					int currentStep = getCurrentStep(percepts);
+					if (currentStep == 0) {
+						await_time(300);
+					}
 					if (lastStep != currentStep) { // only updates if it is a new step
 						lastStep = currentStep;
+						//filterLocations(agent, percepts);
 						//logger.info("new step "+currentStep);
 						udpatePerception(agent, previousPercepts, percepts);
 						previousPercepts = percepts;
@@ -296,7 +299,7 @@ public class EISArtifact extends Artifact {
 		"shop",			
 		"storage",
 		"workshop",
-		"dump",
+//		"dump",
 		"charge",
 		"load",
 		"inFacility",

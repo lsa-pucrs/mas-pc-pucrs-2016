@@ -1,8 +1,8 @@
 { include("new-round.asl") }
 { include("end-round.asl") }
+{ include("common-plans.asl") }
 { include("common-rules.asl") }
 { include("common-actions.asl") }
-{ include("common-plans.asl") }
 { include("bidder.asl") }
 { include("common-strategies.asl") }
 { include("$jacamoJar/templates/common-cartago.asl") }

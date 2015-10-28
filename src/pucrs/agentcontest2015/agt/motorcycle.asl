@@ -3,7 +3,7 @@
 +!start
 	: true
 <-
- 	.wait({ +step(_) });
+	.wait({ +step(_) });
 	!find_tools;
 	!get_tools;
 	+free;
