@@ -166,8 +166,8 @@
 					+buyList(ItemId,Qty,Shop);		
 				}	
 			}
-			?workshopList([Workshop|WList]);
-			//?closest_facility(WList, Workshop);
+			?workshopList(WList);
+			?closest_facility(WList, Workshop);
 			+assembleList(Tool,Workshop);
 		}
 	}

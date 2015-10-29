@@ -155,7 +155,7 @@ public class EISArtifact extends Artifact {
 					}
 					if (lastStep != currentStep) { // only updates if it is a new step
 						lastStep = currentStep;
-						//filterLocations(agent, percepts);
+						filterLocations(agent, percepts);
 						//logger.info("new step "+currentStep);
 						udpatePerception(agent, previousPercepts, percepts);
 						previousPercepts = percepts;
