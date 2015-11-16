@@ -1,3 +1,16 @@
++task(Task,CNPBoard)
+<- 
+  focus(CNPBoard);
+  !calculate_bid(Task,CNPBoard);
+  ?bidList(Bid,CNPBoard);
+  bid(Bid). 
+	
++!calculate_bid(Task,CNPBoard)
+: map(Information) & vehicle(Features) 
+<- 
+    
+  +bidList(Bid,CNPBoard).
+
 /* 
 @task[atomic]
 +task(Task,CNPBoard) 
@@ -7,8 +20,8 @@
 	lookupArtifact(CNPBoard,BoardId);
 	focus(BoardId);
 	!make_bid(Task,BoardId,CNPBoard);
-	.
-
+	. 
+ 
 @winner[atomic]
 +winner(BidId,Task,Items,JobId,StorageId) 
 	: my_bid(BidId,Task)
