@@ -1,0 +1,90 @@
+<roles>
+	<role name="Explorer"
+			maxEnergy="35" maxBuyEnergy="1000"  rateBuyEnergy="2" maxEnergyDisabled="35" rateBuyEnergyDisabled="1"
+			maxHealth="4" maxBuyHealth="1000"  rateBuyHealth="1"
+			strength="0" maxBuyStrength="0"  rateBuyStrength="1"
+			visRange="2"  maxBuyVisRange="1000" rateBuyVisRange="1">
+		<actions>
+			<action name="goto"/>
+			<action name="probe"/>
+			<action name="survey"/>
+			<action name="buy"/>
+			<action name="recharge"/>
+		</actions>
+		<actionsDisable>
+			<action name="recharge"/>
+			<action name="goto"/>
+		</actionsDisable>
+	</role>
+	<role name="Repairer"
+			maxEnergy="25" maxBuyEnergy="1000"  rateBuyEnergy="2" maxEnergyDisabled="25" rateBuyEnergyDisabled="1"
+			maxHealth="6" maxBuyHealth="1000"  rateBuyHealth="1"
+			strength="0" maxBuyStrength="0"  rateBuyStrength="1"
+			visRange="1"  maxBuyVisRange="1000" rateBuyVisRange="1">
+		<actions>
+			<action name="goto"/>
+			<action name="parry"/>
+			<action name="survey"/>
+			<action name="buy"/>
+			<action name="repair"/>
+			<action name="recharge"/>
+		</actions>
+		<actionsDisable>
+			<action name="recharge"/>
+			<action name="goto"/>
+			<action name="repair"/>
+		</actionsDisable>
+	</role>
+	<role name="Saboteur"
+			maxEnergy="20" maxBuyEnergy="1000"  rateBuyEnergy="2" maxEnergyDisabled="20" rateBuyEnergyDisabled="1"
+			maxHealth="3" maxBuyHealth="1000"  rateBuyHealth="1"
+			strength="3" maxBuyStrength="1000"  rateBuyStrength="1"
+			visRange="1"  maxBuyVisRange="1000" rateBuyVisRange="1">
+		<actions>
+			<action name="goto"/>
+			<action name="parry"/>
+			<action name="survey"/>
+			<action name="buy"/>
+			<action name="attack"/>
+			<action name="recharge"/>
+		</actions>
+		<actionsDisable>
+			<action name="recharge"/>
+			<action name="goto"/>
+		</actionsDisable>
+	</role>
+	<role name="Sentinel"
+			maxEnergy="30" maxBuyEnergy="1000"  rateBuyEnergy="2" maxEnergyDisabled="30" rateBuyEnergyDisabled="1"
+			maxHealth="1" maxBuyHealth="1000"  rateBuyHealth="1"
+			strength="0" maxBuyStrength="0"  rateBuyStrength="1"
+			visRange="3"  maxBuyVisRange="1000" rateBuyVisRange="1">
+		<actions>
+			<action name="goto"/>
+			<action name="parry"/>
+			<action name="survey"/>
+			<action name="buy"/>
+			<action name="recharge"/>
+		</actions>
+		<actionsDisable>
+			<action name="recharge"/>
+			<action name="goto"/>
+		</actionsDisable>
+	</role>
+	<role name="Inspector"
+			maxEnergy="25" maxBuyEnergy="1000"  rateBuyEnergy="2" maxEnergyDisabled="25" rateBuyEnergyDisabled="1"
+			maxHealth="6" maxBuyHealth="1000"  rateBuyHealth="1"
+			strength="0" maxBuyStrength="0"  rateBuyStrength="1"
+			visRange="1"  maxBuyVisRange="1000" rateBuyVisRange="1">
+		<actions>
+			<action name="goto"/>
+			<action name="inspect"/>
+			<action name="survey"/>
+			<action name="buy"/>
+			<action name="recharge"/>
+		</actions>
+		<actionsDisable>
+			<action name="recharge"/>
+			<action name="goto"/>
+		</actionsDisable>
+	</role>
+</roles>
