@@ -21,7 +21,7 @@
 	.
 
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
-	: true
+	: .my_name(Me)
 <-
 	.print("Got role: ", Role);
 	.lower_case(Role,File);
@@ -29,7 +29,7 @@
 	!new_round;	
 	.concat(File, ".asl", FileExt);
 	.include(FileExt);
-	if (Role == "Truck")
+	if (Me == "vehicle1")
 	{
 		adoptRole(initiator);
 		.include("initiator.asl");

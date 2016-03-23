@@ -144,11 +144,11 @@
 		?product(Tool,Volume,BaseList);
 		if (BaseList == [])
 		{
-			?find_shops(Tool,List,Result);
-			?best_shop(Result,Shop);
-			+buyList(Tool,1,Shop);
+//			?find_shops(Tool,List,[Shop|Result]);
+			//?best_shop(Result,Shop);
+			+buyList(Tool,1,shop1);
 		}
-		else
+/* 		else
 		{
 			.print("Decomposing tool ",Tool);
 			!decomp(BaseList);
@@ -169,7 +169,7 @@
 			?workshopList(WList);
 			?closest_facility(WList, Workshop);
 			+assembleList(Tool,Workshop);
-		}
+		}*/
 	}
 	.
 	

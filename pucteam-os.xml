@@ -24,12 +24,12 @@
         
        <group-specification id="team">
             <roles>
-                <role id="car" min="1" max="1"/>
-                <role id="drone" min="1" max="1"/>
-                <role id="motorcycle" min="1" max="1"/>
-                <role id="truck" min="1" max="1"/>
+                <role id="car" min="4" max="4"/>
+                <role id="drone" min="4" max="4"/>
+                <role id="motorcycle" min="4" max="4"/>
+                <role id="truck" min="4" max="4"/>
                 <role id="initiator" min="1" max="1"/>
-                <role id="bidder" min="4" max="4"/>
+                <role id="bidder" min="16" max="16"/>
             </roles>
             
              <formation-constraints>

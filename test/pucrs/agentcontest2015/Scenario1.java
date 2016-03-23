@@ -25,7 +25,7 @@ public class Scenario1 {
 			@Override
 			public void run() {
 				try {
-					Server.main(new String[] { "--conf", "conf/test-completescenario/2015-complete-3sims.xml" });
+					Server.main(new String[] { "--conf", "conf/test-complete-3sims/2015-complete-3sims-random.xml" });
 				} catch (InvalidConfigurationException e) {
 					e.printStackTrace();
 				}
