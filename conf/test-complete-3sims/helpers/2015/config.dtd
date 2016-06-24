@@ -29,7 +29,7 @@
 	time CDATA "12:15"
 	time-to-launch CDATA "10000"
 	tournamentmode CDATA "0"
-	tournamentname CDATA "City2015"
+	tournamentname CDATA "City2016"
 	debug-level CDATA "normal"
 >
 
