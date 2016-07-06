@@ -1,0 +1,13 @@
+mas scenario2 {
+
+	agent vehicle: vehicle.asl {
+		ag-arch: pucrs.agentcontest2016.env.EISAgArch
+		focus: eis
+		instances: 1
+	}
+
+	workspace city {
+		artifact eis: pucrs.agentcontest2016.env.EISArtifact
+	}
+
+}

@@ -2029,22 +2029,22 @@
 <Capability EntityName="get items" IMemento.internal.id="338945" Owner="vehicle" OwnerId="158721"/>
 <Goal EntityName="!reconnecting" IMemento.internal.id="43265"/>
 <Goal EntityName="!abort" IMemento.internal.id="435457" Owner="Submit action" OwnerId="391681"/>
-<Note Description="+!register(E)&#x0D;&#x0A;&#x09;: true&#x0D;&#x0A;&lt;-&#x0D;&#x0A;    .print(&quot;Registering...&quot;);&#x0D;&#x0A;    .my_name(Me);&#x0D;&#x0A;    .concat(&quot;eis_art_&quot;, Me, ArtName);&#x0D;&#x0A;    .term2string(Me, MeS);&#x0D;&#x0A;    makeArtifact(ArtName, &quot;pucrs.agentcontest2015.env.EISArtifact&quot;, [], AId);&#x0D;&#x0A;    focus(AId);&#x0D;&#x0A;    register(E);&#x0D;&#x0A;&#x09;." EntityName="Note 337409" IMemento.internal.id="337409" Owner="Register vehicle in server" OwnerId="179713"/>
+<Note Description="+!register(E)&#x0D;&#x0A;&#x09;: true&#x0D;&#x0A;&lt;-&#x0D;&#x0A;    .print(&quot;Registering...&quot;);&#x0D;&#x0A;    .my_name(Me);&#x0D;&#x0A;    .concat(&quot;eis_art_&quot;, Me, ArtName);&#x0D;&#x0A;    .term2string(Me, MeS);&#x0D;&#x0A;    makeArtifact(ArtName, &quot;pucrs.agentcontest2016.env.EISArtifact&quot;, [], AId);&#x0D;&#x0A;    focus(AId);&#x0D;&#x0A;    register(E);&#x0D;&#x0A;&#x09;." EntityName="Note 337409" IMemento.internal.id="337409" Owner="Register vehicle in server" OwnerId="179713"/>
 <Plan EntityName="skip" IMemento.internal.id="433921" Owner="Submit action" OwnerId="391681"/>
 <Capability EntityName="unregister vehicle from server" IMemento.internal.id="188417" Owner="vehicle" OwnerId="158721"/>
 <Note Description="+!create_bid(item(ItemId,Qty),Bid)&#x0D;&#x0A;&#x09;: product(ItemId, Volume, BaseList) &amp; loadExpected(LoadE) &amp; load(Load) &amp; loadTotal(LoadCap) &amp; workshopList([WorkshopId|_]) &amp; shopsList([shop(ShopId,_)|_]) &amp; storageList([StorageId|_]) &amp; roled(_, Speed, _, _, _)&#x0D;&#x0A;&lt;- &#x0D;&#x0A;&#x09;?closest_facility([WorkshopId], FacilityA, RouteLenWorkshop);&#x0D;&#x0A;&#x09;?closest_facility([ShopId], FacilityB, RouteLenShop);&#x0D;&#x0A;&#x09;?closest_facility([StorageId], FacilityC, RouteLenStorage);&#x09;&#x0D;&#x0A;&#x09;?calculate_bases_load(BaseList,Qty,0,LoadB);&#x0D;&#x0A;&#x09;&#x0D;&#x0A;&#x09;?verify_tools([ItemId],[],ToolsMissing);&#x0D;&#x0A;&#x09;if (ToolsMissing \== [])&#x0D;&#x0A;&#x09;{&#x0D;&#x0A;&#x09;&#x09;.length(ToolsMissing,L);&#x0D;&#x0A;&#x09;&#x09;ToolFactor = 2 ** L;&#x0D;&#x0A;&#x09;}&#x0D;&#x0A;&#x09;else {&#x0D;&#x0A;&#x09;&#x09;ToolFactor = 1;&#x0D;&#x0A;&#x09;}&#x0D;&#x0A;&#x09;&#x0D;&#x0A;&#x09;if ( (LoadB &gt; Volume * Qty) &amp; (LoadCap - Load &gt;= LoadB + LoadE) )&#x0D;&#x0A;&#x09;{&#x0D;&#x0A;&#x09;&#x09;-+loadExpected(LoadB + LoadE);&#x0D;&#x0A;&#x09;&#x09;Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed) * ToolFactor);&#x09;&#x09;&#x0D;&#x0A;&#x09;}&#x0D;&#x0A;&#x09;if ( (LoadB &gt; Volume * Qty) &amp; (LoadCap - Load &lt; LoadB + LoadE) ) &#x0D;&#x0A;&#x09;{&#x0D;&#x0A;&#x09;&#x09;Bid = 0;&#x0D;&#x0A;&#x09;}&#x09;&#x0D;&#x0A;&#x09;if ( (LoadB &lt;= Volume * Qty) &amp; (LoadCap - Load &gt;= Volume * Qty + LoadE) )&#x0D;&#x0A;&#x09;{&#x0D;&#x0A;&#x09;&#x09;-+loadExpected(Volume * Qty + LoadE);&#x0D;&#x0A;&#x09;&#x09;Bid = math.round((RouteLenWorkshop / Speed) + (RouteLenShop / Speed) + (RouteLenStorage / Speed) * ToolFactor);&#x0D;&#x0A;&#x09;}&#x0D;&#x0A;&#x09;if ( (LoadB &lt;= Volume * Qty) &amp; (LoadCap - Load &lt; Volume * Qty + LoadE) )&#x0D;&#x0A;&#x09;{&#x0D;&#x0A;&#x09;&#x09;Bid = 0;&#x0D;&#x0A;&#x09;}&#x0D;&#x0A;&#x09;." EntityName="Note 237057" IMemento.internal.id="237057" Owner="Bid procedure" OwnerId="225537"/>
 <Note Description="+simEnd&#x0D;&#x0A;&#x09;: true&#x0D;&#x0A;&lt;-&#x0D;&#x0A;  !end_round;&#x0D;&#x0A;  !new_round;&#x09;&#x0D;&#x0A;  ." EntityName="Note 382977" IMemento.internal.id="382977" Owner="Finalise vehicle in a round" OwnerId="185857"/>
-<Note Description="select_goal é um subgoal de receive_action?" EntityName="Note 88065" IMemento.internal.id="88065"/>
+<Note Description="select_goal ï¿½ um subgoal de receive_action?" EntityName="Note 88065" IMemento.internal.id="88065"/>
 <Note Description="+!new_round&#x0D;&#x0A;&#x09;: true&#x0D;&#x0A;&lt;-&#x0D;&#x0A;&#x09;+goalsList([find_tools,get_tools,start]);&#x0D;&#x0A;&#x09;+chargingList([]);&#x0D;&#x0A;&#x09;+dumpList([]);&#x0D;&#x0A;&#x09;+storageList([]);&#x0D;&#x0A;&#x09;+shopList([]);&#x0D;&#x0A;&#x09;+workshopList([]);&#x0D;&#x0A;&#x09;." EntityName="Note 332801" IMemento.internal.id="332801" Owner="Initialise vehicle for a round" OwnerId="184833"/>
 <Role EntityName="initiator" IMemento.internal.id="135937"/>
 <Goal EntityName="!continue" IMemento.internal.id="380673" Owner="vehicle" OwnerId="158721"/>
-<Note Description="ligar os demais roles em todos os agentes? Acho que estaria errado ligá-los." EntityName="Note 86529" IMemento.internal.id="86529"/>
+<Note Description="ligar os demais roles em todos os agentes? Acho que estaria errado ligï¿½-los." EntityName="Note 86529" IMemento.internal.id="86529"/>
 <Note Description="+!end_round&#x0D;&#x0A;&#x09;: true&#x0D;&#x0A;&lt;-&#x0D;&#x0A;&#x09;.print(&quot;-------------------- END OF THE ROUND ----------------&quot;);&#x0D;&#x0A;&#x09;.abolish(_[source(self)]);&#x0D;&#x0A;&#x09;.abolish(_[source(X)]);&#x0D;&#x0A;    .drop_all_intentions;&#x0D;&#x0A;    .drop_all_desires;&#x09;&#x0D;&#x0A;&#x09;." EntityName="Note 331265" IMemento.internal.id="331265" Owner="Finalise vehicle in a round" OwnerId="185857"/>
 <Plan EntityName="resume" IMemento.internal.id="477953" Owner="vehicle" OwnerId="158721"/>
 <Plan EntityName="calculate bid" IMemento.internal.id="232449" Owner="Bid procedure" OwnerId="225537"/>
 <Capability EntityName="decide action" IMemento.internal.id="182273" Owner="vehicle" OwnerId="158721"/>
 <Percept EntityName="winner" IMemento.internal.id="132865"/>
-<Note Description="+!create_taskboard&#x0D;&#x0A;&#x09;: true&#x0D;&#x0A;&lt;-&#x0D;&#x0A;&#x09;makeArtifact(&quot;task_board&quot;,&quot;pucrs.agentcontest2015.cnp.TaskBoard&quot;,[]);&#x0D;&#x0A;&#x09;.print(&quot;Created taskboard.&quot;);&#x0D;&#x0A;&#x09;." EntityName="Note 279553" IMemento.internal.id="279553" Owner="Preparing task annoucement" OwnerId="271617"/>
+<Note Description="+!create_taskboard&#x0D;&#x0A;&#x09;: true&#x0D;&#x0A;&lt;-&#x0D;&#x0A;&#x09;makeArtifact(&quot;task_board&quot;,&quot;pucrs.agentcontest2016.cnp.TaskBoard&quot;,[]);&#x0D;&#x0A;&#x09;.print(&quot;Created taskboard.&quot;);&#x0D;&#x0A;&#x09;." EntityName="Note 279553" IMemento.internal.id="279553" Owner="Preparing task annoucement" OwnerId="271617"/>
 <Goal EntityName="!charge" IMemento.internal.id="424705" Owner="Submit action" OwnerId="391681"/>
 <Plan EntityName="deliver job(JobId)" IMemento.internal.id="423169" Owner="Submit action" OwnerId="391681"/>
 <Capability EntityName="bid procedure" IMemento.internal.id="225537" Owner="bidder " OwnerId="94209"/>
@@ -2136,7 +2136,7 @@
 <Agent EntityName="motorcycle " IMemento.internal.id="481281"/>
 <Plan EntityName="continue" IMemento.internal.id="431873" Owner="Submit action" OwnerId="391681"/>
 <Plan EntityName="sim end" IMemento.internal.id="382465" Owner="Finalise vehicle in a round" OwnerId="185857"/>
-<Note Description="initiator e bidder são agentes atualmente. &#x0D;&#x0A;Melhor seria se fossem roles?&#x0D;&#x0A;" EntityName="Note 87553" IMemento.internal.id="87553"/>
+<Note Description="initiator e bidder sï¿½o agentes atualmente. &#x0D;&#x0A;Melhor seria se fossem roles?&#x0D;&#x0A;" EntityName="Note 87553" IMemento.internal.id="87553"/>
 <Percept EntityName="auction job" IMemento.internal.id="283649" Owner="initiator " OwnerId="95233"/>
 <Plan EntityName="post job priced(Price, ActiveSteps, StorageId, Items)" IMemento.internal.id="430337" Owner="Submit action" OwnerId="391681"/>
 <Capability EntityName="initialise vehicle for a round" IMemento.internal.id="184833" Owner="vehicle" OwnerId="158721"/>
@@ -2288,7 +2288,7 @@
 <Goal EntityName="!goto" IMemento.internal.id="347393" Owner="Get tools" OwnerId="338945"/>
 <Goal EntityName="initial phase " IMemento.internal.id="3073"/>
 <Plan EntityName="goto(Location)" IMemento.internal.id="394497" Owner="Submit action" OwnerId="391681"/>
-<Note Description="será q esse não é o acknowledgement procedure??" EntityName="Note 247041" IMemento.internal.id="247041" Owner="Execution procedure" OwnerId="197889"/>
+<Note Description="serï¿½ q esse nï¿½o ï¿½ o acknowledgement procedure??" EntityName="Note 247041" IMemento.internal.id="247041" Owner="Execution procedure" OwnerId="197889"/>
 <Plan EntityName="buy items" IMemento.internal.id="344321" Owner="Get tools" OwnerId="338945"/>
 </EntityPool>
 </Project>
