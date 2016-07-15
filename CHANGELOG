@@ -1,0 +1,221 @@
+# 2016-1.2 - The bugfix release
+
+## MASSIM (2016-1.2):
+- fixed a bug that prevented delivered items from being retrieved
+
+## DOC:
+- removed misleading fixed tool information from the role table
+- added CONTEST file detailing the contest ruleset and parameters
+
+# 2016-1.1 - The "final" release (feature complete)
+
+## MASSIM (2016-1.1):
+- fixed a bug where an assembled item was not given to the assembling agent
+- improved random generation
+  - changed available random-gen parameters
+- percentage of each tool's value is refunded on simulation end (now 70% of "value")
+- added some scenario-dependent output to the server console
+
+## JAVAAGENTS (2.3):
+- added smarter dummy agents which do not have to be scripted
+
+# 2016-1.0
+
+## MASSIM (2016-1.0):
+- added random map generation capabilities
+- added new action "call_breakdown_service"
+- added configuration for 16 agents
+- added "failed_no_route" result for goto-action
+- added mapname to SimStart-Percept
+- added seedCapital to SimStart-Percept
+- added new scoring mechanism (as already described in scenario.pdf)
+- added "quite realistic" configuration (3sims-random)
+
+## EISMASSIM (2.7):
+- adopted mapname from Simstart-Percept
+- adopted seedCapital from Simstart-Percept
+
+# 2015-0.6.*
+
+## MASSIM (2015-0.6.2):
+- added fix for "posted jobs not received as percepts"
+
+## MASSIM (2015-0.6):
+- added successful as lastActionResult for "abort" action
+- IMPORTANT: activated random-fail possibility for all actions (1%)
+- Job IDs are now composed of the String "job-id" appended by a randomly drawn long value to ensure that system-generated jobs are indistinguishable from those posted by agents
+
+## EISMASSIM (2.5):
+- fixed a bug where agent-created priced_jobs wouldn't parse correctly (and crash)
+
+## DOCS:
+- clarified maxbid in scenario.pdf
+- added store/dump cost formula to scenario.pdf
+
+# 2015-0.5
+
+## EISMASSIM (2.5):
+- fixed a bug where only the first charging station was given as percept
+
+
+# 2015-0.4
+
+## MASSIM (2015-0.4):
+- fixed bug where no job was added to the "jobsTaken" percept
+
+# 2015-0.3
+
+## MASSIM (2015-0.3):
+- added "successful" as lastActionResult for skip-Action
+
+## EISMASSIM (2.4):
+- added "none" as parameter for empty percepts
+
+# 2015-0.2
+
+## MASSIM:
+- various bugs fixed
+- added role information to InitialPerception, removed extra battery- and loadCapacity info
+
+## EISMASSIM (2.3):
+- bugs fixed
+- added role(..)-Percept to sim-start, removed *Capacity-percepts
+
+# 2015-0.1
+- Brand new scenario for 2015!
+
+
+# 2013-1.4:
+- MASSim: Wrong failure code for an action out of range.
+- Webapp: Improved the AJAX SVG refresh.
+
+# 2013-1.3:
+- SVG visualization: Bug fixes and arrows added.
+- Statistics observer: Functionality for creating a table for the buying transactions added.
+- Bugs in the scenario fixed:
+    - The ranged probe action was returning the wrong node.
+    - The ranged inspect did not return a result.
+    - The map generation was not fully symmetric.
+
+# 2013-1.2:
+
+- SVG visualization adapted.
+- New map generation algorithm.
+
+
+# 2013-1.1:
+
+## MARSMONITOR:
+- Dropdown agents’ list:
+    - Items ordered
+    - Added “empty” selection.
+    - Fixed responsiveness (update instantly at selection, not at next refresh).
+- Selected agent marked in map.
+- New visualization including
+	- different agent polygons
+	- lines to the targets of ranged actions (excluding survey)
+	- a status field displaying lastAction and lastActionResult
+
+# 2013-1.0:
+
+## MASSIM
+- changed node-name-prefix from vertex to v
+- bugfixes
+- changed behavior of the actions inspect, probe, survey, attack and repair
+- statistics: scaled charts to have the same range per simulation
+- adapted configuration files for 2013
+- added new return-codes for 'lastActionResult'
+	- failed_unreachable: target of the goto-action exists, but is not reachable
+	- failed_in_range: ranged action failed, because the effective range did not suffice
+	- failed_out_of_range: ranged action failed, because the target was outside the visibility range
+
+## EISMASSIM
+- added entity for 2013 scenario
+
+## JAVAAGENTS
+- added simple agents for debugging
+- added new actions to MarsUtil
+- changed some configurations for 28 agents, added debugconfig
+
+# 2012-2.0:
+
+## MARSMONITOR:
+- make background disableable
+
+## MASSIM
+- new statistics observer
+- bugfixes
+- improved action-failed messages
+- improved map-generation algorithm
+
+## EISMASSIM:
+- reflect agent-type
+
+## GENERAL:
+- team HempelsSofa team included
+- team Targaryen included
+- improved shell-scripts
+
+# 2012-1.0.0:
+
+## MASSIM:
+- new scenario based on the 2012 one
+- scaled up (more agents, bigger maps)
+- improved outcome of actions (lastActionResult)
+- increased max-energy of all agents to reduce recharges
+
+## EISMASSIM:
+- added lastActionParam
+
+## JAVAAGENTS:
+- scripts for two teams a 20 agents
+
+## DOCUMENTS:
+- updated to reflect the 2012 adaptations
+
+
+# 2011-1.0.2:
+
+## MASSIM:
+- server generates SVGs and a proper results-file
+
+## EISMASSIM:
+- now sends anonymous statistics
+
+## JAVAAGENTS
+- step() now catches exceptions
+- 0815 agents team is included
+
+## MARSMONITOR
+- minor fixes
+
+## DOCUMENTS
+- updated
+
+# 2011-1.0.1:
+
+## MASSIM:
+- added symmetrical graph generation
+- added config-parameter nodeWeighting. nodeWeight will now be computed of a random and a gradient component
+- added config-parameter randomSeed
+- added config-parameter mapGenerator
+- added four new server-configuration files
+- added role to the agent's initial perception
+- Bugfixes.
+- Flash finally removed.
+- Debugger improved.
+- Modified the start scripts to only use bash (Ubuntu Bug)
+- Default debug level set to normal.
+- GridSimulation Report was renamed to Mars2011 Report but the config file was not changed (Bugfix)
+- Scripts are now executable again.
+
+## EISMASSIM:
+- improved scheduling of EISMASSim
+- made iilang-output of EISMASSim deactivatable
+- New statistic function for EISMASSim
+- Modified the start script to only use bash (Ubuntu Bug)
+- improved performance
+- Scripts are now executable again.
+
+## DOCUMENTS:
+- improved version of the documents

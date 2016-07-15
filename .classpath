@@ -40,8 +40,8 @@
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/apltk-0.1.jar"/>
-	<classpathentry kind="lib" path="lib/agentcontest-2016-1.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/agentcontest-2016-1.1.jar" sourcepath="lib/agentcontest-2016-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/agentcontest-2016-1.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/agentcontest-2016-1.2.jar" sourcepath="lib/agentcontest-2016-1.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/eismassim-2.7-sources.jar"/>
 	<classpathentry kind="lib" path="lib/eismassim-2.7.jar" sourcepath="lib/eismassim-2.7-sources.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
