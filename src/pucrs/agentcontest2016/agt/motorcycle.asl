@@ -4,8 +4,8 @@
 	: true
 <-
 	.wait({ +step(_) });
-	!find_tools;
-	!get_tools;
+	//!find_tools;
+	//!get_tools;
 	+free;
 	.
 
