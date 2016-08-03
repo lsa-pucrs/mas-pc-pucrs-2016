@@ -5,7 +5,9 @@ find_shops(ItemId,[shop(ShopId,ListItems)|List],[ShopId|Result]) :- .member(item
 find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
 
 closest_facility(List, Facility) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility).
-closest_facility(List, Facility, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility, RouteLen).
+closest_facility(List, Facility1, Facility2) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility2, Facility1).
+
+enough_battery(FacilityId1, FacilityId2, Result) :- role(Role, Speed, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, RouteLen1) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen2) & charge(Battery) & ((Battery > ((RouteLen1 / Speed * 10) + (RouteLen2 / Speed * 10)) & Result = true) | (Result = false)).
 
 compare_jobs(JobId, StorageId, Begin, End, Reward, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Reward,ItemsS,String1) & post_job_priced(Reward2, JobActive2, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2, JobActive2, Reward2, Items2S,String2) & String1 == String2.
 compare_jobs(JobId, StorageId, Begin, End, Fine, MaxBid, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Fine,MaxBid,ItemsS,String1) & post_job_auction(MaxBid2, Fine2, JobActive2, AuctionActive, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2,JobActive2,Fine2,MaxBid2,Items2S,String2) & String1 == String2.

@@ -1,6 +1,10 @@
 // Goto (option 1)
 // FacilityId must be a string
-+!goto(FacilityId) : inFacility(FacilityId).
++!goto(FacilityId) 
+	: inFacility(FacilityId)
+<-
+	-going(FacilityId);
+	.
 
 +!goto(_) 
 	: lastActionResult(Result) & Result == failed_random & lastActionReal(Action) & .substring("goto",Action) & going(FacilityId)
@@ -8,9 +12,22 @@
 	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
 	.
+	
+// Tests if there is enough battery to go to my goal AND to the nearest charging station around that goal
++!goto(FacilityId)
+	: not going(FacilityId) & not .desire(go_charge) & chargingList(List) & closest_facility(List, FacilityId, FacilityId2) & enough_battery(FacilityId, FacilityId2, Result)
+<-
+    if (not Result) {
+    	!go_charge;
+    }
+	+going(FacilityId);
+	!commitAction(goto(facility(FacilityId)));
+	!goto(FacilityId);
+	.
+	
 +!goto(FacilityId)
 	: not going(FacilityId)
-<-
+<-	
 	+going(FacilityId);
 	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
@@ -35,6 +52,26 @@
 	);
 	+going(Lat,Lon);
 	.
+	
+// Charge
+// No parameters
++!charge
+	: charging & charge(Battery) & role(_, _, _, BatteryCap, _) & Battery = BatteryCap
+<-
+	-charging.
++!charge
+	: not charging
+<-
+	+charging;
+	!commitAction(charge);
+	!charge;
+	.
++!charge
+	: charge(Battery) & role(_, _, _, BatteryCap, _) & Battery < BatteryCap
+<-
+	!continue;
+	!charge;
+	.	
 
 // Buy
 // ItemId must be a string
@@ -168,15 +205,6 @@
 			job(JobId)
 		)
 	);
-	.
-
-// Charge
-// No parameters
-+!charge
-	: true
-<-
-	+charging;
-	!commitAction(charge);
 	.
 
 // Bid for job

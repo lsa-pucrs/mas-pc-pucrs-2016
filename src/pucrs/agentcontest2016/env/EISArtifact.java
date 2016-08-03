@@ -49,7 +49,7 @@ public class EISArtifact extends Artifact {
 //	private boolean test = true;
 	
 	static {
-		String maps[] = new String[] { "clausthal", "hannover", "london" };
+		String maps[] = new String[] {"london" };
 		MapHelper.init(maps[0], 0.001, 0.0002);
 	}
 	

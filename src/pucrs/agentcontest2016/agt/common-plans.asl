@@ -92,7 +92,15 @@
 	{
 		-suspended(Goal);
 		.resume(Goal);
-	}.	
+	}.
+
++!go_charge
+	:  chargingList(List) & closest_facility(List, Facility)
+<-
+	.print("**** Going to charge my battery at ", Facility);
+	!goto(Facility);
+	!charge;
+	.
 
 @decomp
 +!decomp(Items)
