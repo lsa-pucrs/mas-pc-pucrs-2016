@@ -60,6 +60,12 @@
 <-
 	-charging.
 +!charge
+	: lastActionResult(Result) & Result == failed_random & lastActionReal(Action) & .substring("charge",Action)
+<-
+	!commitAction(charge);
+	!charge;
+	.	
++!charge
 	: not charging
 <-
 	+charging;
