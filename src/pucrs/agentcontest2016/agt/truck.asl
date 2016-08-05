@@ -4,16 +4,9 @@
 	: true
 <-
  	.wait({ +step(_) });
- 	!go;
+ 	!go_nearest_shop;
+ 	+free;
     .
- 
-+!go
-	: true
-<-
-    !goto(shop1);
-    !goto(shop2);
-    !go;
-	.
 
 /* 
 +!start

@@ -31,9 +31,9 @@
 	
 @shopList[atomic]
 +shop(ShopId, Lat, Lng, Items)
-	: shopList(List) & not .member(shop(ShopId,_),List)
+	: shopList(List) & not .member(ShopId,List)
 <-
-	-+shopList([shop(ShopId,Items)|List]);
+	-+shopList([ShopId|List]);
 	.
 	
 @storageList[atomic]

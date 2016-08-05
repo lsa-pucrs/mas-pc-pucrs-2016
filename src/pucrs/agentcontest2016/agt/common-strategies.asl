@@ -39,6 +39,14 @@
 <-
 	 !post_job_auction(Reward, Fine, Active, ActiveAuction, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
 	 . 
+	 
++!go_nearest_shop
+	: shopList(List) & closest_facility(List, Facility)
+<-
+	!goto(Facility);
+	?step(S);
+	.print("I have arrived at ", Facility, "   -   Step: ",S);
+	.	 
 
 +free
 	: true
