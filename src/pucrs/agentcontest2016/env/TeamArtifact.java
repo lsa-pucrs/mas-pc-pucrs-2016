@@ -1,13 +1,12 @@
 package pucrs.agentcontest2016.env;
 
 import jason.asSyntax.Term;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import cartago.Artifact;
+import cartago.*;
 
 public class TeamArtifact extends Artifact {
 
@@ -25,5 +24,9 @@ public class TeamArtifact extends Artifact {
 		} else {
 			shopItemsPrice.put(shopId, itemsPrice);
 		}
+	}
+	
+	@OPERATION void test(){
+		System.out.println("TEST SUCCESSFUL!");
 	}
 }
