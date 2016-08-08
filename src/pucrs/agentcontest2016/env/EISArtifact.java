@@ -299,7 +299,7 @@ public class EISArtifact extends Artifact {
 		"shop",			
 		"storage",
 		"workshop",
-//		"dump",
+		"dump",
 		"charge",
 		"load",
 		"inFacility",

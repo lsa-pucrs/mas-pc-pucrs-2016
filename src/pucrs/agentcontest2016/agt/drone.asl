@@ -4,7 +4,6 @@
 	: true
 <-
  	.wait({ +step(_) });
- 	!go_nearest_shop;
  	+free;
     .
 

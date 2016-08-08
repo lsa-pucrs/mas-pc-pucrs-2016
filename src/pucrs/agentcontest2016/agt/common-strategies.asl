@@ -38,15 +38,18 @@
 	: storageList([StorageId|_]) & rewardAuction(Reward) & fineAuction(Fine) & activeAuctionSteps(Active) & auctionSteps(ActiveAuction)
 <-
 	 !post_job_auction(Reward, Fine, Active, ActiveAuction, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
-	 . 
+	 .
 	 
-+!go_nearest_shop
-	: shopList(List) & closest_facility(List, Facility)
++!goto_work(JobId,item(ItemId,Qty),StorageId)
+	: buffer_shop(ShopId)
 <-
-	!goto(Facility);
-	?step(S);
-	.print("I have arrived at ", Facility, "   -   Step: ",S);
-	.	 
+	-buffer_shop(ShopId);
+	!goto(ShopId);
+	!buy(ItemId,Qty);
+	!goto(StorageId);
+	!deliver_job(JobId);
+	+free;
+	.
 
 +free
 	: true
@@ -56,3 +59,12 @@
 		!skip;
 	}
 	.
+/*
++!go_nearest_shop
+	: shopList(List) & closest_facility(List, Facility)
+<-
+	!goto(Facility);
+	?step(S);
+	.print("I have arrived at ", Facility, "   -   Step: ",S);
+	.	
+ */

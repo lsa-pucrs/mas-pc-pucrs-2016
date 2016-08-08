@@ -7,10 +7,23 @@ find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(Item
 closest_facility(List, Facility) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility).
 closest_facility(List, Facility1, Facility2) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility2, Facility1).
 
+route(FacilityId, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen).
+route(FacilityId1, FacilityId2, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen).
+route_drone(FacilityId, RouteLen) :- Role = "drone" & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen).
+
 enough_battery(FacilityId1, FacilityId2, Result) :- role(Role, Speed, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, RouteLen1) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen2) & charge(Battery) & ((Battery > ((RouteLen1 / Speed * 10) + (RouteLen2 / Speed * 10)) & Result = true) | (Result = false)).
+
+select_bid([],bid(AuxBid,AuxBidId),bid(BidWinner,BidIdWinner)) :- BidWinner = AuxBid & BidIdWinner = AuxBidId.
+select_bid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- Bid \== 0 & Bid < AuxBid & select_bid(Bids,bid(Bid,BidId),BidWinner).
+select_bid([bid(Bid,BidId)|Bids],bid(AuxBid,AuxBidId),BidWinner) :- select_bid(Bids,bid(AuxBid,AuxBidId),BidWinner).
 
 compare_jobs(JobId, StorageId, Begin, End, Reward, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Reward,ItemsS,String1) & post_job_priced(Reward2, JobActive2, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2, JobActive2, Reward2, Items2S,String2) & String1 == String2.
 compare_jobs(JobId, StorageId, Begin, End, Fine, MaxBid, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Fine,MaxBid,ItemsS,String1) & post_job_auction(MaxBid2, Fine2, JobActive2, AuctionActive, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2,JobActive2,Fine2,MaxBid2,Items2S,String2) & String1 == String2.
+
+calculate_bases_load([],Qty,Aux,LoadB) :- LoadB = Qty * Aux.
+calculate_bases_load([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 == [] & calculate_bases_load(BaseList,Qty,Volume * Qty2 + Aux,LoadB).
+calculate_bases_load([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 \== [] & calculate_bases_load(BaseList2,Qty,Aux,LoadB2) & calculate_bases_load(BaseList,Qty,LoadB2,LoadB).
+calculate_bases_load([tools(ToolId,Qty2)|BaseList],Qty,Aux,LoadB) :- calculate_bases_load(BaseList,Qty,Aux,LoadB).
 
 /* 
 //low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.

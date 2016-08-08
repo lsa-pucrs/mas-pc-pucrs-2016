@@ -5,7 +5,6 @@ package pucrs.agentcontest2016.cnp;
 import java.util.logging.Logger;
 
 import jason.asSyntax.Literal;
-import pucrs.agentcontest2016.env.EISArtifact;
 import cartago.*;
 
 public class TaskBoard extends Artifact {
@@ -19,12 +18,12 @@ public class TaskBoard extends Artifact {
 		taskId = 0;
 	}
 	
-	@OPERATION void announce(String taskDescr, int duration, OpFeedbackParam<String> id){
+	@OPERATION void announce(String taskDescr, int duration, String storageId, OpFeedbackParam<String> id){
 		taskId++;
 		try {
 			String artifactName = "cnp_board_"+taskId;
 			makeArtifact(artifactName, "pucrs.agentcontest2016.cnp.ContractNetBoard", new ArtifactConfig(taskDescr,duration));
-			defineObsProperty("task", Literal.parseLiteral(taskDescr), artifactName);
+			defineObsProperty("task", Literal.parseLiteral(taskDescr), artifactName, storageId);
 			id.set(artifactName);
 		} catch (Exception ex){
 			logger.info("announce_failed");

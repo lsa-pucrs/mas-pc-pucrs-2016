@@ -4,6 +4,88 @@
 	makeArtifact("task_board","pucrs.agentcontest2016.cnp.TaskBoard",[]);
 	.print("Created taskboard.");
 	.
+	
+//@pricedJob[atomic]
++pricedJob(JobId, StorageId, Begin, End, Reward, Items)
+	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(S) & workshopList([WorkshopId|_]) & shopList([shop(ShopId,_)|_])
+<- 
+	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
+	
+	?route_drone(WorkshopId, RouteLenWorkshop);
+	?route_drone(ShopId, RouteLenShop);
+	?route_drone(StorageId, RouteLenStorage);
+	
+	if (math.round(RouteLenWorkshop/5+RouteLenShop/5+RouteLenStorage/5) >  End-Step) {
+		.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
+		+pricedJob(JobId,Items,StorageId);
+	}
+	else {
+	if ( .length(Items,NumberTasks) &  NumberTasks <= 16) {
+		+count_comp(0);
+		for ( .member(item(ItemId,Qty),Items) ) {
+			?product(ItemId,Volume,BaseList);
+			!count_composite(ItemId,Qty,BaseList);
+		}
+		?count_comp(NumberOfComp);
+		-count_comp(NumberOfComp);
+		.print("Number of composite items: ", NumberOfComp);
+		if (NumberOfComp == 0) {
+			+working;
+			.print("Job is viable, starting contract net.");
+			!separate_tasks(Items,JobId,StorageId);
+		}
+	}
+	else {
+		.print("Too many tasks, not enough agents!");
+	}
+	}
+	.
+	
+@count_composite[atomic]
++!count_composite(ItemId,Qty,BaseList)
+	: true 
+<- 
+	if (BaseList \== []) {
+		for ( .range(I,1,Qty) ) {
+			?count_comp(NumberOfComp);
+			-+count_comp(NumberOfComp+1);			
+			for ( .member(consumed(ItemId2,Qty2),BaseList) ) {
+				?product(ItemId2,Volume2,BaseList2);
+				!count_composite(ItemId2,Qty2,BaseList2);
+			}
+		}
+	}
+	.
+	
++!separate_tasks(Items,JobId,StorageId)
+	: max_bid_time(Time)
+<-
+	for ( .member(item(ItemId,Qty),Items) ) {
+		!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId);
+	}
+	.
+	
++!allocate_task(item(ItemId,Qty),Timeout,Items,JobId,StorageId)
+	: true
+<- 
+	announce(item(ItemId,Qty),Timeout,StorageId,CNPBoardName);
+	+cnp(CNPBoardName);
+	.print("Announced: ",Qty,"x of ",ItemId," on ",CNPBoardName);
+	getBids(Bids) [artifact_name(CNPBoardName)];
+	if (.length(Bids) \== 0) {		
+		+pricedJob(JobId,Items,StorageId);
+		.print("Got bids (",.length(Bids),") for task ",CNPBoardName," List ",Bids);
+		?select_bid(Bids,bid(99999,99999),bid(Bid,BidId));
+		.print("Bid that won: ",Bid," Bid id: ",BidId);
+		award(BidId,CNPBoardName,item(ItemId,Qty),JobId,StorageId)[artifact_name(CNPBoardName)];
+		-listBids(CNPBoardName,_);
+	}
+	else {
+		.print("No bids.");
+	}
+	-cnp(CNPBoardName);
+	//clear(CNPBoardName);
+	.
 
 /* 
 auction_gain(Cost,Bid,MaxBid,WorkshopFee,BatteryFee):- Bid =  MaxBid*30/100 + Cost + WorkshopFee + BatteryFee. // % profit of 30% + expenses

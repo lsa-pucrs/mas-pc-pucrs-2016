@@ -11,12 +11,11 @@
 +!register(E)
 	: .my_name(Me)
 <-
-	if(Me == vehicle1) {
+	if (Me == vehicle1) {
 		makeArtifact("teamArtifact","pucrs.agentcontest2016.env.TeamArtifact",[]);
 	}
 	focusWhenAvailable("teamArtifact");
     .print("Registering...");
-    .my_name(Me);
     .concat("eis_art_", Me, ArtName);
     .term2string(Me, MeS);
     makeArtifact(ArtName, "pucrs.agentcontest2016.env.EISArtifact", [], AId);
@@ -34,7 +33,6 @@
 	.concat(File, ".asl", FileExt);
 	.include(FileExt);
 	if (Me == vehicle1) {
-
 		adoptRole(initiator);
 		.include("initiator.asl");
 		!create_taskboard;

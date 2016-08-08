@@ -13,11 +13,12 @@
 
 <structural-specification>
 
-       <role-definitions>   
-        	<role id="car" />
-        	<role id="drone" />
-        	<role id="motorcycle" />
-        	<role id="truck" />
+       <role-definitions> 
+       		<role id="vehicle" />
+       			<role id="car" > <extends role="vehicle"/>  </role>
+       			<role id="drone" > <extends role="vehicle"/>  </role>
+       			<role id="motorcycle" > <extends role="vehicle"/>  </role>
+       			<role id="truck" > <extends role="vehicle"/>  </role>
         	<role id="initiator" />
         	<role id="bidder" />
        </role-definitions>
@@ -33,12 +34,9 @@
             </roles>
             
              <formation-constraints>
-    			<compatibility from="truck" to="initiator" type="compatibility" bi-dir="true" />
-    			<compatibility from="bidder" to="car" type="compatibility" bi-dir="true" />
-    			<compatibility from="bidder" to="drone" type="compatibility" bi-dir="true" />
-    			<compatibility from="bidder" to="motorcycle" type="compatibility" bi-dir="true" />
-    			<compatibility from="bidder" to="truck" type="compatibility" bi-dir="true" />
-    			<compatibility from="bidder" to="initiator" type="compatibility" bi-dir="true" />
+    			<compatibility from="vehicle" to="initiator" type="compatibility" bi-dir="true" />
+    			<compatibility from="vehicle" to="bidder" type="compatibility" bi-dir="true" />
+    			<compatibility from="initiator" to="bidder" type="compatibility" bi-dir="true" />
  			</formation-constraints>
             
        </group-specification> 

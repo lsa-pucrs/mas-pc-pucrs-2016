@@ -14,8 +14,8 @@ public class route extends DefaultInternalAction {
 
 	@Override
 	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
-		String to = "";
-		String from = "";
+		String to = null;
+		String from = null;
 		if (args.length == 3){
 			from = ts.getUserAgArch().getAgName();
 			to = args[1].toString();
@@ -29,6 +29,7 @@ public class route extends DefaultInternalAction {
 			type = "air";
 		}
 		Route route = MapHelper.getNewRoute(from, to, type);
+		
 		boolean ret = true;
 		if (args.length == 3){
 			ret = ret & un.unifies(args[2], new NumberTermImpl(route.getRouteLength()));

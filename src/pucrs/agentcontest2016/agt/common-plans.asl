@@ -31,11 +31,11 @@
 	
 @shopList[atomic]
 +shop(ShopId, Lat, Lng, Items)
-	: shopList(List) & not .member(ShopId,List)
+	: shopList(List) & not .member(shop(ShopId,_),List)
 <-
-	-+shopList([ShopId|List]);
+	-+shopList([shop(ShopId,Items)|List]);
 	.
-	
+			
 @storageList[atomic]
 +storage(StorageId, Lat, Lng, Price, TotCap, UsedCap, Items)
 	: storageList(List) & not .member(StorageId,List)
@@ -71,28 +71,7 @@
 <- 
 	-+dumpList([DumpId|List]);
 	.
-	
-@suspend[atomic]
-+!suspend
-	: suspendList(List)
-<-
-	for ( .intend(Goal[Annotation]) )
-	{
-		if ( .sublist([Goal],List) )
-		{
-			+suspended(Goal);
-			.suspend(Goal);
-		}
-	}.
-	
-@resume[atomic]
-+!resume
-<-
-	for ( suspended(Goal) )
-	{
-		-suspended(Goal);
-		.resume(Goal);
-	}.
+
 
 +!go_charge
 	:  chargingList(List) & closest_facility(List, Facility)
@@ -182,6 +161,28 @@
 	.
 	
 /* 
+@suspend[atomic]
++!suspend
+	: suspendList(List)
+<-
+	for ( .intend(Goal[Annotation]) )
+	{
+		if ( .sublist([Goal],List) )
+		{
+			+suspended(Goal);
+			.suspend(Goal);
+		}
+	}.
+	
+@resume[atomic]
++!resume
+<-
+	for ( suspended(Goal) )
+	{
+		-suspended(Goal);
+		.resume(Goal);
+	}.
+
 @goHorse[atomic]	
 +lastStep(Step)
 	: steps(TotalSteps) & Step >= TotalSteps - 20 & not goHorse

@@ -1,15 +1,58 @@
-+task(Task,CNPBoard)
+@task[atomic]
++task(Task,CNPBoard,StorageIdS)
 <- 
-  focus(CNPBoard);
-  !calculate_bid(Task,CNPBoard);
-  ?bidList(Bid,CNPBoard);
-  bid(Bid). 
+	lookupArtifact(CNPBoard,BoardId);
+	focus(BoardId);
+	.term2string(StorageId,StorageIdS);
+  	!make_bid(Task,StorageId,BoardId,CNPBoard);
+  	.
+  	
++winner(BidId,Task,Items,JobId,StorageId) 
+	: my_bid(BidId,Task)
+<- 
+	+noMoreTasks;
+	-free;
+	.print("Awarded task ",Task);
+	!goto_work(JobId,Items,StorageId);
+	.
 	
-+!calculate_bid(Task,CNPBoard)
-: map(Information) & vehicle(Features) 
++!make_bid(Task,StorageId,BoardId,CNPBoard)
+	: true
 <- 
-    
-  +bidList(Bid,CNPBoard).
+	!create_bid(Task,StorageId,Bid);
+	bid(Bid,BidId)[artifact_id(BoardId)];
+	+my_bid(BidId,CNPBoard);
+	.print("Bid submitted: ",Bid," - id: ",BidId, " for task: ",CNPBoard);
+	.
+	
+@create_bid[atomic]	
++!create_bid(item(ItemId,Qty),StorageId,Bid)
+	: product(ItemId, Volume, BaseList) & role(_, Speed, LoadCap, _, Tools) & load(Load) & shopList(List) 
+<- 
+	?find_shops(ItemId,List,ShopsViable);
+	?closest_facility(ShopsViable, ShopId);
+	?route(ShopId, RouteLenShop);
+	?route(ShopId, StorageId, RouteLenStorage);	
+	?calculate_bases_load(BaseList,Qty,0,LoadB);
+	
+	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) & not noMoreTasks ) {
+		+buffer_shop(ShopId);
+		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));		
+	}
+	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
+		Bid = 0;
+	}	
+	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty) & not noMoreTasks ) {
+		+buffer_shop(ShopId);
+		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
+	}
+	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
+		Bid = 0;
+	}
+	if ( noMoreTasks ) {
+		Bid = 0;
+	} 
+	.	 
 
 /* 
 @task[atomic]
