@@ -36,6 +36,12 @@
 +!goto(FacilityId)
 <-
 	!continue;
+	?charge(Battery);
+	.print("$> Battery = ", Battery);
+	if(Battery == 0){
+		.print("$> Calling Breakdown Service! I am stucked!");
+		!call_breakdown_service;
+	}
 	!goto(FacilityId);
 	.
 
@@ -294,6 +300,12 @@
 <-
 	!commitAction(abort);
 	.
+
++!call_breakdown_service
+	: true
+<-
+	!commitAction(call_breakdown_service);
+	.	
  
 +!commitAction(Action)
     : step(S)
