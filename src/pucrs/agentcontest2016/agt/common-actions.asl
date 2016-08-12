@@ -13,6 +13,15 @@
 	!goto(FacilityId);
 	.
 	
++!goto(FacilityId)
+	: charge(Battery) & Battery == 0
+<-
+	.print("$> Calling Breakdown Service! I am stucked!");
+	!call_breakdown_service;
+	-going(FacilityId);
+	!goto(FacilityId);
+.	
+	
 // Tests if there is enough battery to go to my goal AND to the nearest charging station around that goal
 +!goto(FacilityId)
 	: not going(FacilityId) & not .desire(go_charge) & chargingList(List) & closest_facility(List, FacilityId, FacilityId2) & enough_battery(FacilityId, FacilityId2, Result)
@@ -35,13 +44,7 @@
 
 +!goto(FacilityId)
 <-
-	!continue;
-	?charge(Battery);
-	.print("$> Battery = ", Battery);
-	if(Battery == 0){
-		.print("$> Calling Breakdown Service! I am stucked!");
-		!call_breakdown_service;
-	}
+	!continue;	
 	!goto(FacilityId);
 	.
 
@@ -302,7 +305,6 @@
 	.
 
 +!call_breakdown_service
-	: true
 <-
 	!commitAction(call_breakdown_service);
 	.	
