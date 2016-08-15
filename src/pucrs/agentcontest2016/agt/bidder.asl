@@ -7,12 +7,12 @@
   	!make_bid(Task,StorageId,BoardId,CNPBoard);
   	.
   	
-+winner(BidId,Task,item(ItemId,Qty),JobId,StorageId) 
-	: my_bid(BidId,Task) & shopList(List)
++winner(item(ItemId,Qty),JobId,StorageId) 
+	: shopList(List)
 <- 
 	+noMoreTasks;
 	-free;
-	.print("Awarded task ",Task);
+	.print("Awarded task to get #",Qty," of ",ItemId);
 	?find_shops(ItemId,List,ShopsViable);
 	?closest_facility(ShopsViable, ShopId);
 	+buyList(ItemId,Qty,ShopId);
@@ -21,12 +21,11 @@
 
 @make_bid[atomic]	
 +!make_bid(Task,StorageId,BoardId,CNPBoard)
-	: true
+	: .my_name(Me)
 <- 
 	!create_bid(Task,StorageId,Bid);
-	bid(Bid,BidId)[artifact_id(BoardId)];
-	+my_bid(BidId,CNPBoard);
-	.print("Bid submitted: ",Bid," - id: ",BidId, " for task: ",CNPBoard);
+	bid(Bid,Me)[artifact_id(BoardId)];
+	.print("Bid submitted: ",Bid," for task: ",CNPBoard);
 	.
 	
 @create_bid[atomic]	

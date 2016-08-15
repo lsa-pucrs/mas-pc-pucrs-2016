@@ -16,7 +16,6 @@ public class ContractNetBoard extends Artifact {
 	private Logger logger = null;
 	
 	private List<Bid> bids;
-	private int bidId;
 	
 	void init(String taskDescr, long duration){
 		logger = Logger.getLogger(ContractNetBoard.class.getName()+"_"+taskDescr);
@@ -27,23 +26,16 @@ public class ContractNetBoard extends Artifact {
 		this.defineObsProperty("deadline", deadline);
 		this.defineObsProperty("state","open");
 		bids = new ArrayList<Bid>();
-		bidId = 0;
 		this.execInternalOp("checkDeadline", duration);
 		this.execInternalOp("checkAllBids");
 	}
 	
-	@OPERATION void bid(int bid, OpFeedbackParam<Integer> id){
+	@OPERATION void bid(int bid, String agent){
 		if (getObsProperty("state").stringValue().equals("open")){
-			bidId++;
-			bids.add(new Bid(bidId,bid));
-			id.set(bidId);
+			bids.add(new Bid(agent,bid));
 		} else {
 			this.failed("cnp_closed");
 		}
-	}
-
-	@OPERATION void award(int bidId, String Task, String Items, String JobId, String StorageId){
-		this.defineObsProperty("winner", bidId,Task,Literal.parseLiteral(Items),Literal.parseLiteral(JobId),Literal.parseLiteral(StorageId));
 	}
 	
 	@INTERNAL_OPERATION void checkDeadline(long dt){
@@ -69,7 +61,7 @@ public class ContractNetBoard extends Artifact {
 		int i = 0;
 		Literal[] aux= new Literal[bids.size()];
 		for (Bid p: bids){
-			aux[i] = Literal.parseLiteral("bid("+p.getValue()+","+p.getId()+")");
+			aux[i] = Literal.parseLiteral("bid("+p.getValue()+","+p.getAgent()+")");
 			i++;
 		}
 		bidList.set(aux);
@@ -89,15 +81,15 @@ public class ContractNetBoard extends Artifact {
 	
 	static public class Bid {
 		
-		private int id;
+		private String agent;
 		private int value;
 		
-		public Bid(int id, int value){
+		public Bid(String agent, int value){
 			this.value = value;
-			this.id = id;
+			this.agent = agent;
 		}
 		
-		public int getId(){ return id; }
+		public String getAgent(){ return agent; }
 		public int getValue(){ return value; }
 	}
 	
