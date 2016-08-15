@@ -12,15 +12,9 @@
 	.
 	
 +item(ItemId,Qty)
-	: buyList(ItemId,Qty,Shop)
+	: buyList(ItemId,Qty,ShopId)
 <-
-	-buyList(ItemId,Qty,Shop);
-	.
-
-+item(ItemId,1)
-	: assembleList(ItemId,Workshop)
-<-
-	-assembleList(ItemId,Workshop);
+	-buyList(ItemId,Qty,ShopId);
 	.
 
 +lastActionResult(Result)
@@ -70,15 +64,6 @@
 	:  dumpList(List) & not .member(DumpId,List) 
 <- 
 	-+dumpList([DumpId|List]);
-	.
-
-
-+!go_charge
-	:  chargingList(List) & closest_facility(List, Facility)
-<-
-	.print("**** Going to charge my battery at ", Facility);
-	!goto(Facility);
-	!charge;
 	.
 
 @decomp

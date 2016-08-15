@@ -4,13 +4,30 @@
 	makeArtifact("task_board","pucrs.agentcontest2016.cnp.TaskBoard",[]);
 	.print("Created taskboard.");
 	.
+
+// check if it can start considering jobs again
+@done[atomic]
++done[source(X)]
+	: pricedJob(JobId, Items, StorageId) & .length(Items, NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
+<-
+	-pricedJob(JobId, Items, StorageId);
+	-working;
+	for ( done[source(A)] ) {
+		-done[source(A)];
+	}
+	.print("All agents are done, time to start looking for a new job.");
+	.
+@done2[atomic]
++done[source(X)]
+<-
+	.print("An agent has finished its task, waiting for the rest to be done.");
+	.
 	
 //@pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
 	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & workshopList([WorkshopId|_]) & shopList([shop(ShopId,_)|_])
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
-	
 	.length(Items,NumberTasks);
 	if ( NumberTasks <= 16) {
 		+count_comp(0);
@@ -29,10 +46,10 @@
 			.print("We estimate ",Total," steps to do priced job ",JobId," that needs ",End-Step," steps");
 			if (Total >  End-Step) {
 				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
-				+pricedJob(JobId,Items,StorageId);
 			}
 			else {
 				+working;
+				+pricedJob(JobId,Items,StorageId);
 				.print("Job is viable, starting contract net.");
 				!separate_tasks(Items,JobId,StorageId);
 			}

@@ -40,15 +40,27 @@
 	 !post_job_auction(Reward, Fine, Active, ActiveAuction, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
 	 .
 	 
-+!goto_work(JobId,item(ItemId,Qty),StorageId)
-	: buffer_shop(ShopId)
++!go_work(JobId,StorageId)
+	: buyList(Item,Qty,ShopId)
 <-
-	-buffer_shop(ShopId);
 	!goto(ShopId);
-	!buy(ItemId,Qty);
+	while ( buyList(Item,Qty,ShopId) ) {
+		!buy(Item,Qty);
+		.wait(500);
+	}
 	!goto(StorageId);
 	!deliver_job(JobId);
+	.send(vehicle1,tell,done);
+	-noMoreTasks;
 	+free;
+	.
+	
++!go_charge
+	:  chargingList(List) & closest_facility(List, Facility)
+<-
+	.print("**** Going to charge my battery at ", Facility);
+	!goto(Facility);
+	!charge;
 	.
 
 +free

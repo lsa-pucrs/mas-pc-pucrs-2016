@@ -16,24 +16,31 @@
 +!goto(FacilityId)
 	: charge(Battery) & Battery == 0
 <-
-	.print("$> Calling Breakdown Service! I am stucked!");
+	.print("$> Calling Breakdown Service! I am stuck!");
 	!call_breakdown_service;
 	-going(FacilityId);
 	!goto(FacilityId);
-.	
-	
-// Tests if there is enough battery to go to my goal AND to the nearest charging station around that goal
+.
+
 +!goto(FacilityId)
-	: not going(FacilityId) & not .desire(go_charge) & chargingList(List) & closest_facility(List, FacilityId, FacilityId2) & enough_battery(FacilityId, FacilityId2, Result)
+	: going(FacilityId)
 <-
-    if (not Result) {
-    	!go_charge;
-    }
-	+going(FacilityId);
-	!commitAction(goto(facility(FacilityId)));
+	!continue;	
 	!goto(FacilityId);
 	.
 	
+// Tests if there is enough battery to go to my goal AND to the nearest charging station around that goal
++!goto(FacilityId)
+	: not .desire(go_charge) & chargingList(List) & closest_facility(List, FacilityId, FacilityId2) & enough_battery(FacilityId, FacilityId2, Result)
+<-
+    +going(FacilityId);
+    if (not Result) {
+    	!go_charge;
+    }
+	!commitAction(goto(facility(FacilityId)));
+	!goto(FacilityId);
+	.
+ 	
 +!goto(FacilityId)
 	: not going(FacilityId)
 <-	
@@ -41,13 +48,13 @@
 	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
 	.
-
+/*
 +!goto(FacilityId)
 <-
 	!continue;	
 	!goto(FacilityId);
 	.
-
+ */
 // Goto (option 2)
 // Lat and Lon must be floats
 +!goto(Lat, Lon)
@@ -93,13 +100,13 @@
 // Amount must be an integer
 +!buy(ItemId, Amount)
 	: true
-<-
-	!commitAction(
-		buy(
-			item(ItemId),
-			amount(Amount)
-		)
-	);
+<-	
+		!commitAction(
+			buy(
+				item(ItemId),
+				amount(Amount)
+			)
+		);
 	.
 
 // Give

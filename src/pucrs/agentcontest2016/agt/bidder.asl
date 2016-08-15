@@ -7,15 +7,19 @@
   	!make_bid(Task,StorageId,BoardId,CNPBoard);
   	.
   	
-+winner(BidId,Task,Items,JobId,StorageId) 
-	: my_bid(BidId,Task)
++winner(BidId,Task,item(ItemId,Qty),JobId,StorageId) 
+	: my_bid(BidId,Task) & shopList(List)
 <- 
 	+noMoreTasks;
 	-free;
 	.print("Awarded task ",Task);
-	!goto_work(JobId,Items,StorageId);
+	?find_shops(ItemId,List,ShopsViable);
+	?closest_facility(ShopsViable, ShopId);
+	+buyList(ItemId,Qty,ShopId);
+	!go_work(JobId,StorageId);
 	.
-	
+
+@make_bid[atomic]	
 +!make_bid(Task,StorageId,BoardId,CNPBoard)
 	: true
 <- 
@@ -35,18 +39,16 @@
 	?route(ShopId, StorageId, RouteLenStorage);	
 	?calculate_bases_load(BaseList,Qty,0,LoadB);
 	
-	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) & not noMoreTasks ) {
-		+buffer_shop(ShopId);
+	if ( not noMoreTasks & (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) ) {
 		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));		
 	}
-	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
+	if ( not noMoreTasks & (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
 		Bid = 0;
 	}	
-	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty) & not noMoreTasks ) {
-		+buffer_shop(ShopId);
+	if ( not noMoreTasks & (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
 		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
 	}
-	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
+	if ( not noMoreTasks & (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
 		Bid = 0;
 	}
 	if ( noMoreTasks ) {
