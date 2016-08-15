@@ -78,7 +78,7 @@
           <products
             min="14" max="20"
             minVol="10" maxVol="30"
-            assembled="0.1"
+            assembled="0.6"
             minReq="1" maxReq="3" reqAmountMin="1" reqAmountMax="3"
             valueMin="100" valueMax="150" assembledValueAddMin="80" assembledValueAddMax="100"
             toolPercentage="50"

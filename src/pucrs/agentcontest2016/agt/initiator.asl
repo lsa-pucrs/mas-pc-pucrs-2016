@@ -7,20 +7,12 @@
 	
 //@pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)
-	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(S) & workshopList([WorkshopId|_]) & shopList([shop(ShopId,_)|_])
+	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & workshopList([WorkshopId|_]) & shopList([shop(ShopId,_)|_])
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	
-	?route_drone(WorkshopId, RouteLenWorkshop);
-	?route_drone(ShopId, RouteLenShop);
-	?route_drone(StorageId, RouteLenStorage);
-	
-	if (math.round(RouteLenWorkshop/5+RouteLenShop/5+RouteLenStorage/5) >  End-Step) {
-		.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
-		+pricedJob(JobId,Items,StorageId);
-	}
-	else {
-	if ( .length(Items,NumberTasks) &  NumberTasks <= 16) {
+	.length(Items,NumberTasks);
+	if ( NumberTasks <= 16) {
 		+count_comp(0);
 		for ( .member(item(ItemId,Qty),Items) ) {
 			?product(ItemId,Volume,BaseList);
@@ -30,14 +22,27 @@
 		-count_comp(NumberOfComp);
 		.print("Number of composite items: ", NumberOfComp);
 		if (NumberOfComp == 0) {
-			+working;
-			.print("Job is viable, starting contract net.");
-			!separate_tasks(Items,JobId,StorageId);
+			//?route_drone(WorkshopId, RouteLenWorkshop);
+			?route_drone(ShopId, RouteLenShop);
+			?route_drone(StorageId, RouteLenStorage);
+			Total = math.round( (RouteLenShop/5 + RouteLenStorage/5) * NumberTasks );
+			.print("We estimate ",Total," steps to do priced job ",JobId," that needs ",End-Step," steps");
+			if (Total >  End-Step) {
+				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
+				+pricedJob(JobId,Items,StorageId);
+			}
+			else {
+				+working;
+				.print("Job is viable, starting contract net.");
+				!separate_tasks(Items,JobId,StorageId);
+			}
+			}
+		else {
+			.print("Composite items detected, ignoring job.");
 		}
 	}
 	else {
 		.print("Too many tasks, not enough agents!");
-	}
 	}
 	.
 	
