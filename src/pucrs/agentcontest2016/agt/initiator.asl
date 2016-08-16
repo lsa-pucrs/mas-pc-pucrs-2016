@@ -96,18 +96,16 @@
 	if (.length(Bids) \== 0) {		
 		+pricedJob(JobId,Items,StorageId);
 		.print("Got bids (",.length(Bids),") for task ",CNPBoardName," List ",Bids);
-		?select_bid(Bids,bid(99999,99999),bid(Bid,Agent));
-		.print("Bid that won: ",Bid," Agent: ",Agent);
-		.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId));
-//		award(BidId,CNPBoardName,item(ItemId,Qty),JobId,StorageId)[artifact_name(CNPBoardName)];
-//		-listBids(CNPBoardName,_);
+		?select_bid(Bids,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
+		.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
+		.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
 	}
 	else {
 		-working;
 		.print("No bids.");
 	}
 	-cnp(CNPBoardName);
-	//clear(CNPBoardName);
+	clear(CNPBoardName);
 	.
 
 /* 

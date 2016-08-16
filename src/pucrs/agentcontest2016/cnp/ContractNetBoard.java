@@ -19,7 +19,6 @@ public class ContractNetBoard extends Artifact {
 	
 	void init(String taskDescr, long duration){
 		logger = Logger.getLogger(ContractNetBoard.class.getName()+"_"+taskDescr);
-		this.defineObsProperty("task_description", taskDescr);
 		long started = System.currentTimeMillis();
 		this.defineObsProperty("created", started);
 		long deadline = started + duration;
@@ -30,9 +29,9 @@ public class ContractNetBoard extends Artifact {
 		this.execInternalOp("checkAllBids");
 	}
 	
-	@OPERATION void bid(int bid, String agent){
+	@OPERATION void bid(int bid, String agent, String shop){
 		if (getObsProperty("state").stringValue().equals("open")){
-			bids.add(new Bid(agent,bid));
+			bids.add(new Bid(agent,bid,shop));
 		} else {
 			this.failed("cnp_closed");
 		}
@@ -61,11 +60,11 @@ public class ContractNetBoard extends Artifact {
 		int i = 0;
 		Literal[] aux= new Literal[bids.size()];
 		for (Bid p: bids){
-			aux[i] = Literal.parseLiteral("bid("+p.getValue()+","+p.getAgent()+")");
+			aux[i] = Literal.parseLiteral("bid("+p.getValue()+","+p.getAgent()+","+p.getShop()+")");
 			i++;
 		}
 		bidList.set(aux);
-	}
+	}	
 	
 	@GUARD boolean biddingClosed(){
 		return isClosed();
@@ -83,14 +82,17 @@ public class ContractNetBoard extends Artifact {
 		
 		private String agent;
 		private int value;
+		private String shop;
 		
-		public Bid(String agent, int value){
+		public Bid(String agent, int value, String shop){
 			this.value = value;
 			this.agent = agent;
+			this.shop = shop;
 		}
 		
 		public String getAgent(){ return agent; }
 		public int getValue(){ return value; }
+		public String getShop(){ return shop; }
 	}
 	
 }

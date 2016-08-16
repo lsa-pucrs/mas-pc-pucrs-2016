@@ -31,7 +31,7 @@ public class TaskBoard extends Artifact {
 	}
 	
 	@OPERATION void clear(String artifactName){
-		this.removeObsPropertyByTemplate("task", null, artifactName);
+		this.removeObsPropertyByTemplate("task", null, artifactName, null);
 	}
 	
 }

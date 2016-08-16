@@ -13,9 +13,9 @@ route_drone(FacilityId, RouteLen) :- Role = "drone" & pucrs.agentcontest2016.act
 
 enough_battery(FacilityId1, FacilityId2, Result) :- role(Role, Speed, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, RouteLen1) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen2) & charge(Battery) & ((Battery > ((RouteLen1 / Speed * 10) + (RouteLen2 / Speed * 10)) & Result = true) | (Result = false)).
 
-select_bid([],bid(AuxBid,AuxBidAgent),bid(BidWinner,BidAgentWinner)) :- BidWinner = AuxBid & BidAgentWinner = AuxBidAgent.
-select_bid([bid(Bid,BidAgent)|Bids],bid(AuxBid,AuxBidAgent),BidWinner) :- Bid \== 0 & Bid < AuxBid & select_bid(Bids,bid(Bid,BidAgent),BidWinner).
-select_bid([bid(Bid,BidAgent)|Bids],bid(AuxBid,AuxBidAgent),BidWinner) :- select_bid(Bids,bid(AuxBid,AuxBidAgent),BidWinner).
+select_bid([],bid(AuxBid,AuxBidAgent,AuxShopId),bid(BidWinner,BidAgentWinner,ShopIdWinner)) :- BidWinner = AuxBid & BidAgentWinner = AuxBidAgent & AuxShopId = ShopIdWinner.
+select_bid([bid(Bid,BidAgent,ShopId)|Bids],bid(AuxBid,AuxBidAgent,AuxShopId),BidWinner) :- Bid \== 0 & Bid < AuxBid & select_bid(Bids,bid(Bid,BidAgent,ShopId),BidWinner).
+select_bid([bid(Bid,BidAgent,ShopId)|Bids],bid(AuxBid,AuxBidAgent,AuxShopId),BidWinner) :- select_bid(Bids,bid(AuxBid,AuxBidAgent,AuxShopId),BidWinner).
 
 compare_jobs(JobId, StorageId, Begin, End, Reward, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Reward,ItemsS,String1) & post_job_priced(Reward2, JobActive2, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2, JobActive2, Reward2, Items2S,String2) & String1 == String2.
 compare_jobs(JobId, StorageId, Begin, End, Fine, MaxBid, Items) :- JobActive = End-Begin & .sort(Items,ItemsS) & .concat(StorageId,JobActive,Fine,MaxBid,ItemsS,String1) & post_job_auction(MaxBid2, Fine2, JobActive2, AuctionActive, StorageId2, Items2) & .sort(Items2,Items2S) & .concat(StorageId2,JobActive2,Fine2,MaxBid2,Items2S,String2) & String1 == String2.
