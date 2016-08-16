@@ -50,6 +50,7 @@
 			else {
 				+working;
 				.print("Job is viable, starting contract net.");
+				+numberTasks(NumberTasks);
 				!separate_tasks(Items,JobId,StorageId);
 			}
 			}
@@ -82,7 +83,7 @@
 	: max_bid_time(Time)
 <-
 	for ( .member(item(ItemId,Qty),Items) ) {
-		!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId);
+		!!allocate_task(item(ItemId,Qty),Time,Items,JobId,StorageId);
 	}
 	.
 	
@@ -96,9 +97,7 @@
 	if (.length(Bids) \== 0) {		
 		+pricedJob(JobId,Items,StorageId);
 		.print("Got bids (",.length(Bids),") for task ",CNPBoardName," List ",Bids);
-		?select_bid(Bids,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
-		.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
-		.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+		!select_bid(Bids);
 	}
 	else {
 		-working;
@@ -106,6 +105,28 @@
 	}
 	-cnp(CNPBoardName);
 	clear(CNPBoardName);
+	.
+
+@select_bid[atomic]
++!select_bid(Bids)
+	: numberTasks(NumberTasks)
+<-
+	if (not allBids(_)) {
+		+allBids([Bids]);
+	}
+	else {
+		?allBids(AuxBidList);
+		.concat(AuxBidList,[Bids],BidList);
+		-+allBids(BidList);
+	}
+    ?allBids(BidList);
+    if (.length(BidList) == NumberTasks) {
+    	.print("Complete bid list ",BidList);
+    	-allBids(_);
+    	//?select_bid(Bids,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
+		//.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
+		//.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+    }
 	.
 
 /* 

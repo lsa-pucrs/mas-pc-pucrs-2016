@@ -51,7 +51,6 @@
 	!goto(StorageId);
 	!deliver_job(JobId);
 	.send(vehicle1,tell,done);
-	-noMoreTasks;
 	+free;
 	.
 	

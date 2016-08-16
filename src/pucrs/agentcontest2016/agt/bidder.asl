@@ -1,4 +1,3 @@
-@task[atomic]
 +task(Task,CNPBoard,StorageIdS)
 <- 
 	lookupArtifact(CNPBoard,BoardId);
@@ -10,14 +9,13 @@
 +winner(item(ItemId,Qty),JobId,StorageId,ShopId) 
 	: shopList(List)
 <- 
-	+noMoreTasks;
 	-free;
 	.print("Awarded task to get #",Qty," of ",ItemId," at ",ShopId);
 	+buyList(ItemId,Qty,ShopId);
 	!go_work(JobId,StorageId);
 	.
 
-@make_bid[atomic]	
+
 +!make_bid(Task,StorageId,BoardId,CNPBoard)
 	: .my_name(Me)
 <- 
@@ -26,7 +24,6 @@
 	.print("Bid submitted: ",Bid," for task: ",CNPBoard," at shop ",ShopId);
 	.
 	
-@create_bid[atomic]	
 +!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId)
 	: product(ItemId, Volume, BaseList) & role(_, Speed, LoadCap, _, Tools) & load(Load) & shopList(List) 
 <- 
@@ -36,21 +33,18 @@
 	?route(ShopId, StorageId, RouteLenStorage);	
 	?calculate_bases_load(BaseList,Qty,0,LoadB);
 	
-	if ( not noMoreTasks & (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) ) {
+	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) ) {
 		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));		
 	}
-	if ( not noMoreTasks & (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
+	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
 		Bid = 0;
 	}	
-	if ( not noMoreTasks & (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
+	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
 		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
 	}
-	if ( not noMoreTasks & (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
+	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
 		Bid = 0;
 	}
-	if ( noMoreTasks ) {
-		Bid = 0;
-	} 
 	.	 
 
 /* 
