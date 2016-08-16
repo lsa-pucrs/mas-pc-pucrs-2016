@@ -113,20 +113,38 @@
 <-
 	if (not allBids(_)) {
 		+allBids([Bids]);
+		if (1 == NumberTasks) {
+	    	.print("Complete bid list ",BidList);
+	    	-allBids(_);
+	    	//?select_bid(Bids,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
+			//.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
+			//.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+    	}
 	}
 	else {
 		?allBids(AuxBidList);
 		.concat(AuxBidList,[Bids],BidList);
 		-+allBids(BidList);
+		 ?allBids(BidList);
+	    if (.length(BidList) == NumberTasks) {
+	    	.print("Complete bid list ",BidList);
+	    	-allBids(_);
+	    	+agentsAwarded([]);
+	    	for (.range(I,0,.length(BidList)-1)) {
+	    		.nth(I,BidList,X);
+		    	?select_bid(X,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
+		    	.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
+		    	?agentsAwarded(Ags);
+		    	if (not .substring(Agent, Ags)) {
+		    		-+agentsAwarded([Agent|Ags]);
+		    	}
+		    }
+		    ?agentsAwarded(AuxAgs);
+	    	-agentsAwarded(_);
+    		.print("Agents awarded ",AuxAgs);
+			//.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+	    }
 	}
-    ?allBids(BidList);
-    if (.length(BidList) == NumberTasks) {
-    	.print("Complete bid list ",BidList);
-    	-allBids(_);
-    	//?select_bid(Bids,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
-		//.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
-		//.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
-    }
 	.
 
 /* 
