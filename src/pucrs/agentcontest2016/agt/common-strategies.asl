@@ -41,7 +41,7 @@
 	 .
 	 
 +!go_work(JobId,StorageId)
-	: buyList(Item,Qty,ShopId)
+	: buyList(_,_,ShopId)
 <-
 	!goto(ShopId);
 	while ( buyList(Item,Qty,ShopId) ) {

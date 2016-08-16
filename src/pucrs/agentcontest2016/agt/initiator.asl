@@ -8,10 +8,11 @@
 // check if it can start considering jobs again
 @done[atomic]
 +done[source(X)]
-	: pricedJob(JobId, Items, StorageId) & .length(Items, NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
+	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone & pricedJob(JobId, Items, StorageId)
 <-
 	-pricedJob(JobId, Items, StorageId);
 	-working;
+	-numberAwarded(NumberAgents);
 	for ( done[source(A)] ) {
 		-done[source(A)];
 	}
@@ -97,7 +98,7 @@
 	if (.length(Bids) \== 0) {		
 		+pricedJob(JobId,Items,StorageId);
 		.print("Got bids (",.length(Bids),") for task ",CNPBoardName," List ",Bids);
-		!select_bid(Bids);
+		!select_bid(Bids,JobId,StorageId);
 	}
 	else {
 		-working;
@@ -108,7 +109,7 @@
 	.
 
 @select_bid[atomic]
-+!select_bid(Bids)
++!select_bid(Bids,JobId,StorageId)
 	: numberTasks(NumberTasks)
 <-
 	if (not allBids(_)) {
@@ -116,9 +117,9 @@
 		if (1 == NumberTasks) {
 	    	.print("Complete bid list ",BidList);
 	    	-allBids(_);
-	    	//?select_bid(Bids,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
-			//.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
-			//.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+	    	?select_bid(Bids,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
+			.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
+			.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
     	}
 	}
 	else {
@@ -129,20 +130,28 @@
 	    if (.length(BidList) == NumberTasks) {
 	    	.print("Complete bid list ",BidList);
 	    	-allBids(_);
-	    	+agentsAwarded([]);
 	    	for (.range(I,0,.length(BidList)-1)) {
 	    		.nth(I,BidList,X);
-		    	?select_bid(X,bid(99999,99999,99999),bid(Bid,Agent,ShopId));
+		    	?select_bid(X,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
 		    	.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
-		    	?agentsAwarded(Ags);
-		    	if (not .substring(Agent, Ags)) {
-		    		-+agentsAwarded([Agent|Ags]);
+		    	if (not awarded(Agent,_,_)) {
+		    		+awarded(Agent,ShopId,item(ItemId,Qty));
+		    	}
+		    	else {
+		    		?awarded(Agent,ShopId,List);
+		    		-awarded(Agent,ShopId,List);
+		    		.concat([List],[item(ItemId,Qty)],NewList);
+		    		+awarded(Agent,ShopId,NewList);
 		    	}
 		    }
-		    ?agentsAwarded(AuxAgs);
-	    	-agentsAwarded(_);
-    		.print("Agents awarded ",AuxAgs);
-			//.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+		    .count(awarded(_,_,_),N);
+		    +numberAwarded(N);
+		    -numberTasks(NumberTasks);
+		    for (awarded(Agent,ShopId,List)) {
+		    	.print("Agent ",Agent," to get ",List," in ",ShopId);
+		    	.send(Agent,tell,winner(List,JobId,StorageId,ShopId));
+    			-awarded(Agent,ShopId,List);	
+			}
 	    }
 	}
 	.
