@@ -41,7 +41,7 @@
 	 .
 	 
 +!go_work(JobId,StorageId)
-	: buyList(_,_,ShopId)
+	: buyList(_,_,ShopId) & .my_name(Me) & role(_, _, LoadCap, _, _)
 <-
 	!goto(ShopId);
 	while ( buyList(Item,Qty,ShopId) ) {
@@ -51,6 +51,7 @@
 	!goto(StorageId);
 	!deliver_job(JobId);
 	.send(vehicle1,tell,done);
+	updateLoad(Me,LoadCap);
 	+free;
 	.
 	

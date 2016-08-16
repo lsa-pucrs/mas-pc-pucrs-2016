@@ -136,12 +136,20 @@
 		    	.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
 		    	if (not awarded(Agent,_,_)) {
 		    		+awarded(Agent,ShopId,item(ItemId,Qty));
+		    		.term2string(Agent,AgentS);
+		    		?load(AgentS,Load);
+		    		?product(ItemId,Volume,BaseList);
+		    		updateLoad(Agent,Load-Volume*Qty);
 		    	}
 		    	else {
 		    		?awarded(Agent,ShopId,List);
 		    		-awarded(Agent,ShopId,List);
 		    		.concat([List],[item(ItemId,Qty)],NewList);
 		    		+awarded(Agent,ShopId,NewList);
+		    		.term2string(Agent,AgentS);
+					?load(AgentS,Load);
+		    		?product(ItemId,Volume,BaseList);
+		    		updateLoad(Agent,Load-Volume*Qty);		    		
 		    	}
 		    }
 		    .count(awarded(_,_,_),N);

@@ -37,6 +37,7 @@
 		.include("initiator.asl");
 		!create_taskboard;
 	};
+	addLoad(Me,LoadCap);
 	focusWhenAvailable("task_board");
 	.print("Task board located.");
 	.

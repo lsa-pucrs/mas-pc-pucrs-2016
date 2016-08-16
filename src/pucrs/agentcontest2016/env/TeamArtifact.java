@@ -26,7 +26,13 @@ public class TeamArtifact extends Artifact {
 		}
 	}
 	
-	@OPERATION void test(){
-		System.out.println("TEST SUCCESSFUL!");
+	@OPERATION void addLoad(String agent, int load){
+		this.defineObsProperty("load",agent,load);
 	}
+
+	@OPERATION void updateLoad(String agent, int load){
+		this.removeObsPropertyByTemplate("load",agent,null);
+		this.defineObsProperty("load",agent,load);
+	}	
+	
 }
