@@ -153,7 +153,7 @@ public class EISArtifact extends Artifact {
 					if (lastStep != currentStep) { // only updates if it is a new step
 						lastStep = currentStep;
 						filterLocations(agent, percepts);
-						//logger.info("new step "+currentStep);
+						//logger.info("Agent "+agent);
 						udpatePerception(agent, previousPercepts, percepts);
 						previousPercepts = percepts;
 					}
@@ -187,40 +187,78 @@ public class EISArtifact extends Artifact {
 	}
 
 	private void udpatePerception(String agent, Collection<Percept> previousPercepts, Collection<Percept> percepts) throws JasonException {
-		
-		// compute removed perception
-		for (Percept old: previousPercepts) {
-			if (step_obs_prop.contains(old.getName())) {
-				if (!percepts.contains(old)) { // not perceived anymore
-					Literal literal = Translator.perceptToLiteral(old);
-					removeObsPropertyByTemplate(old.getName(), (Object[]) literal.getTermsArray());
-					//logger.info("removing old perception "+literal);
+		if (agent.equals("vehicle1")) {
+			// compute removed perception
+			for (Percept old: previousPercepts) {
+				if (step_obs_propv1.contains(old.getName())) {
+					if (!percepts.contains(old)) { // not perceived anymore
+						Literal literal = Translator.perceptToLiteral(old);
+						removeObsPropertyByTemplate(old.getName(), (Object[]) literal.getTermsArray());
+						//logger.info("removing old perception "+literal);
+					}
+				}
+			}
+		}
+		else {
+			for (Percept old: previousPercepts) {
+				if (step_obs_prop.contains(old.getName())) {
+					if (!percepts.contains(old)) { // not perceived anymore
+						Literal literal = Translator.perceptToLiteral(old);
+						removeObsPropertyByTemplate(old.getName(), (Object[]) literal.getTermsArray());
+						//logger.info("removing old perception "+literal);
+					}
 				}
 			}
 		}
 		
 		// compute new perception
 		Literal step = null;
-		for (Percept percept: percepts) {
-			if (step_obs_prop.contains(percept.getName())) {
-				if (!previousPercepts.contains(percept)) { // really new perception 
-					Literal literal = Translator.perceptToLiteral(percept);
-					if (percept.getName().equals("step")) {
-						step = literal;
-					} else if (percept.getName().equals("simEnd")) {
-						cleanObsProps(step_obs_prop);
-						cleanObsProps(match_obs_prop);
-						defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
-						break;
-					} else {
-						//logger.info("adding "+literal);
-						defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
+		if (agent.equals("vehicle1")) {
+			for (Percept percept: percepts) {
+				if (step_obs_propv1.contains(percept.getName())) {
+					if (!previousPercepts.contains(percept)) { // really new perception 
+						Literal literal = Translator.perceptToLiteral(percept);
+						if (percept.getName().equals("step")) {
+							step = literal;
+						} else if (percept.getName().equals("simEnd")) {
+							cleanObsProps(step_obs_propv1);
+							cleanObsProps(match_obs_prop);
+							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
+							break;
+						} else {
+							//logger.info("adding "+literal);
+							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
+						}
 					}
+				} else if (match_obs_prop.contains(percept.getName())) {
+					Literal literal = Translator.perceptToLiteral(percept);
+					//logger.info("adding "+literal);
+					defineObsProperty(literal.getFunctor(), (Object[]) literal.getTermsArray());				
 				}
-			} else if (match_obs_prop.contains(percept.getName())) {
-				Literal literal = Translator.perceptToLiteral(percept);
-				//logger.info("adding "+literal);
-				defineObsProperty(literal.getFunctor(), (Object[]) literal.getTermsArray());				
+			}
+		}
+		else {
+			for (Percept percept: percepts) {
+				if (step_obs_prop.contains(percept.getName())) {
+					if (!previousPercepts.contains(percept)) { // really new perception 
+						Literal literal = Translator.perceptToLiteral(percept);
+						if (percept.getName().equals("step")) {
+							step = literal;
+						} else if (percept.getName().equals("simEnd")) {
+							cleanObsProps(step_obs_prop);
+							cleanObsProps(match_obs_prop);
+							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
+							break;
+						} else {
+							//logger.info("adding "+literal);
+							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
+						}
+					}
+				} else if (match_obs_prop.contains(percept.getName())) {
+					Literal literal = Translator.perceptToLiteral(percept);
+					//logger.info("adding "+literal);
+					defineObsProperty(literal.getFunctor(), (Object[]) literal.getTermsArray());				
+				}
 			}
 		}
 		/*
@@ -294,21 +332,40 @@ public class EISArtifact extends Artifact {
 	static Set<String> step_obs_prop = new HashSet<String>( Arrays.asList(new String[] {
 		"chargingStation",
 		"shop",			
-		"storage",
-		"workshop",
-		"dump",
+//		"storage",
+//		"workshop",
+//		"dump",
 		"charge",
 		"load",
 		"inFacility",
 		"item",
-		"jobTaken",
+//		"jobTaken",
 		"step",
 		"simEnd",		
-		"pricedJob",
-		"auctionJob",
+//		"pricedJob",
+//		"auctionJob",
 		"lastAction",
 		"lastActionResult",
 	}));
+	
+	static Set<String> step_obs_propv1 = new HashSet<String>( Arrays.asList(new String[] {
+			"chargingStation",
+			"shop",			
+//			"storage",
+//			"workshop",
+//			"dump",
+			"charge",
+			"load",
+			"inFacility",
+			"item",
+//			"jobTaken",
+			"step",
+			"simEnd",		
+			"pricedJob",
+//			"auctionJob",
+			"lastAction",
+			"lastActionResult",
+		}));	
 	
 	static List<String> location_perceptions = Arrays.asList(new String[] { "shop", "storage", "workshop", "chargingStation", "dump", "entity" });
 

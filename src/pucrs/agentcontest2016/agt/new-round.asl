@@ -7,12 +7,9 @@
 //	+fineAuction(5000);
 //	+activeAuctionSteps(1);
 //	+auctionSteps(3);
-	+max_bid_time(1000);
 	+chargingList([]);
-	+dumpList([]);
-	+storageList([]);
+//	+dumpList([]);
+//	+storageList([]);
 	+shopList([]);
-	+workshopList([]);
-	
-//	+working;
+//	+workshopList([]);
 	.

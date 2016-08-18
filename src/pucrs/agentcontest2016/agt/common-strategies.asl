@@ -64,7 +64,7 @@
 	.
 	
 //### RINGING ###
-+ringingFinished
++!ringingFinished
 <-
 	.print("Ringing is over, I was notified");
 	-myProposal(_);
@@ -174,7 +174,7 @@
 		.send(NextAgent,achieve,make_proposal(NewAvailableShops,ListOfProposals,ListAgents,NewAvailableAgents));
 	} else{
 		.print("Ringing is Done");
-		.broadcast(tell,ringingFinished);		
+		.broadcast(achieve,ringingFinished);		
 	}	
 	
 	-tempComparingProposals(_);	
@@ -261,14 +261,17 @@
 	.send(NextAgent,achieve,make_proposal(AvailableShops, Proposals, RemainingAgents, AvailableAgents));
 	.
 +!order_agents_to_go_to_the_shops(ListOfAgents)
-	: .my_name(Me) & not initiatorShopChoice
+	: not initiatorShopChoice
 <-	
-	.findall(agents(Name),play(Name,truck,_),ListTrucks);
-	.findall(agents(Name),play(Name,car,_),ListCars);
-	.findall(agents(Name),play(Name,motorcycle,_),ListMotorcycles);
-	.findall(agents(Name),play(Name,drone,_),ListDrones);
+//	.findall(agents(Name),play(Name,truck,_),ListTrucks);
+//	.findall(agents(Name),play(Name,car,_),ListCars);
+//	.findall(agents(Name),play(Name,motorcycle,_),ListMotorcycles);
+//	.findall(agents(Name),play(Name,drone,_),ListDrones);
+	
+	ListOfAgents = [agents(vehicle1),agents(vehicle2),agents(vehicle3),agents(vehicle4),agents(vehicle5),agents(vehicle6),agents(vehicle7),agents(vehicle8),agents(vehicle9),agents(vehicle10),agents(vehicle11),agents(vehicle12),agents(vehicle13),agents(vehicle14),agents(vehicle15),agents(vehicle16)];
 
-	.concat(ListDrones,ListMotorcycles,ListCars,ListTrucks,ListOfAgents);
+	//.concat(ListDrones,ListMotorcycles,ListCars,ListTrucks,ListOfAgents);
+	//.print("AGENTS ",ListOfAgents);
 	.	
 //### RINGING ###
 

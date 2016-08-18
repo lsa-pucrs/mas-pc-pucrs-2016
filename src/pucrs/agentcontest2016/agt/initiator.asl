@@ -37,8 +37,8 @@
 	.
 	
 //@pricedJob[atomic]
-+pricedJob(JobId, StorageId, Begin, End, Reward, Items)
-	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & workshopList([WorkshopId|_]) & shopList([shop(ShopId,_)|_])
++pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
+	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & shopList([shop(ShopId,_)|_])
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	.length(Items,NumberTasks);
@@ -69,11 +69,17 @@
 			}
 		else {
 			.print("Composite items detected, ignoring job.");
+			-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 		}
 	}
 	else {
 		.print("Too many tasks, not enough agents!");
+		-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 	}
+	.
++pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
+<-
+	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 	.
 	
 @count_composite[atomic]
