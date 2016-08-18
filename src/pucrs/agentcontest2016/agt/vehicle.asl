@@ -11,6 +11,7 @@
 +!register(E)
 	: .my_name(Me)
 <-
+	!new_round;
 	if (Me == vehicle1) {
 		makeArtifact("teamArtifact","pucrs.agentcontest2016.env.TeamArtifact",[]);
 	}
@@ -29,7 +30,6 @@
 	.print("Got role: ", Role);
 	.lower_case(Role,File);
 	adoptRole(File);
-	!new_round;	
 	.concat(File, ".asl", FileExt);
 	.include(FileExt);
 	if (Me == vehicle1) {

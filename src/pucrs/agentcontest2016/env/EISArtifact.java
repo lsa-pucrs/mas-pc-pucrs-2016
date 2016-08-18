@@ -150,9 +150,6 @@ public class EISArtifact extends Artifact {
 					if (percepts.isEmpty())
 						break;
 					int currentStep = getCurrentStep(percepts);
-					if (currentStep == 0) {
-						await_time(300);
-					}
 					if (lastStep != currentStep) { // only updates if it is a new step
 						lastStep = currentStep;
 						filterLocations(agent, percepts);
