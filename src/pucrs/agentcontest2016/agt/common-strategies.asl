@@ -114,6 +114,11 @@
 	
 	-+myProposal(Proposal);
 	.
++!calculate_steps_required_all_shops
+<- 	
+// 	Adicionado este plano pq no de cima de vez em quando a lista de shops não era preenchida e ferrava tudo
+	!calculate_steps_required_all_shops;
+	.
 +!sendAgentsToTheirShops
 	: tempAgentsSendProposals(ListShopAgent)
 <-
@@ -183,7 +188,7 @@
 	: .my_name(Me)
 <-
 	!calculate_steps_required_all_shops;
-	.print("Proposal");
+
 	!compare_proposals(AvailableShops, Proposals);
 	
 	!send_proposal_next_agent(AvailableShops, NextAgent, RemainingAgents, AvailableAgents);
