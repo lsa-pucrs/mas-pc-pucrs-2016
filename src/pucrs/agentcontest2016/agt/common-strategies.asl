@@ -62,6 +62,210 @@
 	!goto(Facility);
 	!charge;
 	.
+	
+//### RINGING ###
++ringingFinished
+<-
+	.print("Ringing is over, I was notified");
+	-myProposal(_);
+	.
++!go_to_facility(Facility)
+<-
+	.print("I was send to ", Facility);	
+	-free;
+	!goto(Facility);
+	?step(S);
+	.print("I have arrived at ", Facility, "   -   Step: ",S);
+	.send(vehicle1,tell,done);
+	+free;
+	.
++!start_ringing
+	: .my_name(Me) & shopList(List) & find_shops_id(List,[],ListOfShops)
+<-
+//	.print("Starting Ringing");
+	+numberAwarded(.length(List));
+
+	!order_agents_to_go_to_the_shops(ListOfAgents);
+
+	.delete(agents(Me),ListOfAgents,ListOfAgentsWithoutMe);
+	
+	!create_list_of_proposals(ListOfShops,ListOfProposals);
+	
+	!make_proposal(ListOfShops,ListOfProposals,ListOfAgentsWithoutMe,ListOfAgents);
+	. 
++!create_list_of_proposals(ListOfShops, ListOfProposals)
+<-
+	+tempProposalsShopRing([]);	
+	for (.member(Shop, ListOfShops)){
+		?tempProposalsShopRing(InitialList);
+		.concat(InitialList,[currentProposal(Shop,"ini1",100,"ini2",100)],NewList);	
+		-+tempProposalsShopRing(NewList);
+	}
+	
+	?tempProposalsShopRing(FinalList);	
+	ListOfProposals = FinalList;
+	-tempProposalsShopRing(FinalList);
+	.
+
++!calculate_steps_required_all_shops
+	: .my_name(Me) & role(Role, Speed, _, _, _) & shopList(List) & find_shops_id(List,[],ShopsList)
+<- 	
+	pucrs.agentcontest2016.actions.pathsToFacilities(Me, Role, Speed, ShopsList, Proposal);
+	
+	-+myProposal(Proposal);
+	.
++!sendAgentsToTheirShops
+	: tempAgentsSendProposals(ListShopAgent)
+<-
+	for (.member(proposalAgent(Shop,Agent,_),ListShopAgent) ){
+		.send(Agent,achieve,go_to_facility(Shop));
+	}
+	.
++!calculateBestShopToEachAgent
+	: tempComparingProposals(Proposals)
+<-
+//	.print("Checking the nearest agent for each shop");
+	-+tempAgentsSendProposals([]); 
+	
+	for (.member(currentProposal(Shop,FirstAgent,FirstSteps,SecondAgent,SecondSteps),Proposals) ){		
+		Difference = (SecondSteps - FirstSteps);
+		
+		?tempAgentsSendProposals(InitialList);
+		
+		if (.member(proposalAgent(ShopProposal,FirstAgent,DifferenceStepsTwoAgents), InitialList) ){	
+			if (Difference > DifferenceStepsTwoAgents){
+				.difference(InitialList,[proposalAgent(ShopProposal,FirstAgent,DifferenceStepsTwoAgents)],TempProposal);
+				.concat(TempProposal,[proposalAgent(Shop,FirstAgent,Difference)],NewProposals);	
+				-+tempAgentsSendProposals(NewProposals);
+			} 
+		} else{
+			.concat(InitialList,[proposalAgent(Shop,FirstAgent,Difference)],NewProposals);	
+			-+tempAgentsSendProposals(NewProposals);
+		}	
+	}	
+ 	.
++!make_proposal(AvailableShops, Proposals, [], AvailableAgents)
+	: .my_name(Me)
+<-
+//	.print("I'm the last one to make a proposal");
+	!calculate_steps_required_all_shops;
+		
+	!compare_proposals(AvailableShops, Proposals);
+	
+	!calculateBestShopToEachAgent;
+	
+	!sendAgentsToTheirShops;
+	
+	!find_out_the_remaing_agent_and_shops(AvailableShops, AvailableAgents);
+	
+	?tempNewListAvailableShops(NewAvailableShops);
+	!create_list_of_proposals(NewAvailableShops, ListOfProposals);	
+	
+	?tempNextAgent(NextAgent);	
+	?tempListAgentsRing(ListAgents);
+	?tempNewListAvailableAgent(NewAvailableAgents);
+	
+	if (not .empty(NewAvailableShops)){
+		.send(NextAgent,achieve,make_proposal(NewAvailableShops,ListOfProposals,ListAgents,NewAvailableAgents));
+	} else{
+		.print("Ringing is Done");
+		.broadcast(tell,ringingFinished);		
+	}	
+	
+	-tempComparingProposals(_);	
+	-tempAgentsSendProposals(_);
+	-tempNewListAvailableAgent(_);
+	-tempNewListAvailableShops(_);
+	-tempNextAgent(_);
+	-tempListAgentsRing(_);
+	.
++!make_proposal(AvailableShops, Proposals, [agents(NextAgent)|RemainingAgents], AvailableAgents)
+	: .my_name(Me)
+<-
+	!calculate_steps_required_all_shops;
+	.print("Proposal");
+	!compare_proposals(AvailableShops, Proposals);
+	
+	!send_proposal_next_agent(AvailableShops, NextAgent, RemainingAgents, AvailableAgents);
+	
+	-tempComparingProposals(_);	
+	.
++!compare_proposals(AvailableShops, Proposals)
+	: .my_name(Me) & myProposal(MyProposal)
+<-
+	-+tempComparingProposals([]);	
+	
+	for (.member(proposal(_,Shop,MeSteps), MyProposal)){	
+		ShopBusca = Shop;
+		if (.member(currentProposal(Shop,FirstAgent,FirstSteps,SecondAgent,SecondSteps),Proposals) ){		
+			if (MeSteps < FirstSteps){
+				RetSecondAgent 	= FirstAgent;
+				RetSecondSteps 	= FirstSteps;
+				RetFirstAgent 	= Me;
+				RetFirstSteps 	= MeSteps;
+			} else{
+				if (MeSteps < SecondSteps){
+					RetSecondAgent 	= Me;
+					RetSecondSteps 	= MeSteps;
+					RetFirstAgent 	= FirstAgent;
+					RetFirstSteps 	= FirstSteps;
+				} else{
+					RetSecondAgent 	= SecondAgent;
+					RetSecondSteps 	= SecondSteps;
+					RetFirstAgent 	= FirstAgent;
+					RetFirstSteps 	= FirstSteps;
+				}
+			}
+			
+			?tempComparingProposals(InitialList);
+			.concat(InitialList,[currentProposal(Shop,RetFirstAgent,RetFirstSteps,RetSecondAgent,RetSecondSteps)],NewProposals);
+			-+tempComparingProposals(NewProposals);
+		} 
+	}
+	
+	?tempComparingProposals(LastProposals);
+	.
++!compare_proposals(AvailableShops, Proposals)
+<-
+	.print("Passou Aqui, Nao Deveria");
+	?myProposal(MyProposal);	
+	.
++!find_out_the_remaing_agent_and_shops(AvailableShops, AvailableAgents)
+	: tempAgentsSendProposals(ListShopAgent)
+<-
+	+tempNewListAvailableAgent(AvailableAgents);
+	+tempNewListAvailableShops(AvailableShops);
+	
+	for(.member(proposalAgent(Shop,Agent,_),ListShopAgent)){		
+		?tempNewListAvailableAgent(A);		
+		.delete(agents(Agent),A,NewA);	
+		-+tempNewListAvailableAgent(NewA);			
+		
+		?tempNewListAvailableShops(S);
+		.delete(Shop,S,NewS);
+		-+tempNewListAvailableShops(NewS);		
+	}
+	
+	?tempNewListAvailableAgent([agents(Next)|Tail]);
+	-+tempNextAgent(Next);
+	-+tempListAgentsRing(Tail);
+	.
++!send_proposal_next_agent(AvailableShops, NextAgent, RemainingAgents, AvailableAgents)
+	: tempComparingProposals(Proposals)
+<-
+	.send(NextAgent,achieve,make_proposal(AvailableShops, Proposals, RemainingAgents, AvailableAgents));
+	.
++!order_agents_to_go_to_the_shops(ListOfAgents)
+	: .my_name(Me) & not initiatorShopChoice
+<-	
+	.findall(agents(Name),play(Name,truck,_),ListTrucks);
+	.findall(agents(Name),play(Name,car,_),ListCars);
+	.findall(agents(Name),play(Name,motorcycle,_),ListMotorcycles);
+	.findall(agents(Name),play(Name,drone,_),ListDrones);
+
+	.concat(ListDrones,ListMotorcycles,ListCars,ListTrucks,ListOfAgents);
+	.	
+//### RINGING ###
 
 +free
 	: true

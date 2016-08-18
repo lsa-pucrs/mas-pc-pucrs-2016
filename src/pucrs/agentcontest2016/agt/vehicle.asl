@@ -8,6 +8,22 @@
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }
 
+!start.
+
++!start
+	: .my_name(Me)
+<-
+ 	.wait({ +step(_) });
+// 	!waitShopList;
+// 	!calculateStepsRequiredAllShops;
+	if (Me == vehicle1) {
+		+working;
+		!start_ringing;		
+	}
+ 	
+ 	+free;
+    .
+
 +!register(E)
 	: .my_name(Me)
 <-
@@ -33,6 +49,7 @@
 	.concat(File, ".asl", FileExt);
 	.include(FileExt);
 	if (Me == vehicle1) {
+		+working;
 		adoptRole(initiator);
 		.include("initiator.asl");
 		!create_taskboard;

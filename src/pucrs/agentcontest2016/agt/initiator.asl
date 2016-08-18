@@ -6,11 +6,23 @@
 	.
 
 // check if it can start considering jobs again
+
 @done[atomic]
 +done[source(X)]
 	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone & pricedJob(JobId, Items, StorageId)
 <-
 	-pricedJob(JobId, Items, StorageId);
+	-working;
+	-numberAwarded(NumberAgents);
+	for ( done[source(A)] ) {
+		-done[source(A)];
+	}
+	.print("All agents are done, time to start looking for a new job.");
+	.
+@done3[atomic]
++done[source(X)]
+	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
+<-
 	-working;
 	-numberAwarded(NumberAgents);
 	for ( done[source(A)] ) {

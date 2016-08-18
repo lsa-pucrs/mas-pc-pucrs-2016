@@ -25,6 +25,9 @@ calculate_bases_load([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(
 calculate_bases_load([consumed(ItemId,Qty2)|BaseList],Qty,Aux,LoadB) :- product(ItemId,Volume,BaseList2) & BaseList2 \== [] & calculate_bases_load(BaseList2,Qty,Aux,LoadB2) & calculate_bases_load(BaseList,Qty,LoadB2,LoadB).
 calculate_bases_load([tools(ToolId,Qty2)|BaseList],Qty,Aux,LoadB) :- calculate_bases_load(BaseList,Qty,Aux,LoadB).
 
+find_shops_id([],Temp,Result) :- Result = Temp.
+find_shops_id([shop(ShopId,_)|List],Temp,Result) :- find_shops_id(List,[ShopId|Temp],Result).
+
 /* 
 //low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.
 low_battery :- not goHorse & charge(Battery) & roled(_, Speed, _, _, _) & chargingList(List) & closest_facility(List, Facility, RouteLen)

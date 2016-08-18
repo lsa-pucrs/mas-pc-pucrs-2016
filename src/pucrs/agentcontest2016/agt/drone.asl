@@ -1,11 +1,15 @@
-!start.
-
-+!start
-	: true
-<-
- 	.wait({ +step(_) });
- 	+free;
-    .
+//!start.
+//
+//+!start
+//	: true
+//<-
+// 	.wait({ +step(_) });
+// 	
+// 	!waitShopList;
+// 	!calculateStepsRequiredAllShops;
+// 	
+// 	+free;
+//    .
 
 /* 
 +!start
