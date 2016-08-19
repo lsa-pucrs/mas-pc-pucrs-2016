@@ -30,6 +30,7 @@
 		makeArtifact("teamArtifact","pucrs.agentcontest2016.env.TeamArtifact",[]);
 		+working;
 		+max_bid_time(1000);
+		+chargingPrice(0,0);
 //		adoptRole(initiator);
 		.include("initiator.asl");
 		!create_taskboard;

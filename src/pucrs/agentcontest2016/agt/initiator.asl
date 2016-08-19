@@ -23,9 +23,9 @@
 +done[source(X)]
 	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
 <-
+	addPrices;
 	-working;
 	-numberAwarded(NumberAgents);
-	addPrices;
 	for ( done[source(A)] ) {
 		-done[source(A)];
 	}

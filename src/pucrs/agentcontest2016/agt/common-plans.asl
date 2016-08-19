@@ -27,6 +27,8 @@
 +shop(ShopId, Lat, Lng, Items)
 	: shopList(List) & not .member(shop(ShopId,_),List)
 <-
+    .print(ShopId);
+	.print(Items);
 	-+shopList([shop(ShopId,Items)|List]);
 	.
 			
@@ -36,17 +38,23 @@
 //<-
 //	-+storageList([StorageId|List]);
 //	.	
-	
-@chargingList[atomic]
+
+@chargingListv1[atomic]
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
-	:  chargingList(List) & not .member(ChargingId,List) //& chargingPrice(Price2,Rate2)
-<- 
-//	if (Price > Price2)
-//	{
-//		-+chargingPrice(Price,Rate);
-//	}	
+	:  chargingList(List) & not .member(ChargingId,List) & .my_name(Me) & Me == vehicle1 & chargingPrice(Price2,_)
+<-
+	if (Price > Price2) {
+		-+chargingPrice(Price,Rate);
+	}	
 	-+chargingList([ChargingId|List]);
 	.
+@chargingList[atomic]
++chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
+	:  chargingList(List) & not .member(ChargingId,List)
+<-
+	-+chargingList([ChargingId|List]);
+	.
+
 	
 @workshopList[atomic]
 +workshop(WorkshopId,Lat,Lng,Price) 
