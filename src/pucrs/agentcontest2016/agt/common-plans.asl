@@ -27,8 +27,6 @@
 +shop(ShopId, Lat, Lng, Items)
 	: shopList(List) & not .member(shop(ShopId,_),List)
 <-
-    .print(ShopId);
-	.print(Items);
 	-+shopList([shop(ShopId,Items)|List]);
 	.
 			
