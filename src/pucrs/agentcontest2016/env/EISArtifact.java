@@ -145,7 +145,7 @@ public class EISArtifact extends Artifact {
 			for (String agent: agentIds.keySet()) {
 				try {
 					Collection<Percept> percepts = ei.getAllPercepts(agent).get(agentToEntity.get(agent));
-					//populateTeamArtifact(percepts);
+					populateTeamArtifact(percepts);
 					//logger.info("***"+percepts);
 					if (percepts.isEmpty())
 						break;
@@ -181,7 +181,7 @@ public class EISArtifact extends Artifact {
 			if(name.equals("shop")){
 				for(Parameter p: percept.getParameters())
 					if(p.toString().contains("availableItem"))
-						TeamArtifact.addShopItemsPrice(percept.getParameters().get(0).toString(), new ArrayList<Term>());
+						TeamArtifact.addShopItemsPrice(percept.getParameters().get(0).toString(), percept.getParameters().get(3).toString());
 			}
 		}
 	}

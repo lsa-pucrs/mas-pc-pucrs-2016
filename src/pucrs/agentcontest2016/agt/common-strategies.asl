@@ -65,13 +65,17 @@
 	
 //### RINGING ###
 +!ringingFinished
+	: not going(X)
 <-
-	.print("Ringing is over, I was notified");
 	-myProposal(_);
+	+free;
 	.
++!ringingFinished
+<-
+	-myProposal(_);
+	.	
 +!go_to_facility(Facility)
 <-
-	.print("I was send to ", Facility);	
 	-free;
 	!goto(Facility);
 	?step(S);
@@ -116,7 +120,7 @@
 	.
 +!calculate_steps_required_all_shops
 <- 	
-// 	Adicionado este plano pq no de cima de vez em quando a lista de shops não era preenchida e ferrava tudo
+// 	Adicionado este plano pq no de cima de vez em quando a lista de shops nï¿½o era preenchida e ferrava tudo
 	!calculate_steps_required_all_shops;
 	.
 +!sendAgentsToTheirShops
@@ -174,7 +178,8 @@
 		.send(NextAgent,achieve,make_proposal(NewAvailableShops,ListOfProposals,ListAgents,NewAvailableAgents));
 	} else{
 		.print("Ringing is Done");
-		.broadcast(achieve,ringingFinished);		
+		.broadcast(achieve,ringingFinished);
+		!!free;	
 	}	
 	
 	-tempComparingProposals(_);	
@@ -275,6 +280,10 @@
 	.	
 //### RINGING ###
 
++!free
+<-
+	+free;
+	.
 +free
 	: true
 <-

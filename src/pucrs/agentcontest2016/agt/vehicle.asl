@@ -16,11 +16,10 @@
  	.wait({ +step(_) });
 // 	!waitShopList;
 // 	!calculateStepsRequiredAllShops;
+	
 	if (Me == vehicle1) {
 		!start_ringing;		
 	}
- 	
- 	+free;
     .
 
 +!register(E)
@@ -49,7 +48,6 @@
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
 	: .my_name(Me)
 <-
-	.print("Got role: ", Role);
 	.lower_case(Role,File);
 //	adoptRole(File);
 	.concat(File, ".asl", FileExt);
