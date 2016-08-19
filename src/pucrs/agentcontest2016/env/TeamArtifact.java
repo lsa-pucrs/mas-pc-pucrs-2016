@@ -48,6 +48,13 @@ public class TeamArtifact extends Artifact {
 		}
 	}
 	
+	@OPERATION void addPrices(){
+		for (String key : shopItemsPrice.keySet()) {
+			this.defineObsProperty("itemPrice",key,shopItemsPrice.get(key));
+		}
+		
+	}	
+	
 	@OPERATION void addLoad(String agent, int load){
 		this.defineObsProperty("load",agent,load);
 	}

@@ -25,6 +25,7 @@
 <-
 	-working;
 	-numberAwarded(NumberAgents);
+	addPrices;
 	for ( done[source(A)] ) {
 		-done[source(A)];
 	}
