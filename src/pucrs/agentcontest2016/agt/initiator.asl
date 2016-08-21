@@ -1,3 +1,7 @@
+calculateCost([],Aux,Cost) :- Cost = Aux.
+//calculateCost([item(Id,Qty)],Cost) :- item_price(Id,Price) &  Cost = Price * Qty.
+calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(IdS,Price) & calculateCost(List,Aux+Price*Qty,Cost).
+
 +!create_taskboard
 	: true
 <-
@@ -39,7 +43,7 @@
 	
 //@pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & shopList([shop(ShopId,_)|_])
+	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & shopList([shop(ShopId,_)|_]) & chargingPrice(PriceC,Rate)
 <- 
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	.length(Items,NumberTasks);
@@ -62,10 +66,20 @@
 				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
 			}
 			else {
-				+working;
-				.print("Job is viable, starting contract net.");
-				+numberTasks(NumberTasks);
-				!separate_tasks(Items,JobId,StorageId);
+				BatteryFee = math.round((((RouteLenShop / 5 * 10) * NumberTasks) + ((RouteLenStorage / 5 * 10) * NumberTasks)) / Rate) * PriceC;
+				.print("Battery fee ",BatteryFee);
+				?calculateCost(Items,0,Cost);
+				.print("Reward for this job is ",Reward," and we estimate the approximate cost is ",Cost+BatteryFee);
+				if (Cost+BatteryFee < Reward) {
+					.print("Job is viable and profitable, starting contract net.");
+					+working;
+					+numberTasks(NumberTasks);
+					!separate_tasks(Items,JobId,StorageId);
+				}
+				else {
+					.print("Bad job, it could cost more than the reward.");
+					-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
+				}
 			}
 			}
 		else {

@@ -44,7 +44,7 @@ public class TeamArtifact extends Artifact {
 				if (x == 4)
 					x = 0;
 			}
-			logger.info("$> Team Artifact (Item - Price): " + shopItemsPrice);		
+//			logger.info("$> Team Artifact (Item - Price): " + shopItemsPrice);		
 		}
 	}
 	
