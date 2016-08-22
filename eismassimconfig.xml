@@ -17,46 +17,5 @@
     <entity name="connectionA14" username="a14" password="1" iilang="no" xml="no"/>
     <entity name="connectionA15" username="a15" password="1" iilang="no" xml="no"/>
     <entity name="connectionA16" username="a16" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA17" username="a17" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA18" username="a18" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA19" username="a19" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA20" username="a20" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA21" username="a21" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA22" username="a22" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA23" username="a23" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA24" username="a24" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA25" username="a25" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA26" username="a26" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA27" username="a27" password="1" iilang="no" xml="no"/>
-    <entity name="connectionA28" username="a28" password="1" iilang="no" xml="no"/>
-    
-    <entity name="connectionB1" username="b1" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB2" username="b2" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB3" username="b3" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB4" username="b4" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB5" username="b5" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB6" username="b6" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB7" username="b7" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB8" username="b8" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB9" username="b9" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB10" username="b10" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB11" username="b11" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB12" username="b12" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB13" username="b13" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB14" username="b14" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB15" username="b15" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB16" username="b16" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB17" username="b17" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB18" username="b18" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB19" username="b19" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB20" username="b20" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB21" username="b21" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB22" username="b22" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB23" username="b23" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB24" username="b24" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB25" username="b25" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB26" username="b26" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB27" username="b27" password="1" iilang="no" xml="no"/>
-    <entity name="connectionB28" username="b28" password="1" iilang="no" xml="no"/>
   </entities>
 </interfaceConfig>
