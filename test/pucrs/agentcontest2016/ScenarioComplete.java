@@ -9,7 +9,7 @@ import massim.competition2015.monitor.GraphMonitor;
 import massim.server.Server;
 import massim.test.InvalidConfigurationException;
 
-public class ScenarioBatteryTest {
+public class ScenarioComplete {
 
 	@Before
 	public void setUp() {
@@ -25,7 +25,7 @@ public class ScenarioBatteryTest {
 			@Override
 			public void run() {
 				try {
-					Server.main(new String[] { "--conf", "conf/test-complete-3sims/2016-r-random-conf.xml" });
+					Server.main(new String[] { "--conf", "conf/test-complete-3sims/2016-r-random-conf-complete.xml" });
 				} catch (InvalidConfigurationException e) {
 					e.printStackTrace();
 				}
@@ -34,7 +34,7 @@ public class ScenarioBatteryTest {
 
 		try {
 			JaCaMoLauncher runner = new JaCaMoLauncher();
-			runner.init(new String[] { "test/pucrs/agentcontest2016/scenarioBattery.jcm" });
+			runner.init(new String[] { "test/pucrs/agentcontest2016/scenario1.jcm" });
 			runner.getProject().addSourcePath("./src/pucrs/agentcontest2016/agt");
 			runner.create();
 			runner.start();
