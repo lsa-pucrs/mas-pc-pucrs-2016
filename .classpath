@@ -47,5 +47,7 @@
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.12.jar"/>
 	<classpathentry kind="lib" path="lib/intmas.jar"/>
 	<classpathentry kind="lib" path="lib/jade.jar"/>
+	<classpathentry kind="lib" path="lib/javaagents-2.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/javaagents-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
