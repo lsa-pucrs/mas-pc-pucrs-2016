@@ -130,6 +130,29 @@
 		.send(Agent,achieve,go_to_facility(Shop));
 	}
 	.
+//+!calculateBestShopToEachAgent
+//	: tempComparingProposals(Proposals)
+//<-
+////	.print("Checking the nearest agent for each shop");
+//	-+tempAgentsSendProposals([]); 
+//	
+//	for (.member(currentProposal(Shop,FirstAgent,FirstSteps,SecondAgent,SecondSteps),Proposals) ){		
+//		Difference = (SecondSteps - FirstSteps);
+//		
+//		?tempAgentsSendProposals(InitialList);
+//		
+//		if (.member(proposalAgent(ShopProposal,FirstAgent,DifferenceStepsTwoAgents), InitialList) ){	
+//			if (Difference > DifferenceStepsTwoAgents){
+//				.difference(InitialList,[proposalAgent(ShopProposal,FirstAgent,DifferenceStepsTwoAgents)],TempProposal);
+//				.concat(TempProposal,[proposalAgent(Shop,FirstAgent,Difference)],NewProposals);	
+//				-+tempAgentsSendProposals(NewProposals);
+//			} 
+//		} else{
+//			.concat(InitialList,[proposalAgent(Shop,FirstAgent,Difference)],NewProposals);	
+//			-+tempAgentsSendProposals(NewProposals);
+//		}	
+//	}	
+// 	.
 +!calculateBestShopToEachAgent
 	: tempComparingProposals(Proposals)
 <-
@@ -137,18 +160,17 @@
 	-+tempAgentsSendProposals([]); 
 	
 	for (.member(currentProposal(Shop,FirstAgent,FirstSteps,SecondAgent,SecondSteps),Proposals) ){		
-		Difference = (SecondSteps - FirstSteps);
 		
 		?tempAgentsSendProposals(InitialList);
 		
-		if (.member(proposalAgent(ShopProposal,FirstAgent,DifferenceStepsTwoAgents), InitialList) ){	
-			if (Difference > DifferenceStepsTwoAgents){
-				.difference(InitialList,[proposalAgent(ShopProposal,FirstAgent,DifferenceStepsTwoAgents)],TempProposal);
-				.concat(TempProposal,[proposalAgent(Shop,FirstAgent,Difference)],NewProposals);	
+		if (.member(proposalAgent(ShopProposal,FirstAgent,WorstBetterSteps), InitialList) ){	
+			if (FirstSteps > WorstBetterSteps){
+				.difference(InitialList,[proposalAgent(ShopProposal,FirstAgent,WorstBetterSteps)],TempProposal);
+				.concat(TempProposal,[proposalAgent(Shop,FirstAgent,FirstSteps)],NewProposals);	
 				-+tempAgentsSendProposals(NewProposals);
 			} 
 		} else{
-			.concat(InitialList,[proposalAgent(Shop,FirstAgent,Difference)],NewProposals);	
+			.concat(InitialList,[proposalAgent(Shop,FirstAgent,FirstSteps)],NewProposals);	
 			-+tempAgentsSendProposals(NewProposals);
 		}	
 	}	
