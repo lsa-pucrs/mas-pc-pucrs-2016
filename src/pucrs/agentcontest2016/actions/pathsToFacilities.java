@@ -2,6 +2,7 @@ package pucrs.agentcontest2016.actions;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.logging.Logger;
 
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
@@ -11,19 +12,21 @@ import jason.asSyntax.ListTermImpl;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
 import pucrs.agentcontest2016.env.MapHelper;
+import pucrs.agentcontest2016.env.TeamArtifact;
 
 public class pathsToFacilities extends DefaultInternalAction {
 //	private static final long serialVersionUID = 3044142657303654485L;
-
+	private static Logger logger = Logger.getLogger(TeamArtifact.class.getName());
 	@Override
 	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
+		
 		ListTerm proposals = new ListTermImpl();
 		
 		String name = args[0].toString();
 		String role = args[1].toString();
 		int speed 	= Integer.valueOf(args[2].toString());
 		String type = "road";
-		if(role.equals("drone")){
+		if(role.equals("\"Drone\"")){
 			type = "air";
 		}
 		ListTerm ids   = (ListTerm) args[3];

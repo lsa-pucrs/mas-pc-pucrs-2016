@@ -9,7 +9,7 @@ closest_facility(List, Facility1, Facility2) :- role(Role, _, _, _, _) & pucrs.a
 
 route(FacilityId, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen).
 route(FacilityId1, FacilityId2, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen).
-route_drone(FacilityId, RouteLen) :- Role = "drone" & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen).
+route_drone(FacilityId, RouteLen) :- Role = "Drone" & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen).
 
 enough_battery(FacilityId1, FacilityId2, Result) :- role(Role, Speed, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, RouteLen1) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen2) & charge(Battery) & ((Battery > ((RouteLen1 / Speed * 10) + (RouteLen2 / Speed * 10)) & Result = true) | (Result = false)).
 

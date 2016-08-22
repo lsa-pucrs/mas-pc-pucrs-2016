@@ -25,7 +25,7 @@ public class route extends DefaultInternalAction {
 		}
 		String role = args[0].toString();
 		String type = "road";
-		if(role.equals("drone")){
+		if(role.equals("\"Drone\"")){
 			type = "air";
 		}
 		Route route = MapHelper.getNewRoute(from, to, type);

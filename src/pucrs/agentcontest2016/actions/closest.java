@@ -17,7 +17,7 @@ public class closest extends DefaultInternalAction {
 	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
 		String role = args[0].toString();
 		String type = "road";
-		if(role.equals("drone")){
+		if(role.equals("\"Drone\"")){
 			type = "air";
 		}
 		ListTerm ids = (ListTerm) args[1];
