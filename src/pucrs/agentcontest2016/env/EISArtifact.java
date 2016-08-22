@@ -129,7 +129,7 @@ public class EISArtifact extends Artifact {
 		try {
 			String agent = getOpUserName();
 			Action a = Translator.literalToAction(action);
-			ei.performAction(agent, a, agentToEntity.get(agent));
+			ei.performAction(agent, a, agentToEntity.get(agent));			
 		} catch (ActException e) {
 			e.printStackTrace();
 		}

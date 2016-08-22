@@ -1,3 +1,9 @@
++lastAction(Action)
+	: .term2string(Action,ActionS) & (ActionS == "noAction") & lastActionReal(ActionReal)
+<-
+	!commitAction(ActionReal);
+	.
+	
 +simEnd
 	: true
 <-
