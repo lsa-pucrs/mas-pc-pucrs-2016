@@ -59,7 +59,15 @@
 	:  chargingList(List) & lat(Lat) & lon(Lon) & getFacility(FacilityId,Flat,Flon,Aux1,Aux2)
 <-
 	+onMyWay([]);
-	for(.member(ChargingId,List)){
+	?inFacility(Fac);
+	if (.member(Fac,List)) {
+		.delete(Fac,List,List2);
+		
+	}
+	else {
+		List2 = List;
+	}
+	for(.member(ChargingId,List2)){
 		?chargingStation(ChargingId,Clat,Clon,_,_,_);
 		if(math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Lat-Clat)**2+(Lon-Clon)**2)) & math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Clat-Flat)**2+(Clon-Flon)**2))){
 			?onMyWay(AuxList);
@@ -73,12 +81,13 @@
 	?onMyWay(Aux2List);
 	.print("Lista: ",Aux2List);
 	if(.empty(Aux2List)){
-		?closest_facility(List,Facility);
+			?closest_facility(List2,Facility);
 	}
 	else{
 		.print("FacilityID: ",FacilityId);
 		?closest_facility(Aux2List,Facility);
 	}
+	-onMyWay(Aux2List);
 	.print("**** Going to charge my battery at ", Facility);
 	!goto(Facility);
 	!charge;

@@ -33,11 +33,11 @@
 +!goto(FacilityId)
 : not .desire(go_charge(_)) & chargingList(List) & closest_facility(List, FacilityId, FacilityId2) & enough_battery(FacilityId, FacilityId2, Result)
 <-
-    +going(FacilityId);
     if (not Result) {
     	!go_charge(FacilityId);
     }
-	!commitAction(goto(facility(FacilityId)));
+    else {+going(FacilityId); !commitAction(goto(facility(FacilityId)));}
+//	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
 	.
  	
