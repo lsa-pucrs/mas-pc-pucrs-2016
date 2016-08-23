@@ -129,7 +129,7 @@ public class EISArtifact extends Artifact {
 		try {
 			String agent = getOpUserName();
 			Action a = Translator.literalToAction(action);
-			ei.performAction(agent, a, agentToEntity.get(agent));			
+			ei.performAction(agent, a, agentToEntity.get(agent));
 		} catch (ActException e) {
 			e.printStackTrace();
 		}
@@ -332,9 +332,11 @@ public class EISArtifact extends Artifact {
 	static Set<String> step_obs_prop = new HashSet<String>( Arrays.asList(new String[] {
 		"chargingStation",
 		"shop",			
-//		"storage",
+		"storage",
 //		"workshop",
 //		"dump",
+		"lat",
+		"lon",
 		"charge",
 		"load",
 		"inFacility",
@@ -351,9 +353,11 @@ public class EISArtifact extends Artifact {
 	static Set<String> step_obs_propv1 = new HashSet<String>( Arrays.asList(new String[] {
 			"chargingStation",
 			"shop",			
-//			"storage",
+			"storage",
 //			"workshop",
 //			"dump",
+			"lat",
+			"lon",
 			"charge",
 			"load",
 			"inFacility",

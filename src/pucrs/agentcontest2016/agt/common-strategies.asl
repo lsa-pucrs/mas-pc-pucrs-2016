@@ -55,9 +55,30 @@
 	+free;
 	.
 	
-+!go_charge
-	:  chargingList(List) & closest_facility(List, Facility)
++!go_charge(FacilityId)
+	:  chargingList(List) & lat(Lat) & lon(Lon) & getFacility(FacilityId,Flat,Flon,Aux1,Aux2)
 <-
+	+onMyWay([]);
+	for(.member(ChargingId,List)){
+		?chargingStation(ChargingId,Clat,Clon,_,_,_);
+		if(math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Lat-Clat)**2+(Lon-Clon)**2)) & math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Clat-Flat)**2+(Clon-Flon)**2))){
+			?onMyWay(AuxList);
+			-onMyWay(AuxList);
+			+onMyWay([ChargingId|AuxList]);
+			//.print("me-to-facility: ",math.sqrt((Lat-Flat)**2+(Lon-Flon)**2));
+			//.print("me-to-charging: ",math.sqrt((Lat-Clat)**2+(Lon-Clon)**2));
+			//.print("charging-to-facility: ",math.sqrt((Clat-Flat)**2+(Clon-Flon)**2));
+		}
+	}
+	?onMyWay(Aux2List);
+	.print("Lista: ",Aux2List);
+	if(.empty(Aux2List)){
+		?closest_facility(List,Facility);
+	}
+	else{
+		.print("FacilityID: ",FacilityId);
+		?closest_facility(Aux2List,Facility);
+	}
 	.print("**** Going to charge my battery at ", Facility);
 	!goto(Facility);
 	!charge;
