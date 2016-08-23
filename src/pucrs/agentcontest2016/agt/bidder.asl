@@ -31,7 +31,7 @@
 <- 
 	!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId);
 	bid(Bid,Me,ShopId,item(ItemId,Qty))[artifact_id(BoardId)];
-	.print("Bid submitted: ",Bid," for task: ",CNPBoard," at shop ",ShopId);
+//	.print("Bid submitted: ",Bid," for task: ",CNPBoard," at shop ",ShopId);
 	.
 	
 +!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId)

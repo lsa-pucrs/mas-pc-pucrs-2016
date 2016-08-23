@@ -1,3 +1,8 @@
+//+lastAction(Action)
+//	: lastActionReal(ActionReal)
+//<-
+//	.print("Did ",ActionReal," server said ",Action);
+//	.
 +lastAction(Action)
 	: .term2string(Action,ActionS) & (ActionS == "noAction") & lastActionReal(ActionReal)
 <-

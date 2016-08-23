@@ -348,10 +348,12 @@
 +free
 	: true
 <-
-	while ( free )
+	while ( free  & (not going(X) | not charging))
 	{
 		!skip;
+		.wait(10);
 	}
+	-free;
 	.
 /*
 +!go_nearest_shop
