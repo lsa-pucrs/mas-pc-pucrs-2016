@@ -11,7 +11,8 @@ route(FacilityId, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.a
 route(FacilityId1, FacilityId2, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen).
 route_drone(FacilityId, RouteLen) :- Role = "Drone" & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen).
 
-enough_battery(FacilityId1, FacilityId2, Result) :- role(Role, Speed, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, RouteLen1) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen2) & charge(Battery) & ((Battery > ((RouteLen1 / Speed * 10) + (RouteLen2 / Speed * 10)) & Result = true) | (Result = false)).
+enough_battery(FacilityId1, FacilityId2, Result) :- role(Role, Speed, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, RouteLen1) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen2) & charge(Battery) & ((Battery > ((RouteLen1 / Speed * 10) + (RouteLen2 / Speed * 10) + 10) & Result = true) | (Result = false)).
+enough_battery_charging(FacilityId, Result) :- role(Role, Speed, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen)& charge(Battery) & ((Battery > ((RouteLen / Speed * 10) + 10) & Result = true) | (Result = false)).
 
 select_bid([],bid(AuxBid,AuxBidAgent,AuxShopId,AuxItem),bid(BidWinner,BidAgentWinner,ShopIdWinner,ItemWinner)) :- BidWinner = AuxBid & BidAgentWinner = AuxBidAgent & ShopIdWinner = AuxShopId  & ItemWinner = AuxItem.
 select_bid([bid(Bid,BidAgent,ShopId,item(ItemId,Qty))|Bids],bid(AuxBid,AuxBidAgent,AuxShopId,AuxItem),BidWinner) :- Bid \== 0 & Bid < AuxBid & ( ((not awarded(BidAgent,_,_)) )  | (awarded(BidAgent,ShopId,_) & product(ItemId,Volume,BaseList) & .term2string(BidAgent,BidAgentS) & load(BidAgentS,Load) & Load >= Volume*Qty ) ) & select_bid(Bids,bid(Bid,BidAgent,ShopId,item(ItemId,Qty)),BidWinner).

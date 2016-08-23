@@ -46,7 +46,7 @@
 	!goto(ShopId);
 	while ( buyList(Item,Qty,ShopId) ) {
 		!buy(Item,Qty);
-		.wait(500);
+		.wait(1000);
 	}
 	!goto(StorageId);
 	!deliver_job(JobId);
@@ -62,7 +62,6 @@
 	?inFacility(Fac);
 	if (.member(Fac,List)) {
 		.delete(Fac,List,List2);
-		
 	}
 	else {
 		List2 = List;
@@ -79,17 +78,27 @@
 		}
 	}
 	?onMyWay(Aux2List);
-	.print("Lista: ",Aux2List);
+//	.print("Lista: ",Aux2List);
 	if(.empty(Aux2List)){
-			?closest_facility(List2,Facility);
+		?closest_facility(List2,Facility);
+		FacilityAux2 = Facility;
 	}
 	else{
-		.print("FacilityID: ",FacilityId);
+//		.print("FacilityID: ",FacilityId);
 		?closest_facility(Aux2List,Facility);
+		?enough_battery_charging(Facility, Result);
+		if (not Result) {
+			?closest_facility(List2,FacilityAux);
+//			.print("!!!!!!!!!!!!! not enough battery to get to ",Facility," going instead to ",FacilityAux);
+			FacilityAux2 = FacilityAux;
+		}
+		else {
+			FacilityAux2 = Facility;
+		}
 	}
 	-onMyWay(Aux2List);
-	.print("**** Going to charge my battery at ", Facility);
-	!goto(Facility);
+	.print("**** Going to charge my battery at ", FacilityAux2);
+	!goto(FacilityAux2);
 	!charge;
 	.
 	
