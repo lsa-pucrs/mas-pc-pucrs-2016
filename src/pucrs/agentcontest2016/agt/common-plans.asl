@@ -3,12 +3,19 @@
 <-
 	!commitAction(ActionReal);
 	.
-	
+
 +simEnd
-	: true
+	: .my_name(Me) & role(Role, Speed, LoadCap, BatteryCap, Tools)
 <-
 	!end_round;
-	!new_round;	
+	if (Me == vehicle1) {
+		+working;
+		+max_bid_time(1000);
+		+chargingPrice(0,0);
+	}
+	!new_round;
+	+role(Role, Speed, LoadCap, BatteryCap, Tools);
+	!start;
 	.
 
 +inFacility(Facility)

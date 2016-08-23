@@ -221,9 +221,9 @@ public class EISArtifact extends Artifact {
 						if (percept.getName().equals("step")) {
 							step = literal;
 						} else if (percept.getName().equals("simEnd")) {
-							cleanObsProps(step_obs_propv1);
-							cleanObsProps(match_obs_prop);
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
+							//cleanObsProps(step_obs_prop);
+							//cleanObsProps(match_obs_prop);	
 							break;
 						} else {
 							//logger.info("adding "+literal);
@@ -245,9 +245,9 @@ public class EISArtifact extends Artifact {
 						if (percept.getName().equals("step")) {
 							step = literal;
 						} else if (percept.getName().equals("simEnd")) {
-							cleanObsProps(step_obs_prop);
-							cleanObsProps(match_obs_prop);
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
+							//cleanObsProps(step_obs_prop);
+							//cleanObsProps(match_obs_prop);							
 							break;
 						} else {
 							//logger.info("adding "+literal);
