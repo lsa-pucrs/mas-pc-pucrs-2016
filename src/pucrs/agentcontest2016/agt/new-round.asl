@@ -11,5 +11,6 @@
 //	+dumpList([]);
 //	+storageList([]);
 	+shopList([]);
+	+noActionCount(0);
 //	+workshopList([]);
 	.

@@ -216,7 +216,7 @@ public class EISArtifact extends Artifact {
 		if (agent.equals("vehicle1")) {
 			for (Percept percept: percepts) {
 				if (step_obs_propv1.contains(percept.getName())) {
-					if (!previousPercepts.contains(percept)) { // really new perception 
+					if (!previousPercepts.contains(percept) || percept.getName().equals("lastAction")) { // really new perception 
 						Literal literal = Translator.perceptToLiteral(percept);
 						if (percept.getName().equals("step")) {
 							step = literal;
@@ -240,7 +240,7 @@ public class EISArtifact extends Artifact {
 		else {
 			for (Percept percept: percepts) {
 				if (step_obs_prop.contains(percept.getName())) {
-					if (!previousPercepts.contains(percept)) { // really new perception 
+					if (!previousPercepts.contains(percept) || percept.getName().equals("lastAction")) { // really new perception 
 						Literal literal = Translator.perceptToLiteral(percept);
 						if (percept.getName().equals("step")) {
 							step = literal;

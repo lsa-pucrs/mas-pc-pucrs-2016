@@ -4,9 +4,17 @@
 //	.print("Did ",ActionReal," server said ",Action);
 //	.
 +lastAction(Action)
-	: .term2string(Action,ActionS) & (ActionS == "noAction") & lastActionReal(ActionReal)
+	: Action == noAction & lastActionReal(ActionReal) & noActionCount(Count)
 <-
+	-+noActionCount(Count+1);
+	.print(">>>>>>>>>>> I have done ",Count+1," noActions.");
 	!commitAction(ActionReal);
+	.
++lastAction(Action)
+	: Action == noAction & noActionCount(Count)
+<-
+	-+noActionCount(Count+1);
+	.print(">>>>>>>>>>> I have done ",Count+1," noActions.");
 	.
 
 +simEnd
