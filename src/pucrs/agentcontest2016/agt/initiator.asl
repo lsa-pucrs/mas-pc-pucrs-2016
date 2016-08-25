@@ -66,7 +66,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
 			}
 			else {
-				BatteryFee = math.round((((RouteLenShop / 5 * 10) * NumberTasks) + ((RouteLenStorage / 5 * 10) * NumberTasks)) / Rate) * PriceC;
+				BatteryFee = math.round((((RouteLenShop / 5 * 10)) + ((RouteLenStorage / 5 * 10))) / Rate) * (PriceC*Rate);
 				.print("Battery fee ",BatteryFee);
 				?calculateCost(Items,0,Cost);
 				.print("Reward for this job is ",Reward," and we estimate the approximate cost is ",Cost+BatteryFee);

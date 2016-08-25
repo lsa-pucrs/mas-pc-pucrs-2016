@@ -320,6 +320,9 @@
     : step(S)
 <- 
 	-+lastActionReal(Action);
+	if (Action \== skip) {
+		-free;
+	}
 	if (Action \== skip & Action \== continue) {
 	    .print("Action: ",Action, "   -   Step: ",S);
     }	

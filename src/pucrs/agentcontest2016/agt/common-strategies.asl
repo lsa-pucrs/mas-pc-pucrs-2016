@@ -44,9 +44,11 @@
 	: buyList(_,_,ShopId) & .my_name(Me) & role(_, _, LoadCap, _, _)
 <-
 	!goto(ShopId);
-	while ( buyList(Item,Qty,ShopId) ) {
-		!buy(Item,Qty);
-		.wait(1000);
+	for ( buyList(Item2,Qty2,ShopId) ) { 
+		while ( buyList(Item,Qty,ShopId) ) {
+			!buy(Item,Qty);
+			.wait(1000);
+		}
 	}
 	!goto(StorageId);
 	!deliver_job(JobId);
@@ -104,15 +106,16 @@
 	
 //### RINGING ###
 +!ringingFinished
-	: not going(X)
+	: not .desire(goto(_))
 <-
 	-myProposal(_);
-	+free;
+	+free
 	.
 +!ringingFinished
 <-
 	-myProposal(_);
-	.	
+	.
+	
 +!go_to_facility(Facility)
 <-
 	-free;
