@@ -168,7 +168,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 		    	?select_bid(X,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
 		    	.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
 		    	if (not awarded(Agent,_,_)) {
-		    		+awarded(Agent,ShopId,item(ItemId,Qty));
+		    		+awarded(Agent,ShopId,[item(ItemId,Qty)]);
 		    		.term2string(Agent,AgentS);
 		    		?load(AgentS,Load);
 		    		?product(ItemId,Volume,BaseList);
@@ -177,7 +177,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 		    	else {
 		    		?awarded(Agent,ShopId,List);
 		    		-awarded(Agent,ShopId,List);
-		    		.concat([List],[item(ItemId,Qty)],NewList);
+		    		.concat(List,[item(ItemId,Qty)],NewList);
 		    		+awarded(Agent,ShopId,NewList);
 		    		.term2string(Agent,AgentS);
 					?load(AgentS,Load);

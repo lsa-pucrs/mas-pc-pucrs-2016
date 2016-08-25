@@ -37,10 +37,15 @@
 	-going(Facility);
 	.
 	
+//+buyList(ItemId,Qty,ShopId)
+//<-
+//	.print("Added buylist to buy #",Qty," of ",ItemId," at ",ShopId).
+	
 +item(ItemId,Qty)
 	: buyList(ItemId,Qty,ShopId)
 <-
 	-buyList(ItemId,Qty,ShopId);
+//	.print("I have confirmation that I have bought the item sucessfuly: ",ItemId);
 	.
 
 +lastActionResult(Result)

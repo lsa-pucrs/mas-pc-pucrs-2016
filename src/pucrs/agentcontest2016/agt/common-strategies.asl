@@ -46,8 +46,8 @@
 	!goto(ShopId);
 	for ( buyList(Item2,Qty2,ShopId) ) { 
 		while ( buyList(Item,Qty,ShopId) ) {
+			.wait(1500);
 			!buy(Item,Qty);
-			.wait(1000);
 		}
 	}
 	!goto(StorageId);
@@ -109,7 +109,7 @@
 	: not .desire(goto(_))
 <-
 	-myProposal(_);
-	+free
+	+free;
 	.
 +!ringingFinished
 <-

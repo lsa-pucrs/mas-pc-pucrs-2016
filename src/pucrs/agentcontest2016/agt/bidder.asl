@@ -5,15 +5,6 @@
 	.term2string(StorageId,StorageIdS);
   	!make_bid(Task,StorageId,BoardId,CNPBoard);
   	.
-  	
-+winner(item(ItemId,Qty),JobId,StorageId,ShopId) 
-	: true
-<- 
-	-free;
-	.print("Awarded task to get #",Qty," of ",ItemId," at ",ShopId);
-	+buyList(ItemId,Qty,ShopId);
-	!go_work(JobId,StorageId);
-	.
 	
 +winner(List,JobId,StorageId,ShopId) 
 	: true
