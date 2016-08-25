@@ -1,15 +1,16 @@
+// PERIGO, AGENTES ESTÃO COMEÇANDO A DAR A BID ANTES DE TROCAREM DE PASSO
 +task(Task,CNPBoard,StorageIdS)
 <- 
+//	.print("Starting my bid.");
 	lookupArtifact(CNPBoard,BoardId);
 	focus(BoardId);
 	.term2string(StorageId,StorageIdS);
   	!make_bid(Task,StorageId,BoardId,CNPBoard);
   	.
 	
-+winner(List,JobId,StorageId,ShopId) 
++winner(List,JobId,StorageId,ShopId)
 	: true
 <- 
-	-free;
 	.print("Awarded task to get ",List," at ",ShopId);
 	for ( .member(item(ItemId,Qty),List) ) {
 		+buyList(ItemId,Qty,ShopId);

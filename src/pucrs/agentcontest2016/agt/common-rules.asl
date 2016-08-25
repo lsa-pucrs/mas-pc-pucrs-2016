@@ -4,6 +4,9 @@ find_shops(ItemId,[],[]).
 find_shops(ItemId,[shop(ShopId,ListItems)|List],[ShopId|Result]) :- .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
 find_shops(ItemId,[shop(ShopId,ListItems)|List],Result) :- not .member(item(ItemId,_,_,_),ListItems) & find_shops(ItemId,List,Result).
 
+verify_item(ItemId,Qty,Result) :- item(ItemId,Qty) & Result = true.
+verify_item(ItemId,Qty,Result) :- Result = false.
+
 closest_facility(List, Facility) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility).
 closest_facility(List, Facility1, Facility2) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility2, Facility1).
 

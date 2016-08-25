@@ -16,6 +16,13 @@
 	-+noActionCount(Count+1);
 	.print(">>>>>>>>>>> I have done ",Count+1," noActions.");
 	.
+	
++lastActionResult(Result)
+	: Result == failed_random & lastActionReal(Action) & .substring("deliver_job",Action)
+<-
+	.print("Deliver Job failed, executing it again.");
+	!commitAction(Action);
+	.
 
 +simEnd
 	: .my_name(Me) & role(Role, Speed, LoadCap, BatteryCap, Tools)
@@ -41,12 +48,12 @@
 //<-
 //	.print("Added buylist to buy #",Qty," of ",ItemId," at ",ShopId).
 	
-+item(ItemId,Qty)
-	: buyList(ItemId,Qty,ShopId)
-<-
-	-buyList(ItemId,Qty,ShopId);
-//	.print("I have confirmation that I have bought the item sucessfuly: ",ItemId);
-	.
+//+item(ItemId,Qty)
+//	: buyList(ItemId,Qty,ShopId)
+//<-
+//	-buyList(ItemId,Qty,ShopId);
+////	.print("I have confirmation that I have bought the item sucessfuly: ",ItemId);
+//	.
 
 +lastActionResult(Result)
 	: Result == failed_random & lastActionReal(Action) & step(Step)
@@ -102,6 +109,26 @@
 <- 
 	-+dumpList([DumpId|List]);
 	.
+	
++!notFree(Step2)
+//: step(Step1) & Step1 == Step2
+<-
+//	.print("Not free, step ",Step2);
+	.drop_desire(free);
+.
+//+!notFree(Step)
+//<-
+//	.wait({ +step(Step) });
+//	!notFree(Step);
+//	.
+	
++!endCNP
+: not winner(_,_,_,_)
+<-
+//	.print("Bid finished.");
+	!free;
+.
++!endCNP.
 
 @decomp
 +!decomp(Items)

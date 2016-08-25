@@ -316,13 +316,20 @@
 	!commitAction(call_breakdown_service);
 	.	
  
+ 
+//+!commitAction(Action)
+//    : step(S) & stepLast(SL) & S == SL
+//<- 
+//	.print("@@@@@@@@@@@@@@@@@@ Already did an action last step! @@@@@@@@@@@@@@@@@@")
+//	.
 +!commitAction(Action)
     : step(S)
 <- 
+	-+stepLast(S);
 	-+lastActionReal(Action);
-	if (Action \== skip) {
-		-free;
-	}
+//	if (Action \== skip) {
+//		.drop_desire(free);
+//	}
 	if (Action \== skip & Action \== continue) {
 	    .print("Action: ",Action, "   -   Step: ",S);
     }	

@@ -46,15 +46,27 @@
 	!goto(ShopId);
 	for ( buyList(Item2,Qty2,ShopId) ) { 
 		while ( buyList(Item,Qty,ShopId) ) {
-			.wait(1500);
 			!buy(Item,Qty);
+			.wait(1500);
+			?verify_item(Item,Qty,Result);
+			if (Result) {
+//				.print("REMOVENDO ITEM");
+				-buyList(Item,Qty,ShopId);
+			}
+//			else {
+//				for (item(X,Y)) {
+//					.print("Item #",Y," ",X);
+//				}
+//			}
 		}
 	}
 	!goto(StorageId);
 	!deliver_job(JobId);
 	.send(vehicle1,tell,done);
 	updateLoad(Me,LoadCap);
-	+free;
+	?winner(List,JobId,StorageId,ShopId)[source(X)];
+	-winner(List,JobId,StorageId,ShopId)[source(X)];
+	!free;
 	.
 	
 +!go_charge(FacilityId)
@@ -109,7 +121,7 @@
 	: not .desire(goto(_))
 <-
 	-myProposal(_);
-	+free;
+	!free;
 	.
 +!ringingFinished
 <-
@@ -123,7 +135,7 @@
 	?step(S);
 	.print("I have arrived at ", Facility, "   -   Step: ",S);
 	.send(vehicle1,tell,done);
-	+free;
+	!free;
 	.
 +!start_ringing
 	: .my_name(Me) & shopList(List) & find_shops_id(List,[],ListOfShops)
@@ -345,19 +357,24 @@
 //### RINGING ###
 
 +!free
+	: not going(_) | not charging
 <-
-	+free;
+	!skip;
+	.wait(500);
+	!free;
 	.
-+free
-	: true
-<-
-	while ( free  & (not going(X) | not charging))
-	{
-		!skip;
-		.wait(10);
-	}
-	-free;
-	.
+//+!free
+//	: free	
+//+free
+//	: true
+//<-
+//	while ( free  & (not going(X) | not charging))
+//	{
+//		!skip;
+//		.wait(10);
+//	}
+//	-free;
+//	.
 /*
 +!go_nearest_shop
 	: shopList(List) & closest_facility(List, Facility)

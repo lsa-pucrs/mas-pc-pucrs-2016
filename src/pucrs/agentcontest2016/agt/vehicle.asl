@@ -20,6 +20,8 @@
 	if (Me == vehicle1) {
 		!start_ringing;		
 	}
+//-working;
+//!free;
     .
 
 +!register(E)

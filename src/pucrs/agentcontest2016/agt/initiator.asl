@@ -10,7 +10,6 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	.
 
 // check if it can start considering jobs again
-
 @done[atomic]
 +done[source(X)]
 	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone & pricedJob(JobId, Items, StorageId)
@@ -45,6 +44,8 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
 	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & shopList([shop(ShopId,_)|_]) & chargingPrice(PriceC,Rate)
 <- 
+//	.print("Not free step ",Step);
+	.broadcast(achieve,notFree(Step));
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
 	.length(Items,NumberTasks);
 	if ( NumberTasks <= 16) {
@@ -64,6 +65,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 			.print("We estimate ",Total," steps to do priced job ",JobId," that needs ",End-Step," steps");
 			if (Total >  End-Step) {
 				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
+				.broadcast(achieve,endCNP);
 			}
 			else {
 				BatteryFee = math.round((((RouteLenShop / 5 * 10)) + ((RouteLenStorage / 5 * 10))) / Rate) * (PriceC*Rate);
@@ -78,19 +80,23 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 				}
 				else {
 					.print("Bad job, it could cost more than the reward.");
+					.broadcast(achieve,endCNP);
 					-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 				}
 			}
 			}
 		else {
 			.print("Composite items detected, ignoring job.");
+			.broadcast(achieve,endCNP);
 			-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 		}
 	}
 	else {
 		.print("Too many tasks, not enough agents!");
+		.broadcast(achieve,endCNP);
 		-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 	}
+//	.broadcast(achieve,endCNP);
 	.
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
 <-
@@ -153,6 +159,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	    	?select_bid(Bids,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
 			.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
 			.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+			.broadcast(achieve,endCNP);
     	}
 	}
 	else {
@@ -193,6 +200,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 		    	.send(Agent,tell,winner(List,JobId,StorageId,ShopId));
     			-awarded(Agent,ShopId,List);	
 			}
+			.broadcast(achieve,endCNP);
 	    }
 	}
 	.
