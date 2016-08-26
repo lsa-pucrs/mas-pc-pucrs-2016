@@ -46,7 +46,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 <- 
 //	.print("Not free step ",Step);
 	.broadcast(achieve,notFree(Step));
-	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId);
+	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId," started at ",Begin," ends at ",End," and rewards ",Reward);
 	.length(Items,NumberTasks);
 	if ( NumberTasks <= 16) {
 		+count_comp(0);

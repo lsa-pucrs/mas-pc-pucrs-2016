@@ -130,7 +130,6 @@
 	
 +!go_to_facility(Facility)
 <-
-	-free;
 	!goto(Facility);
 	?step(S);
 	.print("I have arrived at ", Facility, "   -   Step: ",S);
@@ -356,6 +355,7 @@
 	.	
 //### RINGING ###
 
+// We need to experiment tweaking the wait value
 +!free
 	: not going(_) | not charging
 <-
@@ -363,18 +363,7 @@
 	.wait(500);
 	!free;
 	.
-//+!free
-//	: free	
-//+free
-//	: true
-//<-
-//	while ( free  & (not going(X) | not charging))
-//	{
-//		!skip;
-//		.wait(10);
-//	}
-//	-free;
-//	.
+
 /*
 +!go_nearest_shop
 	: shopList(List) & closest_facility(List, Facility)

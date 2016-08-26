@@ -77,9 +77,9 @@
 
 @chargingListv1[atomic]
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
-	:  chargingList(List) & not .member(ChargingId,List) & .my_name(Me) & Me == vehicle1 & chargingPrice(Price2,_)
+	:  chargingList(List) & not .member(ChargingId,List) & .my_name(Me) & Me == vehicle1 & chargingPrice(Price2,Rate2)
 <-
-	if (Price > Price2) {
+	if (Price*Rate > Price2*Rate2) {
 		-+chargingPrice(Price,Rate);
 	}	
 	-+chargingList([ChargingId|List]);
