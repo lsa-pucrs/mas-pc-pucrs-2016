@@ -154,7 +154,7 @@ public class EISArtifact extends Artifact {
 						lastStep = currentStep;
 						filterLocations(agent, percepts);
 						//logger.info("Agent "+agent);
-						udpatePerception(agent, previousPercepts, percepts);
+						updatePerception(agent, previousPercepts, percepts);
 						previousPercepts = percepts;
 					}
 				} catch (PerceiveException | NoEnvironmentException e) {
@@ -186,7 +186,7 @@ public class EISArtifact extends Artifact {
 		}
 	}
 
-	private void udpatePerception(String agent, Collection<Percept> previousPercepts, Collection<Percept> percepts) throws JasonException {
+	private void updatePerception(String agent, Collection<Percept> previousPercepts, Collection<Percept> percepts) throws JasonException {
 		if (agent.equals("vehicle1")) {
 			// compute removed perception
 			for (Percept old: previousPercepts) {
@@ -214,6 +214,7 @@ public class EISArtifact extends Artifact {
 		// compute new perception
 		Literal step = null;
 		if (agent.equals("vehicle1")) {
+//			logger.info("############################### START");
 			for (Percept percept: percepts) {
 				if (step_obs_propv1.contains(percept.getName())) {
 					if (!previousPercepts.contains(percept) || percept.getName().equals("lastAction")) { // really new perception 
@@ -226,7 +227,7 @@ public class EISArtifact extends Artifact {
 							//cleanObsProps(match_obs_prop);	
 							break;
 						} else {
-							//logger.info("adding "+literal);
+//							logger.info("adding "+literal);
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
 						}
 					}
@@ -236,8 +237,10 @@ public class EISArtifact extends Artifact {
 					defineObsProperty(literal.getFunctor(), (Object[]) literal.getTermsArray());				
 				}
 			}
+//			logger.info("############################### END");
 		}
 		else {
+//			logger.info("############################### START");
 			for (Percept percept: percepts) {
 				if (step_obs_prop.contains(percept.getName())) {
 					if (!previousPercepts.contains(percept) || percept.getName().equals("lastAction")) { // really new perception 
@@ -250,7 +253,7 @@ public class EISArtifact extends Artifact {
 							//cleanObsProps(match_obs_prop);							
 							break;
 						} else {
-							//logger.info("adding "+literal);
+//							logger.info("adding "+literal);
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
 						}
 					}
@@ -260,7 +263,9 @@ public class EISArtifact extends Artifact {
 					defineObsProperty(literal.getFunctor(), (Object[]) literal.getTermsArray());				
 				}
 			}
+//			logger.info("############################### END");
 		}
+			
 		/*
 		cleanObsProps(step_obs_prop);
 		Literal step = null;
@@ -285,6 +290,7 @@ public class EISArtifact extends Artifact {
 		if (step != null) {
 			//logger.info("adding "+step);
 			//signal(agentIds.get(agent), step.getFunctor(), (Object[]) step.getTermsArray());
+//			logger.info("adding "+step);
 			defineObsProperty(step.getFunctor(), (Object[]) step.getTermsArray());
 		}
 
