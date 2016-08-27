@@ -25,7 +25,7 @@
 +!goto(FacilityId)
 	: going(FacilityId)
 <-
-	!continue;	
+	!continue;
 	!goto(FacilityId);
 	.
 	
@@ -335,6 +335,7 @@
     }	
 	action(Action); // the action in the artifact
 	.wait({ +step(_) }); // wait next step to continue
+	.wait(500);
 //	if (Action \== skip & not (lastActionResult(successful) | lastActionResult(successful_partial))) {
 //		.print("step ",S,", error executing ", Action, " trying again...");
 //		!commitAction(Action);

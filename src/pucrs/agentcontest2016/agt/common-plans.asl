@@ -17,12 +17,14 @@
 	.print(">>>>>>>>>>> I have done ",Count+1," noActions.");
 	.
 	
-+lastActionResult(Result)
-	: Result == failed_random & lastActionReal(Action) & .substring("deliver_job",Action)
-<-
-	.print("Deliver Job failed, executing it again.");
-	!commitAction(Action);
-	.
+//+lastActionResult(Result)
+//	: Result == failed_random & lastActionReal(Action) & .substring("deliver_job",Action)
+//<-
+//	.print("Deliver Job failed, executing it again.");
+//	.drop_desire(free);
+//	!commitAction(Action);
+//	!free;
+//	.
 
 +simEnd
 	: .my_name(Me)

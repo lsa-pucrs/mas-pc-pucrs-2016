@@ -62,6 +62,10 @@
 	}
 	!goto(StorageId);
 	!deliver_job(JobId);
+	while (lastActionResult(ActionResult) & Result == failed_random) {
+		.print("Deliver Job failed, executing it again.");
+		!deliver_job(JobId);
+	}
 	.send(vehicle1,tell,done);
 	updateLoad(Me,LoadCap);
 	?winner(List,JobId,StorageId,ShopId)[source(X)];
@@ -364,7 +368,7 @@
 	: not .desire(goto(_)) | not .desire(charge)
 <-
 	!skip;
-	.wait(500);
+//	.wait(500);
 	!free;
 	.
 
