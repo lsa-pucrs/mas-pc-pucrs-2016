@@ -48,11 +48,11 @@
 		while ( buyList(Item,Qty,ShopId) ) {
 			!buy(Item,Qty);
 			.wait(1500);
-			?verify_item(Item,Qty,Result);
-			if (Result) {
+//			?verify_item(Item,Qty,Result);
+//			if (Result) {
 //				.print("REMOVENDO ITEM");
-				-buyList(Item,Qty,ShopId);
-			}
+//				-buyList(Item,Qty,ShopId);
+//			}
 //			else {
 //				for (item(X,Y)) {
 //					.print("Item #",Y," ",X);
@@ -100,24 +100,52 @@
 	if(.empty(Aux2List)){
 		?closest_facility(List2,Facility);
 		FacilityAux2 = Facility;
+		.print("There is no charging station between me and my goal, going to the nearest one.");
 	}
 	else{
 //		.print("FacilityID: ",FacilityId);
 		?closest_facility(Aux2List,Facility);
 		?enough_battery_charging(Facility, Result);
 		if (not Result) {
+//			.print("I don't even have battery to go to the nearest charging station of the list, go to the nearest overall!");
 			?closest_facility(List2,FacilityAux);
-//			.print("!!!!!!!!!!!!! not enough battery to get to ",Facility," going instead to ",FacilityAux);
 			FacilityAux2 = FacilityAux;
 		}
 		else {
-			FacilityAux2 = Facility;
+			?closest_facility(Aux2List,FacilityId,FacilityAux);
+//			.print("Closest of ",Aux2List," charging station to ",FacilityId," is ",FacilityAux);
+			?enough_battery_charging(FacilityAux, ResultAux);
+			if (ResultAux) {
+				FacilityAux2 = FacilityAux;
+			}
+			else {
+				.delete(FacilityAux,Aux2List,Aux2List2);
+				!check_list_charging(Aux2List2,FacilityId);
+				?charge_in(FacAux);
+				-charge_in(FacAux);
+				FacilityAux2 = FacAux;
+			}
 		}
 	}
 	-onMyWay(Aux2List);
 	.print("**** Going to charge my battery at ", FacilityAux2);
 	!goto(FacilityAux2);
 	!charge;
+	.
+	
++!check_list_charging(List,FacilityId)
+<-
+//	.print("Not enough battery, trying to find another charging station.");
+	?closest_facility(List,FacilityId,Facility);
+//	.print("Closest of ",List," charging station to ",FacilityId," is ",Facility);
+	?enough_battery_charging(Facility, Result);
+	if (Result) {
+		+charge_in(Facility);
+	}
+	else {
+		.delete(Facility,List,ListAux);
+		!check_list_charging(ListAux,FacilityId);
+	}
 	.
 	
 //### RINGING ###

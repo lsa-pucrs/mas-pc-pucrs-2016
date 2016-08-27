@@ -16,7 +16,7 @@ import pucrs.agentcontest2016.env.TeamArtifact;
 
 public class pathsToFacilities extends DefaultInternalAction {
 //	private static final long serialVersionUID = 3044142657303654485L;
-	private static Logger logger = Logger.getLogger(TeamArtifact.class.getName());
+	private static Logger logger = Logger.getLogger(pathsToFacilities.class.getName());
 	@Override
 	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
 		

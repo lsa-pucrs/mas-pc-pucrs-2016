@@ -330,6 +330,9 @@
 //	if (Action \== skip) {
 //		.drop_desire(free);
 //	}
+//	if ( (Action \== continue) & (Action \== skip)) {
+//		.drop_desire(charge);
+//	}
 	if (Action \== skip & Action \== continue) {
 	    .print("Action: ",Action, "   -   Step: ",S);
     }	
