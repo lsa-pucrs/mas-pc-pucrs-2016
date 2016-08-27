@@ -47,6 +47,7 @@ public class EISArtifact extends Artifact {
 	private EnvironmentInterfaceStandard ei;
 	private boolean receiving;
 //	private boolean test = true;
+	private int lastStep = -1;
 	
 	static {
 		String maps[] = new String[] {"london", "clausthal", "hannover" };
@@ -137,7 +138,7 @@ public class EISArtifact extends Artifact {
 
 	@INTERNAL_OPERATION
 	void receiving() throws JasonException {
-		int lastStep = -1;
+		lastStep = -1;
 		Collection<Percept> previousPercepts = new ArrayList<Percept>();
 
 		while (receiving) {
@@ -194,7 +195,7 @@ public class EISArtifact extends Artifact {
 					if (!percepts.contains(old)) { // not perceived anymore
 						Literal literal = Translator.perceptToLiteral(old);
 						removeObsPropertyByTemplate(old.getName(), (Object[]) literal.getTermsArray());
-						//logger.info("removing old perception "+literal);
+//						logger.info("removing old perception "+literal);
 					}
 				}
 			}
@@ -222,18 +223,19 @@ public class EISArtifact extends Artifact {
 						if (percept.getName().equals("step")) {
 							step = literal;
 						} else if (percept.getName().equals("simEnd")) {
+//							cleanObsProps(step_obs_propv1);
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
-							//cleanObsProps(step_obs_prop);
-							//cleanObsProps(match_obs_prop);	
+							cleanObsProps(match_obs_prop);
+							lastStep = -1;
 							break;
 						} else {
 //							logger.info("adding "+literal);
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
 						}
 					}
-				} else if (match_obs_prop.contains(percept.getName())) {
+				} if (match_obs_prop.contains(percept.getName())) {
 					Literal literal = Translator.perceptToLiteral(percept);
-					//logger.info("adding "+literal);
+//					logger.info("adding "+literal);
 					defineObsProperty(literal.getFunctor(), (Object[]) literal.getTermsArray());				
 				}
 			}
@@ -249,15 +251,15 @@ public class EISArtifact extends Artifact {
 							step = literal;
 						} else if (percept.getName().equals("simEnd")) {
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
-							//cleanObsProps(step_obs_prop);
-							//cleanObsProps(match_obs_prop);							
+							cleanObsProps(match_obs_prop);
+							lastStep = -1;						
 							break;
 						} else {
 //							logger.info("adding "+literal);
 							defineObsProperty(percept.getName(), (Object[]) literal.getTermsArray());
 						}
 					}
-				} else if (match_obs_prop.contains(percept.getName())) {
+				} if (match_obs_prop.contains(percept.getName())) {
 					Literal literal = Translator.perceptToLiteral(percept);
 					//logger.info("adding "+literal);
 					defineObsProperty(literal.getFunctor(), (Object[]) literal.getTermsArray());				
@@ -305,7 +307,7 @@ public class EISArtifact extends Artifact {
 	private void cleanObsProp(String obs) {
 		ObsProperty ob = getObsProperty(obs);
 		while (ob != null) {
-			//logger.info("Removing "+ob);
+//			logger.info("Removing "+ob);
 			removeObsProperty(obs);
 			ob = getObsProperty(obs);
 		}

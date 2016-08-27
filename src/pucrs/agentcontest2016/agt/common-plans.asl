@@ -25,7 +25,7 @@
 	.
 
 +simEnd
-	: .my_name(Me) & role(Role, Speed, LoadCap, BatteryCap, Tools)
+	: .my_name(Me)
 <-
 	!end_round;
 	if (Me == vehicle1) {
@@ -34,7 +34,6 @@
 		+chargingPrice(0,0);
 	}
 	!new_round;
-	+role(Role, Speed, LoadCap, BatteryCap, Tools);
 	!start;
 	.
 

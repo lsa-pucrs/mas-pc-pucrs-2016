@@ -130,6 +130,7 @@
 	
 +!go_to_facility(Facility)
 <-
+//    .print("I am going to ", Facility);
 	!goto(Facility);
 	?step(S);
 	.print("I have arrived at ", Facility, "   -   Step: ",S);
@@ -139,7 +140,7 @@
 +!start_ringing
 	: .my_name(Me) & shopList(List) & find_shops_id(List,[],ListOfShops)
 <-
-//	.print("Starting Ringing");
+	.print("Starting Ringing");
 	+numberAwarded(.length(List));
 
 	!order_agents_to_go_to_the_shops(ListOfAgents);
@@ -170,6 +171,7 @@
 	pucrs.agentcontest2016.actions.pathsToFacilities(Me, Role, Speed, ShopsList, Proposal);
 	
 	-+myProposal(Proposal);
+//	.print("My proposal ",Proposal);
 	.
 +!calculate_steps_required_all_shops
 <- 	
@@ -225,8 +227,10 @@
 		} else{
 			.concat(InitialList,[proposalAgent(Shop,FirstAgent,FirstSteps)],NewProposals);	
 			-+tempAgentsSendProposals(NewProposals);
-		}	
+		}
 	}	
+//	?tempAgentsSendProposals(Props);
+//	.print("List of proposals ",Props);
  	.
 +!make_proposal(AvailableShops, Proposals, [], AvailableAgents)
 	: .my_name(Me)
@@ -357,7 +361,7 @@
 
 // We need to experiment tweaking the wait value
 +!free
-	: not going(_) | not charging
+	: not .desire(goto(_)) | not .desire(charge)
 <-
 	!skip;
 	.wait(500);

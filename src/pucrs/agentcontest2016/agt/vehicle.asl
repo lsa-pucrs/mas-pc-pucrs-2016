@@ -8,6 +8,8 @@
 { include("$jacamoJar/templates/common-cartago.asl") }
 //{ include("$jacamoJar/templates/common-moise.asl") }
 
+round(0).
+
 !start.
 
 +!start
@@ -49,12 +51,17 @@
 	.
 
 +role(Role, Speed, LoadCap, BatteryCap, Tools)
-	: .my_name(Me)
+	: .my_name(Me) & round(0)
 <-
 	.lower_case(Role,File);
 //	adoptRole(File);
 	.concat(File, ".asl", FileExt);
 	.include(FileExt);
+	addLoad(Me,LoadCap);
+	.
++role(Role, Speed, LoadCap, BatteryCap, Tools)
+	: .my_name(Me)
+<-
 	addLoad(Me,LoadCap);
 	.
 	

@@ -23,7 +23,7 @@
 
 		<simulation id="2016-testing-sim1of3">
 			<configuration
-					maxNumberOfSteps="50"
+					maxNumberOfSteps="200"
           randomSeed="1460210294175"
 					map="london"
 					seedcapital="50000"
@@ -78,7 +78,7 @@
           <products
             min="14" max="20"
             minVol="10" maxVol="30"
-            assembled="0.4"
+            assembled="0.1"
             minReq="1" maxReq="3" reqAmountMin="1" reqAmountMax="3"
             valueMin="100" valueMax="150" assembledValueAddMin="80" assembledValueAddMax="100"
             toolPercentage="50"
@@ -217,11 +217,17 @@
 		
 		<simulation id="2016-testing-sim2of3">
 			<configuration
-					maxNumberOfSteps="50"
+					maxNumberOfSteps="200"
           randomSeed="1460210294175"
-					map="clausthal"
-					seedcapital="500000" interest="2" minLon="10.3264" minLat="51.7959"
-				maxLon="10.3641" maxLat="51.8122" proximity="0.0002" cellSize="0.001"
+					map="london"
+					seedcapital="50000"
+					interest="2"
+					minLon="-0.1978"
+					minLat="51.4647"
+					maxLon="-0.0354"
+					maxLat="51.5223"
+					proximity="0.0002"
+					cellSize="0.001"
     			serviceTime="25"
 					serviceFee="500"
 			>
@@ -261,12 +267,12 @@
     		&jobs;
 
         <generate products="true" facilities="true" jobs="true" agentLoc="true"
-          mapCenterLat="51.8041" mapCenterLon="10.3453">
+          mapCenterLat="51.4885438" mapCenterLon="-0.1112036">
 
           <products
             min="14" max="20"
             minVol="10" maxVol="30"
-            assembled="0.4"
+            assembled="0.1"
             minReq="1" maxReq="3" reqAmountMin="1" reqAmountMax="3"
             valueMin="100" valueMax="150" assembledValueAddMin="80" assembledValueAddMax="100"
             toolPercentage="50"
@@ -405,11 +411,17 @@
 		
 		<simulation id="2016-testing-sim3of3">
 			<configuration
-					maxNumberOfSteps="50"
+					maxNumberOfSteps="200"
           randomSeed="1460210294175"
-					map="hannover"
-				seedcapital="500000" interest="2" minLon="9.7051" minLat="52.3526"
-				maxLon="9.7686" maxLat="52.3783" proximity="0.0002" cellSize="0.001"
+					map="london"
+					seedcapital="50000"
+					interest="2"
+					minLon="-0.1978"
+					minLat="51.4647"
+					maxLon="-0.0354"
+					maxLat="51.5223"
+					proximity="0.0002"
+					cellSize="0.001"
     			serviceTime="25"
 					serviceFee="500"
 			>
@@ -449,12 +461,12 @@
     		&jobsh;
 
         <generate products="true" facilities="true" jobs="true" agentLoc="true"
-          mapCenterLat="52.3658" mapCenterLon="9.7369">
+          mapCenterLat="51.4885438" mapCenterLon="-0.1112036">
 
           <products
             min="14" max="20"
             minVol="10" maxVol="30"
-            assembled="0.4"
+            assembled="0.1"
             minReq="1" maxReq="3" reqAmountMin="1" reqAmountMax="3"
             valueMin="100" valueMax="150" assembledValueAddMin="80" assembledValueAddMax="100"
             toolPercentage="50"
