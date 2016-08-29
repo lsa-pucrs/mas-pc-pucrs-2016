@@ -36,6 +36,12 @@ public class ScenarioAgainstJavaAgents {
 		new Thread(new Runnable() {
 			 @Override
 			 public void run() {
+				 try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				 App.main(new String[] {"conf/javaagents/javaagentsconfig.xml"});
 			 }
 		}).start();
