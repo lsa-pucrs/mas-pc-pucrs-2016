@@ -1,3 +1,7 @@
+//+visibleChargingStation(_,_,_,_,_,_,Slots)
+//<- .print("Slots occupied: ",Slots).
+//+charge(Battery)
+//<- .print("My battery: ",Battery).
 //+lastAction(Action)
 //	: lastActionReal(ActionReal)
 //<-

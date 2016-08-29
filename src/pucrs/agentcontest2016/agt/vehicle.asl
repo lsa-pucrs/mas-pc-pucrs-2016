@@ -18,13 +18,20 @@ round(0).
  	.wait({ +step(_) });
 // 	!waitShopList;
 // 	!calculateStepsRequiredAllShops;
-	
+//	!test;
 	if (Me == vehicle1) {
 		!start_ringing;		
 	}
 //-working;
 //!free;
     .
+    
+//+!test
+//<- !goto(charging0);
+//   !charge;
+//   !goto(storage0);
+//   !test;
+//   .    
 
 +!register(E)
 	: .my_name(Me)

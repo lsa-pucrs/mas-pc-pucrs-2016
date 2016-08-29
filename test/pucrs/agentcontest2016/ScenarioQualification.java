@@ -6,7 +6,7 @@ import org.junit.Test;
 import jacamo.infra.JaCaMoLauncher;
 import jason.JasonException;
 
-public class ScenarioConnectionTest {
+public class ScenarioQualification {
 
 	@Before
 	public void setUp() {

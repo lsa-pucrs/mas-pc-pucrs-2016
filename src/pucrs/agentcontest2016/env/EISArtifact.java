@@ -339,6 +339,7 @@ public class EISArtifact extends Artifact {
 	
 	static Set<String> step_obs_prop = new HashSet<String>( Arrays.asList(new String[] {
 		"chargingStation",
+//		"visibleChargingStation",
 		"shop",			
 		"storage",
 //		"workshop",
@@ -360,6 +361,7 @@ public class EISArtifact extends Artifact {
 	
 	static Set<String> step_obs_propv1 = new HashSet<String>( Arrays.asList(new String[] {
 			"chargingStation",
+//			"visibleChargingStation",
 			"shop",			
 			"storage",
 //			"workshop",
