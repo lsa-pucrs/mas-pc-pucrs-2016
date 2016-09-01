@@ -78,14 +78,16 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 //			!count_composite(ItemId,Qty,BaseList);
 		}
 //		?count_comp(NumberOfComp);
-//		-count_comp(NumberOfComp);
-		?doable(NumberDo);
-		-doable(NumberDo);
-		.print("Number of doable items: ", NumberDo," out of ",NumberTasks);
-		if (NumberDo == NumberTasks) {
-			//?route_drone(WorkshopId, RouteLenWorkshop);
-			?route_drone(ShopId, RouteLenShop);
-			?route_drone(StorageId, RouteLenStorage);
+//		-count_comp(NumberOfComp); 
+    	?doable(NumberDo); 
+    	-doable(NumberDo); 
+    	.print("Number of doable items: ", NumberDo," out of ",NumberTasks); 
+    	if (NumberDo == NumberTasks) { 
+    		?map_center(CenterLat, CenterLon);
+//			.print("===========", CenterLat, " ", CenterLon);
+//			?route_drone_from_center(CenterLat, CenterLon, WorkshopId, RouteLenWorkshop);
+			?route_drone_from_center(CenterLat, CenterLon, ShopId, RouteLenShop);
+			?route_drone_from_center(CenterLat, CenterLon, StorageId, RouteLenStorage);
 			Total = math.round( (RouteLenShop/5 + RouteLenStorage/5) * NumberTasks );
 			.print("We estimate ",Total," steps to do priced job ",JobId," that needs ",End-Step," steps");
 			if (Total >  End-Step) {
@@ -109,7 +111,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 					-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 				}
 			}
-			}
+		}
 		else {
 			.print("Composite items detected, ignoring job.");
 			.broadcast(achieve,endCNP);
@@ -128,6 +130,32 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 	.
 	
+// Calculate map center, based on shop locations. 
+// This adds a belief of "map_center", so future calls to ?map_center(CenterLat, CenterLon) will not need to perform this code again.
+@map_center[atomic]
++?map_center(CenterLat, CenterLon)
+	: shopList(ShopList)
+<-
+	// These two lists will store respectively latitude and longitude locations of shops
+	-+shopLatitudes([]);
+	-+shopLongitudes([]);
+	for( .member(shop(ShopId,_),ShopList) ) {
+		pucrs.agentcontest2016.actions.getLocation(ShopId, ShopLat, ShopLon);
+		?shopLatitudes(LatList);
+		?shopLongitudes(LonList);
+		-+shopLatitudes([ShopLat | LatList]);
+		-+shopLongitudes([ShopLon | LonList]);
+	}
+	// Add a belief that the center of the map is in the average of the shops locations.
+	?shopLatitudes(LatList);
+	?shopLongitudes(LonList);
+	CenterLat = math.average(LatList);
+	CenterLon = math.average(LonList);
+	-+map_center(CenterLat, CenterLon);
+	-shopLatitudes(_);
+	-shopLongitudes(_);
+	.
+
 @count_composite[atomic]
 +!count_composite(ItemId,Qty,BaseList)
 	: true 
