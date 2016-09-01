@@ -101,12 +101,7 @@
 +!buy(ItemId, Amount)
 	: true
 <-	
-		!commitAction(
-			buy(
-				item(ItemId),
-				amount(Amount)
-			)
-		);
+		!commitAction(buy(item(ItemId),amount(Amount)));
 	.
 
 // Give
@@ -325,6 +320,8 @@
 +!commitAction(Action)
     : step(S)
 <- 
+    action(Action); // the action in the artifact
+	.wait({ +step(_) }); // wait next step to continue
 	-+stepLast(S);
 	-+lastActionReal(Action);
 //	if (Action \== skip) {
@@ -335,9 +332,9 @@
 //	}
 	if (Action \== skip & Action \== continue) {
 	    .print("Action: ",Action, "   -   Step: ",S);
-    }	
-	action(Action); // the action in the artifact
-	.wait({ +step(_) }); // wait next step to continue
+    }
+//	?step(StepNew);
+//	.print("Resuming my action on step ",StepNew);
 	.wait(500);
 //	if (Action \== skip & not (lastActionResult(successful) | lastActionResult(successful_partial))) {
 //		.print("step ",S,", error executing ", Action, " trying again...");

@@ -2,6 +2,23 @@ calculateCost([],Aux,Cost) :- Cost = Aux.
 //calculateCost([item(Id,Qty)],Cost) :- item_price(Id,Price) &  Cost = Price * Qty.
 calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(IdS,Price) & calculateCost(List,Aux+Price*Qty,Cost).
 
++step(1)
+	: shopList(List)
+<-
+	for ( product(ItemId,_,BaseList) ) {
+		if (not .empty(BaseList)) {
+			?find_shops(ItemId,List,ShopsViable);
+//			.print("Shops viable ",ShopsViable);
+			if (not .empty(ShopsViable)) {
+				?assembledInShops(ItemsAsb);
+				-assembledInShops(ItemsAsb);
+				.concat(ItemsAsb,[ItemId],NewList);
+				+assembledInShops(NewList);
+			}
+		}
+	}
+	.
+
 +!create_taskboard
 	: true
 <-
@@ -49,15 +66,23 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId," started at ",Begin," ends at ",End," and rewards ",Reward);
 	.length(Items,NumberTasks);
 	if ( NumberTasks <= 16) {
-		+count_comp(0);
+//		+count_comp(0);
+		+doable(0);
+		?assembledInShops(Assembled);
 		for ( .member(item(ItemId,Qty),Items) ) {
 			?product(ItemId,Volume,BaseList);
-			!count_composite(ItemId,Qty,BaseList);
+			if (.empty(BaseList) | .substring(ItemId,Assembled)) {
+				?doable(NDo);
+				-+doable(NDo+1);
+			}
+//			!count_composite(ItemId,Qty,BaseList);
 		}
-		?count_comp(NumberOfComp);
-		-count_comp(NumberOfComp);
-		.print("Number of composite items: ", NumberOfComp);
-		if (NumberOfComp == 0) {
+//		?count_comp(NumberOfComp);
+//		-count_comp(NumberOfComp);
+		?doable(NumberDo);
+		-doable(NumberDo);
+		.print("Number of doable items: ", NumberDo," out of ",NumberTasks);
+		if (NumberDo == NumberTasks) {
 			//?route_drone(WorkshopId, RouteLenWorkshop);
 			?route_drone(ShopId, RouteLenShop);
 			?route_drone(StorageId, RouteLenStorage);

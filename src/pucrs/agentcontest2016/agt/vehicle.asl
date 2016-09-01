@@ -42,6 +42,7 @@ round(0).
 		+working;
 		+max_bid_time(1000);
 		+chargingPrice(0,0);
+		+assembledInShops([]);
 //		adoptRole(initiator);
 		.include("initiator.asl");
 		!create_taskboard;
