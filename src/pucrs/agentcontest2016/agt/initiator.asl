@@ -17,6 +17,10 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 			}
 		}
 	}
+	?find_shops_id(List,[],List2);
+	?map_center(CenterLat, CenterLon);
+	?closest_facility_from_center(CenterLat, CenterLon, List2, ShopId);
+	+center_shop(ShopId);
 	.
 
 +!create_taskboard
@@ -59,7 +63,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	
 //@pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & shopList([shop(ShopId,_)|_]) & chargingPrice(PriceC,Rate)
+	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
 <- 
 //	.print("Not free step ",Step);
 	.broadcast(achieve,notFree(Step));
@@ -95,7 +99,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 				.broadcast(achieve,endCNP);
 			}
 			else {
-				BatteryFee = math.round((((RouteLenShop / 5 * 10)) + ((RouteLenStorage / 5 * 10))) / Rate) * (PriceC*Rate);
+				BatteryFee = math.round((((RouteLenShop / 5 * 10) * NumberTasks) + ((RouteLenStorage / 5 * 10) * NumberTasks)) / Rate) * (PriceC*Rate);
 				.print("Battery fee ",BatteryFee);
 				?calculateCost(Items,0,Cost);
 				.print("Reward for this job is ",Reward," and we estimate the approximate cost is ",Cost+BatteryFee);

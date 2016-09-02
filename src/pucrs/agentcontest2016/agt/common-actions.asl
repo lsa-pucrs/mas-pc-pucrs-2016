@@ -320,10 +320,11 @@
 +!commitAction(Action)
     : step(S)
 <- 
-    action(Action); // the action in the artifact
-	.wait({ +step(_) }); // wait next step to continue
 	-+stepLast(S);
 	-+lastActionReal(Action);
+    action(Action); // the action in the artifact
+	.wait({ +step(_) }); // wait next step to continue
+
 //	if (Action \== skip) {
 //		.drop_desire(free);
 //	}

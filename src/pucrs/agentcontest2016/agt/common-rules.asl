@@ -8,7 +8,8 @@ verify_item(ItemId,Qty,Result) :- item(ItemId,Qty) & Result = true.
 verify_item(ItemId,Qty,Result) :- Result = false.
 
 closest_facility(List, Facility) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility).
-closest_facility(List, Facility1, Facility2) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility2, Facility1).
+closest_facility(List, Facility1, Facility2) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.closest(Role, List, Facility1, Facility2).
+closest_facility_from_center(CenterLat, CenterLon, List, ShopId) :- Role = "Drone" & pucrs.agentcontest2016.actions.closest(Role, CenterLat, CenterLon, List, ShopId).
 
 route(FacilityId, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId, RouteLen).
 route(FacilityId1, FacilityId2, RouteLen) :- role(Role, _, _, _, _) & pucrs.agentcontest2016.actions.route(Role, FacilityId1, FacilityId2, RouteLen).
