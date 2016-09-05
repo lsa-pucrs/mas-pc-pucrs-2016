@@ -50,7 +50,7 @@ public class EISArtifact extends Artifact {
 	private int lastStep = -1;
 	
 	static {
-		String maps[] = new String[] {"london", "clausthal", "hannover" };
+		String maps[] = new String[] {"london", "hannover", "sanfrancisco" };
 		MapHelper.init(maps[0], 0.001, 0.0002);
 	}
 	
