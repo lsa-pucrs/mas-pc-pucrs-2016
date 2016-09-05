@@ -96,19 +96,19 @@
             <storages density="0.8" costMin="1" costMax="6" capacityMin="7500" capacityMax="15000"/>
           </facilities>
 
-          <jobs
-            rate="0.2" auctionPerc="40"
-            productTypesMin="3" productTypesMax="5"
-            timeMin="70" timeMax="301"
-            valueMin="2000" valueMax="5000"
-            rewardSub="0" rewardAddMin="175" rewardAddMax="200"
-            badJob="0">
-            <auction
-              auctionTimeMin="2" auctionTimeMax="10"
-              fineSub="50" fineAdd="50"
-              maxRewardAdd="50"/>
-            <priced/>
-          </jobs>
+      <jobs
+        rate="0.2" auctionPerc="40"
+        productTypesMin="3" productTypesMax="5"
+        timeMin="70" timeMax="301"
+        valueMin="2000" valueMax="5000"
+        rewardSub="0" rewardAddMin="300" rewardAddMax="301"
+        badJob="0">
+        <auction
+          auctionTimeMin="2" auctionTimeMax="10"
+          fineSub="50" fineAdd="50"
+          maxRewardAdd="100"/>
+        <priced/>
+      </jobs>
         </generate>
 
 			</configuration>
