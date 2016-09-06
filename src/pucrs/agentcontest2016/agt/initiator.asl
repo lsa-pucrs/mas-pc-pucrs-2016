@@ -2,9 +2,19 @@ calculateCost([],Aux,Cost) :- Cost = Aux.
 //calculateCost([item(Id,Qty)],Cost) :- item_price(Id,Price) &  Cost = Price * Qty.
 calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(IdS,Price) & calculateCost(List,Aux+Price*Qty,Cost).
 
+// Isso aqui vai ser necessario para não ser aceito mais jobs na parte final da simulação, assim para de gastar dinheiro com jobs que não serão entregues
+//+step(900)
+//<- 
+//	.print("## I will not receive more jobs");
+//	+notReceiveJobs;
+// 	.
+
 +step(1)
 	: shopList(List)
 <-
+	+shopExplorationInProgess;
+	-+jobsInProgress(0); 
+	
 	for ( product(ItemId,_,BaseList) ) {
 		if (not .empty(BaseList)) {
 			?find_shops(ItemId,List,ShopsViable);
@@ -32,38 +42,159 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 
 // check if it can start considering jobs again
 @done[atomic]
-+done[source(X)]
-	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone & pricedJob(JobId, Items, StorageId)
+//+done[source(X)]
+//	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone & pricedJob(JobId, Items, StorageId)
++done(JobId)[source(X)]
+	: jobsInProgress(NumberJobsProgress) & numberAwarded(JobId,NumberAgents) & .count(done(JobId)[source(_)], NumberDone) & NumberAgents == NumberDone & pricedJob(JobId, Items, StorageId)
 <-
+	-+jobsInProgress(NumberJobsProgress-1);
+	.print("## We Have ",NumberJobsProgress-1," Jobs In Progress Right Now! One Job (",JobId,") is Done");
+	
 	-pricedJob(JobId, Items, StorageId);
-	-working;
-	-numberAwarded(NumberAgents);
-	for ( done[source(A)] ) {
-		-done[source(A)];
+//	-working;
+//	-numberAwarded(NumberAgents);
+//	for ( done[source(A)] ) {
+//		-done[source(A)];
+//	}
+	-numberAwarded(JobId,NumberAgents);
+	for ( done(JobId)[source(A)] ) {
+		-done(JobId)[source(A)];
 	}
 	.print("All agents are done, time to start looking for a new job.");
 	.
+	
 @done3[atomic]
-+done[source(X)]
-	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
+//+done[source(X)]
+//	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
++done(JobId)[source(X)]
+	: jobsInProgress(NumberJobsProgress) & numberAwarded(JobId, NumberAgents) & .count(done(JobId)[source(_)], NumberDone) & NumberAgents == NumberDone
 <-
+	-+jobsInProgress(NumberJobsProgress-1);
+	.print("## We Have ",NumberJobsProgress-1," Jobs In Progress Right Now! One Job2 (",JobId,") is Done");
+
 	addPrices;
-	-working;
-	-numberAwarded(NumberAgents);
-	for ( done[source(A)] ) {
-		-done[source(A)];
+//	-working;
+//	-numberAwarded(NumberAgents);
+//	for ( done[source(A)] ) {
+//		-done[source(A)];
+//	}
+	-numberAwarded(JobId, NumberAgents);
+	for ( done(JobId)[source(A)] ) {
+		-done(JobId)[source(A)];
 	}
 	.print("All agents are done, time to start looking for a new job.");
 	.
+//@done2[atomic]
+//+done[source(X)]
+//<-
+//	.print("An agent has finished its task, waiting for the rest to be done.");
+//	.
 @done2[atomic]
-+done[source(X)]
++done(JobId)[source(X)]
 <-
-	.print("An agent has finished its task, waiting for the rest to be done.");
+	.print(X, " has finished its task (",JobId,"), waiting for the rest to be done.");
+	.
+	
+@done5[atomic]
++doneExploration[source(X)]
+	: numberAwarded(NumberAgents) & .count(doneExploration[source(_)], NumberDone) & NumberAgents == NumberDone
+<-
+	-shopExplorationInProgess;
+	.print("## Shop Exploration Finished");
+
+	addPrices;
+//	-working;
+	-numberAwarded(NumberAgents);
+	for ( doneExploration[source(A)] ) {
+		-doneExploration[source(A)];
+	}
+	.print("All agents are done, time to start looking for a new job.");
+	.	
+@done6[atomic]
++doneExploration[source(X)]
+<-
+	.print(X, " has finished its shop exploration, waiting for the rest to be done.");
 	.
 	
 //@pricedJob[atomic]
+//+pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
+//	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
+//<- 
+////	.print("Not free step ",Step);
+//	.broadcast(achieve,notFree(Step));
+//	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId," started at ",Begin," ends at ",End," and rewards ",Reward);
+//	.length(Items,NumberTasks);
+//	if ( NumberTasks <= 16) {
+////		+count_comp(0);
+//		+doable(0);
+//		?assembledInShops(Assembled);
+//		for ( .member(item(ItemId,Qty),Items) ) {
+//			?product(ItemId,Volume,BaseList);
+//			if (.empty(BaseList) | .substring(ItemId,Assembled)) {
+//				?doable(NDo);
+//				-+doable(NDo+1);
+//			}
+////			!count_composite(ItemId,Qty,BaseList);
+//		}
+////		?count_comp(NumberOfComp);
+////		-count_comp(NumberOfComp); 
+//    	?doable(NumberDo); 
+//    	-doable(NumberDo); 
+//    	.print("Number of doable items: ", NumberDo," out of ",NumberTasks); 
+//    	if (NumberDo == NumberTasks) { 
+//    		?map_center(CenterLat, CenterLon);
+////			.print("===========", CenterLat, " ", CenterLon);
+////			?route_drone_from_center(CenterLat, CenterLon, WorkshopId, RouteLenWorkshop);
+//			?route_drone_from_center(CenterLat, CenterLon, ShopId, RouteLenShop);
+//			?route_drone_from_center(CenterLat, CenterLon, StorageId, RouteLenStorage);
+//			Total = math.round( (RouteLenShop/5 + RouteLenStorage/5) * NumberTasks );
+//			.print("We estimate ",Total," steps to do priced job ",JobId," that needs ",End-Step," steps");
+//			if (Total >  End-Step) {
+//				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
+//				.broadcast(achieve,endCNP);
+//			}
+//			else {
+//				BatteryFee = math.round((((RouteLenShop / 5 * 10) * NumberTasks) + ((RouteLenStorage / 5 * 10) * NumberTasks)) / Rate) * (PriceC*Rate);
+//				.print("Battery fee ",BatteryFee);
+//				?calculateCost(Items,0,Cost);
+//				.print("Reward for this job is ",Reward," and we estimate the approximate cost is ",Cost+BatteryFee);
+//				if (Cost+BatteryFee < Reward) {
+//					.print("Job is viable and profitable, starting contract net.");
+//					+working;
+//					+numberTasks(NumberTasks);
+//					!separate_tasks(Items,JobId,StorageId);
+//				}
+//				else {
+//					.print("Bad job, it could cost more than the reward.");
+//					.broadcast(achieve,endCNP);
+//					-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
+//				}
+//			}
+//		}
+//		else {
+//			.print("Composite items detected, ignoring job.");
+//			.broadcast(achieve,endCNP);
+//			-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
+//		}
+//	}
+//	else {
+//		.print("Too many tasks, not enough agents!");
+//		.broadcast(achieve,endCNP);
+//		-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
+//	}
+////	.broadcast(achieve,endCNP);
+//	.
+
+// AQUI SE DEFINE MAXIMO DE JOBS SERAO FEITOS POR VEZ
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-	: not working & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
+	: jobsInProgress(NumberJobsProgress) & (NumberJobsProgress >= 6)
+<-
+	.print("## We've already reached our maximum number of simultaneous jobs");
+	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
+ 	.
++pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
+//	: not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
+	: not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
 <- 
 //	.print("Not free step ",Step);
 	.broadcast(achieve,notFree(Step));
@@ -105,7 +236,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 				.print("Reward for this job is ",Reward," and we estimate the approximate cost is ",Cost+BatteryFee);
 				if (Cost+BatteryFee < Reward) {
 					.print("Job is viable and profitable, starting contract net.");
-					+working;
+//					+working;
 					+numberTasks(NumberTasks);
 					!separate_tasks(Items,JobId,StorageId);
 				}
@@ -131,6 +262,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	.
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
 <-
+	.print("Job dumped!");
 	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 	.
 	
@@ -250,14 +382,18 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 		    	}
 		    }
 		    .count(awarded(_,_,_),N);
-		    +numberAwarded(N);
+		    +numberAwarded(JobId,N);
 		    -numberTasks(NumberTasks);
 		    for (awarded(Agent,ShopId,List)) {
 		    	.print("Agent ",Agent," to get ",List," in ",ShopId);
 		    	.send(Agent,tell,winner(List,JobId,StorageId,ShopId));
     			-awarded(Agent,ShopId,List);	
-			}
+			}			
 			.broadcast(achieve,endCNP);
+			
+			?jobsInProgress(NumberJobsProgress);
+			-+jobsInProgress(NumberJobsProgress+1);
+			.print("## We Have ",NumberJobsProgress+1," Jobs (",JobId,") In Progress Right Now!");
 	    }
 	}
 	.

@@ -66,7 +66,8 @@
 		.print("Deliver Job failed, executing it again.");
 		!deliver_job(JobId);
 	}
-	.send(vehicle1,tell,done);
+//	.send(vehicle1,tell,done);
+	.send(vehicle1,tell,done(JobId));
 	updateLoad(Me,LoadCap);
 	?winner(List,JobId,StorageId,ShopId)[source(X)];
 	-winner(List,JobId,StorageId,ShopId)[source(X)];
@@ -166,7 +167,7 @@
 	!goto(Facility);
 	?step(S);
 	.print("I have arrived at ", Facility, "   -   Step: ",S);
-	.send(vehicle1,tell,done);
+	.send(vehicle1,tell,doneExploration);
 	!free;
 	.
 +!start_ringing
