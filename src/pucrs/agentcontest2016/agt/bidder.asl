@@ -26,11 +26,12 @@
 //	.print("Bid submitted: ",Bid," for task: ",CNPBoard," at shop ",ShopId);
 	.
 	
-// Se o agente já está trabalhando em um job no próximo job envia uma proposta zerada
+// Se o agente jï¿½ estï¿½ trabalhando em um job no prï¿½ximo job envia uma proposta zerada
 +!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId)
 	: winner(_,_,_,_)
 <-
 	Bid = 0;
+	ShopId = shop0;
 	.
 +!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId)
 	: product(ItemId, Volume, BaseList) & role(_, Speed, LoadCap, _, Tools) & load(Load) & shopList(List) 
