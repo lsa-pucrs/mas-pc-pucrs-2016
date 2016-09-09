@@ -205,7 +205,7 @@
 	pucrs.agentcontest2016.actions.pathsToFacilities(Me, Role, Speed, ShopsList, Proposal);
 	
 	-+myProposal(Proposal);
-//	.print("My proposal ",Proposal);
+	//.print("My proposal ",Proposal);
 	.
 +!calculate_steps_required_all_shops
 <- 	

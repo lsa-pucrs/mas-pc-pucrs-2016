@@ -50,6 +50,8 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	.print("## We Have ",NumberJobsProgress-1," Jobs In Progress Right Now! One Job (",JobId,") is Done");
 	
 	-pricedJob(JobId, Items, StorageId);
+	?agentsFree(AFree);
+	-+agentsFree(AFree + 1);
 //	-working;
 //	-numberAwarded(NumberAgents);
 //	for ( done[source(A)] ) {
@@ -194,7 +196,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 //	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 // 	.
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-	: not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate) & agentsFree(AFree)
+	: not gotHorse & not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate) & agentsFree(AFree)
 //	: not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
 <- 
 //	.print("Not free step ",Step);

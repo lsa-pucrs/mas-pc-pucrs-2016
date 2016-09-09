@@ -14,7 +14,7 @@
 	.
 	
 +!goto(FacilityId)
-	: charge(Battery) & Battery == 0
+	: not goHorse & charge(Battery) & Battery == 0
 <-
 	.print("$> Calling Breakdown Service! I am stuck!");
 	!call_breakdown_service;

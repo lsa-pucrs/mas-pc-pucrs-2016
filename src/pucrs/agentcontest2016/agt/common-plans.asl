@@ -35,6 +35,7 @@
 <-
 	!end_round;
 	setMap;
+	.wait(500);
 	if (Me == vehicle1) {
 		+working;
 		+max_bid_time(1000);
@@ -217,6 +218,13 @@
 	}
 	.
 	
+@goHorse[atomic]	
++step(Step)
+	: steps(TotalSteps) & Step >= TotalSteps - 100 & not goHorse
+<-
+	+goHorse;
+	.print("|||GO-HORSE|||");
+	.
 /* 
 @suspend[atomic]
 +!suspend
@@ -239,14 +247,6 @@
 		-suspended(Goal);
 		.resume(Goal);
 	}.
-
-@goHorse[atomic]	
-+lastStep(Step)
-	: steps(TotalSteps) & Step >= TotalSteps - 20 & not goHorse
-<-
-	+goHorse;
-	.print("|||GOHORSE|||");
-	.
 	
 +charge(Battery)
 	: charging & chargeTotal(BatteryTotal) & BatteryTotal == Battery
