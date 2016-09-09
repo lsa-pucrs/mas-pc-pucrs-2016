@@ -39,6 +39,7 @@
 		+max_bid_time(1000);
 		+chargingPrice(0,0);
 		+assembledInShops([]);
+		+shopExplorationInProgess;
 	}
 	!new_round;
 	!start;

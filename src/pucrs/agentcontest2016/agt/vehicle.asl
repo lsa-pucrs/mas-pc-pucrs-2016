@@ -40,9 +40,11 @@ round(0).
 	if (Me == vehicle1) {
 		makeArtifact("teamArtifact","pucrs.agentcontest2016.env.TeamArtifact",[]);
 		+working;
-		+max_bid_time(1000);
+		+max_bid_time(2000);
 		+chargingPrice(0,0);
 		+assembledInShops([]);
+		+agentsFree(16);
+		+shopExplorationInProgess;
 //		adoptRole(initiator);
 		.include("initiator.asl");
 		!create_taskboard;

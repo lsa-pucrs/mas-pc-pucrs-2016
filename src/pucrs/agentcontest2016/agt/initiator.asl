@@ -2,8 +2,8 @@ calculateCost([],Aux,Cost) :- Cost = Aux.
 //calculateCost([item(Id,Qty)],Cost) :- item_price(Id,Price) &  Cost = Price * Qty.
 calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(IdS,Price) & calculateCost(List,Aux+Price*Qty,Cost).
 
-// Isso aqui vai ser necessario para não ser aceito mais jobs na parte final da simulação, assim para de gastar dinheiro com jobs que não serão entregues
-//+step(900)
+// Isso aqui vai ser necessario para nï¿½o ser aceito mais jobs na parte final da simulaï¿½ï¿½o, assim para de gastar dinheiro com jobs que nï¿½o serï¿½o entregues
+//+step(400)
 //<- 
 //	.print("## I will not receive more jobs");
 //	+notReceiveJobs;
@@ -12,7 +12,6 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 +step(1)
 	: shopList(List)
 <-
-	+shopExplorationInProgess;
 	-+jobsInProgress(0); 
 	
 	for ( product(ItemId,_,BaseList) ) {
@@ -70,7 +69,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	: jobsInProgress(NumberJobsProgress) & numberAwarded(JobId, NumberAgents) & .count(done(JobId)[source(_)], NumberDone) & NumberAgents == NumberDone
 <-
 	-+jobsInProgress(NumberJobsProgress-1);
-	.print("## We Have ",NumberJobsProgress-1," Jobs In Progress Right Now! One Job2 (",JobId,") is Done");
+	.print("## We Have ",NumberJobsProgress-1," Jobs In Progress Right Now! Job (",JobId,") is Done");
 
 	addPrices;
 //	-working;
@@ -92,6 +91,8 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 @done2[atomic]
 +done(JobId)[source(X)]
 <-
+	?agentsFree(AFree);
+	-+agentsFree(AFree + 1);
 	.print(X, " has finished its task (",JobId,"), waiting for the rest to be done.");
 	.
 	
@@ -185,22 +186,22 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 ////	.broadcast(achieve,endCNP);
 //	.
 
-// AQUI SE DEFINE MAXIMO DE JOBS SERAO FEITOS POR VEZ
+//// AQUI SE DEFINE MAXIMO DE JOBS SERAO FEITOS POR VEZ
+//+pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
+//	: jobsInProgress(NumberJobsProgress) & (NumberJobsProgress >= 6)
+//<-
+//	.print("## We've already reached our maximum number of simultaneous jobs");
+//	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
+// 	.
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-	: jobsInProgress(NumberJobsProgress) & (NumberJobsProgress >= 6)
-<-
-	.print("## We've already reached our maximum number of simultaneous jobs");
-	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
- 	.
-+pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-//	: not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
-	: not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
+	: not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate) & agentsFree(AFree)
+//	: not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
 <- 
 //	.print("Not free step ",Step);
 	.broadcast(achieve,notFree(Step));
 	.print("New priced job: ",JobId," Items: ",Items, " Storage: ", StorageId," started at ",Begin," ends at ",End," and rewards ",Reward);
 	.length(Items,NumberTasks);
-	if ( NumberTasks <= 16) {
+	if ( NumberTasks <= AFree) {
 //		+count_comp(0);
 		+doable(0);
 		?assembledInShops(Assembled);
@@ -384,6 +385,8 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 		    .count(awarded(_,_,_),N);
 		    +numberAwarded(JobId,N);
 		    -numberTasks(NumberTasks);
+		    ?agentsFree(AFree);
+		    -+agentsFree(AFree-N);
 		    for (awarded(Agent,ShopId,List)) {
 		    	.print("Agent ",Agent," to get ",List," in ",ShopId);
 		    	.send(Agent,tell,winner(List,JobId,StorageId,ShopId));

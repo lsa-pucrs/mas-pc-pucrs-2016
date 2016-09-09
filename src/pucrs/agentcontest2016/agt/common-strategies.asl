@@ -47,7 +47,8 @@
 	for ( buyList(Item2,Qty2,ShopId) ) { 
 		while ( buyList(Item,Qty,ShopId) ) {
 			!buy(Item,Qty);
-			.wait(1500);
+//			.wait(1500);
+			!skip;
 //			?verify_item(Item,Qty,Result);
 //			if (Result) {
 //				.print("REMOVENDO ITEM");
