@@ -3,7 +3,6 @@ package pucrs.agentcontest2016.env;
 import jason.JasonException;
 import jason.NoValueException;
 import jason.asSyntax.Literal;
-import jason.asSyntax.Term;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,15 +47,14 @@ public class EISArtifact extends Artifact {
 	private boolean receiving;
 //	private boolean test = true;
 	private int lastStep = -1;
+	private int round = 0;
+	private String maps[] = new String[] {"london", "hannover", "sanfrancisco" };
 	
-	static {
-		String maps[] = new String[] {"london", "hannover", "sanfrancisco" };
-		MapHelper.init(maps[0], 0.001, 0.0002);
-	}
 	
 	public EISArtifact() {
 		agentIds      = new ConcurrentHashMap<String, AgentId>();
 		agentToEntity = new ConcurrentHashMap<String, String>();
+		MapHelper.init(maps[round], 0.001, 0.0002);
 	}
 
 	protected void init() throws IOException, InterruptedException {
@@ -135,12 +133,19 @@ public class EISArtifact extends Artifact {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@INTERNAL_OPERATION
+	void setMap(){
+		round++;
+		MapHelper.init(maps[round], 0.001, 0.0002);
+		System.out.println("$> MAP: " + maps[round]);
+	}
+	
 	@INTERNAL_OPERATION
 	void receiving() throws JasonException {
 		lastStep = -1;
 		Collection<Percept> previousPercepts = new ArrayList<Percept>();
-
+		
 		while (receiving) {
 			await_time(100);
 			for (String agent: agentIds.keySet()) {
@@ -332,12 +337,16 @@ public class EISArtifact extends Artifact {
 //}));
 
 	static Set<String> match_obs_prop = new HashSet<String>( Arrays.asList(new String[] {
+		"simStart",
+		"map",
 		"steps",
 		"product",
 		"role",
 	}));
 	
 	static Set<String> step_obs_prop = new HashSet<String>( Arrays.asList(new String[] {
+		"simStart",
+		"map",
 		"chargingStation",
 //		"visibleChargingStation",
 		"shop",			
@@ -360,6 +369,8 @@ public class EISArtifact extends Artifact {
 	}));
 	
 	static Set<String> step_obs_propv1 = new HashSet<String>( Arrays.asList(new String[] {
+			"simStart",
+			"map",
 			"chargingStation",
 //			"visibleChargingStation",
 			"shop",			

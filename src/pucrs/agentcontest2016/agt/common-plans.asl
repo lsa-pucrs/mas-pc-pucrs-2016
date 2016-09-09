@@ -34,6 +34,7 @@
 	: .my_name(Me)
 <-
 	!end_round;
+	setMap;
 	if (Me == vehicle1) {
 		+working;
 		+max_bid_time(1000);
