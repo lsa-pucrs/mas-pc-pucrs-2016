@@ -193,7 +193,7 @@ public class EISArtifact extends Artifact {
 	}
 
 	private void updatePerception(String agent, Collection<Percept> previousPercepts, Collection<Percept> percepts) throws JasonException {
-		if (agent.equals("vehicle1")) {
+		if (agent.equals("vehicle15")) {
 			// compute removed perception
 			for (Percept old: previousPercepts) {
 				if (step_obs_propv1.contains(old.getName())) {
@@ -219,7 +219,7 @@ public class EISArtifact extends Artifact {
 		
 		// compute new perception
 		Literal step = null;
-		if (agent.equals("vehicle1")) {
+		if (agent.equals("vehicle15")) {
 //			logger.info("############################### START");
 			for (Percept percept: percepts) {
 				if (step_obs_propv1.contains(percept.getName())) {

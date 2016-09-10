@@ -36,7 +36,7 @@
 	!end_round;
 	setMap;
 	.wait(500);
-	if (Me == vehicle1) {
+	if (Me == vehicle15) {
 		+working;
 		+max_bid_time(1000);
 		+chargingPrice(0,0);
@@ -86,7 +86,7 @@
 
 @chargingListv1[atomic]
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 
-	:  chargingList(List) & not .member(ChargingId,List) & .my_name(Me) & Me == vehicle1 & chargingPrice(Price2,Rate2)
+	:  chargingList(List) & not .member(ChargingId,List) & .my_name(Me) & Me == vehicle15 & chargingPrice(Price2,Rate2)
 <-
 	if (Price*Rate > Price2*Rate2) {
 		-+chargingPrice(Price,Rate);

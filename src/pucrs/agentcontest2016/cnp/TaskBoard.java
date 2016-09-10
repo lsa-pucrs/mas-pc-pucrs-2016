@@ -23,7 +23,7 @@ public class TaskBoard extends Artifact {
 		try {
 			String artifactName = "cnp_board_"+taskId;
 			makeArtifact(artifactName, "pucrs.agentcontest2016.cnp.ContractNetBoard", new ArtifactConfig(taskDescr,duration));
-			defineObsProperty("task", Literal.parseLiteral(taskDescr), artifactName, storageId);
+			defineObsProperty("task", Literal.parseLiteral(taskDescr), artifactName, storageId, taskId);
 			id.set(artifactName);
 		} catch (Exception ex){
 			logger.info("announce_failed");
@@ -31,7 +31,7 @@ public class TaskBoard extends Artifact {
 	}
 	
 	@OPERATION void clear(String artifactName){
-		this.removeObsPropertyByTemplate("task", null, artifactName, null);
+		this.removeObsPropertyByTemplate("task", null, artifactName, null, null);
 	}
 	
 }

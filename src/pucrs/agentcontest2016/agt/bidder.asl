@@ -1,7 +1,7 @@
 // PERIGO, AGENTES ESTÃO COMEÇANDO A DAR A BID ANTES DE TROCAREM DE PASSO
-+task(Task,CNPBoard,StorageIdS)
++task(Task,CNPBoard,StorageIdS,TaskId)
 <- 
-//	.print("Starting my bid.");
+//	.print("Starting my bid for task ",TaskId);
 	lookupArtifact(CNPBoard,BoardId);
 	focus(BoardId);
 	.term2string(StorageId,StorageIdS);

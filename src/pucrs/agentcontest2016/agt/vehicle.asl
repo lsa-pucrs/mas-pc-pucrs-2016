@@ -19,7 +19,7 @@ round(0).
 // 	!waitShopList;
 // 	!calculateStepsRequiredAllShops;
 //	!test;
-	if (Me == vehicle1) {
+	if (Me == vehicle15) {
 		!start_ringing;		
 	}
 //-working;
@@ -37,7 +37,7 @@ round(0).
 	: .my_name(Me)
 <-
 	!new_round;
-	if (Me == vehicle1) {
+	if (Me == vehicle15) {
 		makeArtifact("teamArtifact","pucrs.agentcontest2016.env.TeamArtifact",[]);
 		+working;
 		+max_bid_time(2000);

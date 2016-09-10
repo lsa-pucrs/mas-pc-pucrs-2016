@@ -189,14 +189,14 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 //	.
 
 //// AQUI SE DEFINE MAXIMO DE JOBS SERAO FEITOS POR VEZ
-//+pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-//	: jobsInProgress(NumberJobsProgress) & (NumberJobsProgress >= 6)
-//<-
-//	.print("## We've already reached our maximum number of simultaneous jobs");
-//	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
-// 	.
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-	: not gotHorse & not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate) & agentsFree(AFree)
+	: jobsInProgress(NumberJobsProgress) & (NumberJobsProgress == 2)
+<-
+	.print("## We've already reached our maximum number of simultaneous jobs");
+	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
+ 	.
++pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
+	: not goHorse & not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate) & agentsFree(AFree)
 //	: not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
 <- 
 //	.print("Not free step ",Step);
