@@ -30,6 +30,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	?map_center(CenterLat, CenterLon);
 	?closest_facility_from_center(CenterLat, CenterLon, List2, ShopId);
 	+center_shop(ShopId);
+	.broadcast(tell,explorationInProgress);
 	.
 
 +!create_taskboard
@@ -111,6 +112,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	for ( doneExploration[source(A)] ) {
 		-doneExploration[source(A)];
 	}
+	.broadcast(untell,explorationInProgress);
 	.print("All agents are done, time to start looking for a new job.");
 	.	
 @done6[atomic]
@@ -195,6 +197,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 //	.print("## We've already reached our maximum number of simultaneous jobs");
 //	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
 // 	.
+
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
 	: not gotHorse & not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate) & agentsFree(AFree)
 //	: not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)

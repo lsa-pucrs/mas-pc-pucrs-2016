@@ -77,12 +77,12 @@
 	-+shopList([shop(ShopId,Items)|List]);
 	.
 			
-//@storageList[atomic]
-//+storage(StorageId, Lat, Lng, Price, TotCap, UsedCap, Items)
-//	: storageList(List) & not .member(StorageId,List)
-//<-
-//	-+storageList([StorageId|List]);
-//	.	
+@storageList[atomic]
++storage(StorageId, Lat, Lng, Price, TotCap, UsedCap, Items)
+	: storageList(List) & not .member(StorageId,List)
+<-
+	-+storageList([StorageId|List]);
+	.	
 
 @chargingListv1[atomic]
 +chargingStation(ChargingId,Lat,Lng,Rate,Price,Slots) 

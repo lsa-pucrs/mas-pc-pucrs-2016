@@ -9,7 +9,7 @@
 //	+auctionSteps(3);
 	+chargingList([]);
 //	+dumpList([]);
-//	+storageList([]);
+	+storageList([]);
 	+shopList([]);
 	+noActionCount(0);
 //	+workshopList([]);

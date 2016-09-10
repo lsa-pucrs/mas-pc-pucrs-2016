@@ -27,18 +27,6 @@
 		!assemble(Item);
 	}
 	.
-	
-+!post_priced
-	: storageList([StorageId|_]) & steps(Steps) & activePricedSteps(Active)
-<-
-	 !post_job_priced(Active, Steps, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
-	 .
-	 
-+!post_auction
-	: storageList([StorageId|_]) & rewardAuction(Reward) & fineAuction(Fine) & activeAuctionSteps(Active) & auctionSteps(ActiveAuction)
-<-
-	 !post_job_auction(Reward, Fine, Active, ActiveAuction, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
-	 .
 	 
 +!go_work(JobId,StorageId)
 	: buyList(_,_,ShopId) & .my_name(Me) & role(_, _, LoadCap, _, _)
@@ -392,6 +380,33 @@
 	//.print("AGENTS ",ListOfAgents);
 	.	
 //### RINGING ###
+
++!free
+	: explorationInProgress & storageList([StorageId|_])
+<- 	
+	// Select a random item from product list
+	+itemList([]);
+	for ( product(ItemId,Volume,BaseList) ) {
+		?itemList(List);
+		-+itemList([ItemId|List]);
+	}
+	?itemList(List);
+	.nth(math.floor(math.random(.length(List))), List, X);
+	// Select the number of items to be posted (between 1 and 10)
+	+randomNumberOfItems(math.ceil(math.random(10)));
+	?randomNumberOfItems(NumberOfItems);
+	// Decide if we are going to post an auction or a priced job, with the random product selected
+	.random(N);
+	if(N < 0.5) {
+		// Posting auction job
+		!post_job_auction(777, 1500, 15, 20, StorageId, [item(X,NumberOfItems)]);
+	} else {
+		// Posting priced job
+		!post_job_priced(888, 15, StorageId, [item(X,NumberOfItems)]);
+	}
+	-itemList(_);
+	-randomNumberOfItems(_);
+	!free.
 
 // We need to experiment tweaking the wait value
 +!free
