@@ -71,7 +71,7 @@ public class ContractNetBoard extends Artifact {
 	}
 	
 	private boolean allAgentsMadeTheirBid(){
-		 return bids.size() == EISArtifact.getRegisteredAgents().size();
+		 return bids.size() == EISArtifact.getRegisteredAgents().size()-1;
 	}
 	
 	static public class Bid {

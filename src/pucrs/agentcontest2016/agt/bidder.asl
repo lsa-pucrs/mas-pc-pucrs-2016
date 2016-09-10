@@ -1,5 +1,11 @@
 // PERIGO, AGENTES ESTÃO COMEÇANDO A DAR A BID ANTES DE TROCAREM DE PASSO
 +task(Task,CNPBoard,StorageIdS,TaskId)
+	: .my_name(Me) & Me == vehicle15
+<- 
+	-task(Task,CNPBoard,StorageIdS,TaskId);
+  	.
+
++task(Task,CNPBoard,StorageIdS,TaskId)
 <- 
 //	.print("Starting my bid for task ",TaskId);
 	lookupArtifact(CNPBoard,BoardId);

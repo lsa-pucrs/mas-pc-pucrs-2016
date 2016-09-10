@@ -195,6 +195,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	.print("## We've already reached our maximum number of simultaneous jobs");
 	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
  	.
+@pricedJob[atomic]
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
 	: not goHorse & not notReceiveJobs & not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate) & agentsFree(AFree)
 //	: not shopExplorationInProgess & not pricedJob(JobId,Items,StorageId) & not cnp(_) & step(Step) & center_shop(ShopId) & chargingPrice(PriceC,Rate)
@@ -224,9 +225,9 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
     		?map_center(CenterLat, CenterLon);
 //			.print("===========", CenterLat, " ", CenterLon);
 //			?route_drone_from_center(CenterLat, CenterLon, WorkshopId, RouteLenWorkshop);
-			?route_drone_from_center(CenterLat, CenterLon, ShopId, RouteLenShop);
-			?route_drone_from_center(CenterLat, CenterLon, StorageId, RouteLenStorage);
-			Total = math.round( (RouteLenShop/5 + RouteLenStorage/5) * NumberTasks );
+			?route_car_from_center(CenterLat, CenterLon, ShopId, RouteLenShop);
+			?route_car_from_center(CenterLat, CenterLon, StorageId, RouteLenStorage);
+			Total = math.round( (RouteLenShop/3 + RouteLenStorage/3) * NumberTasks );
 			.print("We estimate ",Total," steps to do priced job ",JobId," that needs ",End-Step," steps");
 			if (Total >  End-Step) {
 				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
