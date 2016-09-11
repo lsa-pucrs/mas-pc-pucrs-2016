@@ -11,7 +11,7 @@
 	lookupArtifact(CNPBoard,BoardId);
 	focus(BoardId);
 	.term2string(StorageId,StorageIdS);
-  	!make_bid(Task,StorageId,BoardId,CNPBoard);
+  	!make_bid(Task,StorageId,BoardId,CNPBoard,TaskId);
   	.
 	
 +winner(List,JobId,StorageId,ShopId)
@@ -24,22 +24,22 @@
 	!go_work(JobId,StorageId);
 	.
 
-+!make_bid(item(ItemId,Qty),StorageId,BoardId,CNPBoard)
++!make_bid(item(ItemId,Qty),StorageId,BoardId,CNPBoard,TaskId)
 	: .my_name(Me)
 <- 
-	!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId);
+	!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId);
 	bid(Bid,Me,ShopId,item(ItemId,Qty))[artifact_id(BoardId)];
 //	.print("Bid submitted: ",Bid," for task: ",CNPBoard," at shop ",ShopId);
 	.
 	
 // Se o agente j� est� trabalhando em um job no pr�ximo job envia uma proposta zerada
-+!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId)
++!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId)
 	: winner(_,_,_,_)
 <-
-	Bid = 0;
+	Bid = -1;
 	ShopId = shop0;
 	.
-+!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId)
++!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId)
 	: product(ItemId, Volume, BaseList) & role(_, Speed, LoadCap, _, Tools) & load(Load) & shopList(List) 
 <- 
 	?find_shops(ItemId,List,ShopsViable);
@@ -52,13 +52,13 @@
 		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));		
 	}
 	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
-		Bid = 0;
+		Bid = -1;
 	}	
 	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
 		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
 	}
 	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
-		Bid = 0;
+		Bid = -1;
 	}
 	.	 
 
