@@ -234,7 +234,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 				.broadcast(achieve,endCNP);
 			}
 			else {
-				BatteryFee = math.round((((RouteLenShop / 5 * 10) * NumberTasks) + ((RouteLenStorage / 5 * 10) * NumberTasks)) / Rate) * (PriceC*Rate);
+				BatteryFee = math.round((((RouteLenShop / 3 * 10) * NumberTasks) + ((RouteLenStorage / 3 * 10) * NumberTasks)) / Rate) * (PriceC*Rate);
 				.print("Battery fee ",BatteryFee);
 				?calculateCost(Items,0,Cost);
 				.print("Reward for this job is ",Reward," and we estimate the approximate cost is ",Cost+BatteryFee);
