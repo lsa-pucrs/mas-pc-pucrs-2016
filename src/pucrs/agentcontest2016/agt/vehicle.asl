@@ -16,11 +16,29 @@ round(0).
 	: .my_name(Me)
 <-
  	.wait({ +step(_) });
+// 	if ((Me == vehicle8) | (Me == vehicle5)) {
+// 		!goto(dump3);
+// 		for (item(ItemId,Qty)) {
+// 			!dump(ItemId,Qty);
+// 		}
+// 	} 	
+// 	if ((Me == vehicle7)) {
+// 		!goto(dump0);
+// 		 		for (item(ItemId,Qty)) {
+// 			!dump(ItemId,Qty);
+// 		}
+// 	}
+// 	if ((Me == vehicle10)) {
+// 		!goto(dump1);
+// 		 		for (item(ItemId,Qty)) {
+// 			!dump(ItemId,Qty);
+// 		}
+// 	} 	
 // 	!waitShopList;
 // 	!calculateStepsRequiredAllShops;
 //	!test;
 	if (Me == vehicle15) {
-		!start_ringing;		
+		!start_ringing;	
 	}
 //-working;
 //!free;

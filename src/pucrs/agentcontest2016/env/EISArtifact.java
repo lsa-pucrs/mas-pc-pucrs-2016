@@ -48,7 +48,9 @@ public class EISArtifact extends Artifact {
 //	private boolean test = true;
 	private int lastStep = -1;
 	private int round = 0;
-	private String maps[] = new String[] {"london", "hannover", "sanfrancisco" };
+	private String maps[] = new String[] { "london", "hannover", "sanfrancisco" };
+//	private String maps[] = new String[] { "hannover", "sanfrancisco","london", };
+//	private String maps[] = new String[] { "sanfrancisco", "hannover", "london" };
 	
 	
 	public EISArtifact() {
