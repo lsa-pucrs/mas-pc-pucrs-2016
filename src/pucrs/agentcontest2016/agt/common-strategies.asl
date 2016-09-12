@@ -76,7 +76,7 @@
 	.
 	
 +!go_charge(FacilityId)
-	:  chargingList(List) & lat(Lat) & lon(Lon) & getFacility(FacilityId,Flat,Flon,Aux1,Aux2)
+	:  chargingList(List) & lat(Lat) & lon(Lon) & getFacility(FacilityId,Flat,Flon,Aux1,Aux2) & role(_, Speed, _, BatteryCap, _)
 <-
 	+onMyWay([]);
 	?inFacility(Fac);
@@ -101,8 +101,19 @@
 //	.print("Lista: ",Aux2List);
 	if(.empty(Aux2List)){
 		?closest_facility(List2,Facility);
-		FacilityAux2 = Facility;
-		.print("There is no charging station between me and my goal, going to the nearest one.");
+		?closest_facility(List,FacilityId,FacilityId2);
+		?enough_battery2(Facility, FacilityId, FacilityId2, Result, BatteryCap);
+		if (not Result) {
+			+going(FacilityId); 
+			+impossible;
+			.print("@@@@ Impossible route, going to try anyway and hopefully call service breakdown.");
+			!commitAction(goto(facility(FacilityId)));
+			!commitAction(goto(facility(FacilityId)));
+		}
+		else {
+			FacilityAux2 = Facility;
+			.print("There is no charging station between me and my goal, going to the nearest one.");
+		}
 	}
 	else{
 //		.print("FacilityID: ",FacilityId);
@@ -111,7 +122,19 @@
 		if (not Result) {
 //			.print("I don't even have battery to go to the nearest charging station of the list, go to the nearest overall!");
 			?closest_facility(List2,FacilityAux);
-			FacilityAux2 = FacilityAux;
+//			?closest_facility(List,FacilityAux,FacilityId2);
+			?enough_battery_charging2(FacilityAux, Facility, Result, BatteryCap);
+			if (not Result) {
+				+going(FacilityId); 
+				+impossible;
+				.print("@@@@ Impossible route, going to try anyway and hopefully call service breakdown.");
+				!commitAction(goto(facility(FacilityId)));
+				!commitAction(goto(facility(FacilityId)));
+			}
+			else {
+				FacilityAux2 = FacilityAux;
+				.print("There is no charging station between me and my goal, going to the nearest one.");
+			}
 		}
 		else {
 			?closest_facility(Aux2List,FacilityId,FacilityAux);
@@ -130,9 +153,15 @@
 		}
 	}
 	-onMyWay(Aux2List);
-	.print("**** Going to charge my battery at ", FacilityAux2);
-	!goto(FacilityAux2);
-	!charge;
+	if (not impossible) {
+		.print("**** Going to charge my battery at ", FacilityAux2);
+		!goto(FacilityAux2);
+		!charge;		
+	}
+	else {
+		-impossible;
+	}
+
 	.
 	
 +!check_list_charging(List,FacilityId)

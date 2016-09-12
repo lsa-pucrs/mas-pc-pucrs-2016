@@ -10,11 +10,12 @@
 	: lastActionResult(Result) & Result == failed_random & lastActionReal(Action) & .substring("goto",Action) & going(FacilityId)
 <-
 	!commitAction(goto(facility(FacilityId)));
+	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
 	.
 	
 +!goto(FacilityId)
-	: not goHorse & charge(Battery) & Battery == 0
+	: charge(Battery) & Battery == 0
 <-
 	.print("$> Calling Breakdown Service! I am stuck!");
 	!call_breakdown_service;
@@ -36,7 +37,7 @@
     if (not Result) {
     	!go_charge(FacilityId);
     }
-    else {+going(FacilityId); !commitAction(goto(facility(FacilityId)));}
+    else {+going(FacilityId); !commitAction(goto(facility(FacilityId))); !commitAction(goto(facility(FacilityId)));}
 //	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
 	.
@@ -45,6 +46,7 @@
 	: not going(FacilityId)
 <-	
 	+going(FacilityId);
+	!commitAction(goto(facility(FacilityId)));
 	!commitAction(goto(facility(FacilityId)));
 	!goto(FacilityId);
 	.
@@ -79,12 +81,14 @@
 	: lastActionResult(Result) & Result == failed_random & lastActionReal(Action) & .substring("charge",Action)
 <-
 	!commitAction(charge);
+	!commitAction(charge);
 	!charge;
 	.	
 +!charge
 	: not charging
 <-
 	+charging;
+	!commitAction(charge);
 	!commitAction(charge);
 	!charge;
 	.
