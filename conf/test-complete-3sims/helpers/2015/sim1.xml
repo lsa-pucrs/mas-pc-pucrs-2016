@@ -1,6 +1,6 @@
 <simulation id="2016-tournament-sim1of3">
   <configuration
-      maxNumberOfSteps="10"
+      maxNumberOfSteps="1000"
       map="london"
       seedcapital="50000"
       interest="2"
