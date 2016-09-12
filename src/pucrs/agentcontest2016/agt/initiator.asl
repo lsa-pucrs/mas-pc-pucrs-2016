@@ -323,17 +323,17 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 +!allocate_task(item(ItemId,Qty),Timeout,Items,JobId,StorageId)
 	: true
 <- 
-	announce(item(ItemId,Qty),Timeout,StorageId,CNPBoardName);
+	announce(item(ItemId,Qty),Timeout,StorageId,CNPBoardName,TaskId);
 	+cnp(CNPBoardName);
-	.print("Announced: ",Qty,"x of ",ItemId," on ",CNPBoardName);
+	.print("Announced: ",Qty,"x of ",ItemId," on ",CNPBoardName, " task ID ",TaskId);
 	getBids(Bids) [artifact_name(CNPBoardName)];
-	if (.length(Bids) \== 0) {		
+	if (.length(Bids) \== 0) {
 		+pricedJob(JobId,Items,StorageId);
 		.print("Got bids (",.length(Bids),") for task ",CNPBoardName," List ",Bids);
 		!select_bid(Bids,JobId,StorageId);
 	}
 	else {
-		-working;
+//		-working;
 		.print("No bids.");
 	}
 	-cnp(CNPBoardName);
@@ -349,10 +349,26 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 		if (1 == NumberTasks) {
 	    	.print("Complete bid list ",BidList);
 	    	-allBids(_);
-	    	?select_bid(Bids,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
-			.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
-			.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
-			.broadcast(achieve,endCNP);
+	    	+auxCount(0);
+			for (.member(bid(Value,_,_,_),Bids)) {
+				if (Value == -1) {
+					?auxCount(I);
+					-auxCount(I);
+					+auxCount(I+1);
+				}
+			}
+			?auxCount(I);
+			-auxCount(I);
+			if (I == .length(Bids)) {
+				.print("@@@@@@@@@@@@ Some tasks might be impossible, ignoring job.");
+				.broadcast(achieve,endCNP);
+			}
+			else {
+				?select_bid(Bids,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
+				.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
+				.send(Agent,tell,winner(item(ItemId,Qty),JobId,StorageId,ShopId));
+				.broadcast(achieve,endCNP);
+			}
     	}
 	}
 	else {
@@ -363,43 +379,70 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	    if (.length(BidList) == NumberTasks) {
 	    	.print("Complete bid list ",BidList);
 	    	-allBids(_);
-	    	for (.range(I,0,.length(BidList)-1)) {
-	    		.nth(I,BidList,X);
-		    	?select_bid(X,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
-		    	.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
-		    	if (not awarded(Agent,_,_)) {
-		    		+awarded(Agent,ShopId,[item(ItemId,Qty)]);
-		    		.term2string(Agent,AgentS);
-		    		?load(AgentS,Load);
-		    		?product(ItemId,Volume,BaseList);
-		    		updateLoad(Agent,Load-Volume*Qty);
-		    	}
-		    	else {
-		    		?awarded(Agent,ShopId,List);
-		    		-awarded(Agent,ShopId,List);
-		    		.concat(List,[item(ItemId,Qty)],NewList);
-		    		+awarded(Agent,ShopId,NewList);
-		    		.term2string(Agent,AgentS);
-					?load(AgentS,Load);
-		    		?product(ItemId,Volume,BaseList);
-		    		updateLoad(Agent,Load-Volume*Qty);		    		
-		    	}
-		    }
-		    .count(awarded(_,_,_),N);
-		    +numberAwarded(JobId,N);
-		    -numberTasks(NumberTasks);
-		    ?agentsFree(AFree);
-		    -+agentsFree(AFree-N);
-		    for (awarded(Agent,ShopId,List)) {
-		    	.print("Agent ",Agent," to get ",List," in ",ShopId);
-		    	.send(Agent,tell,winner(List,JobId,StorageId,ShopId));
-    			-awarded(Agent,ShopId,List);	
-			}			
-			.broadcast(achieve,endCNP);
-			
-			?jobsInProgress(NumberJobsProgress);
-			-+jobsInProgress(NumberJobsProgress+1);
-			.print("## We Have ",NumberJobsProgress+1," Jobs (",JobId,") In Progress Right Now!");
+	    	+impossible(0);
+	    	for (.range(U,0,.length(BidList)-1)) {
+			   	.nth(U,BidList,TaskSelected);
+		    	+auxCount(0);
+				for (.member(bid(Value,_,_,_),TaskSelected)) {
+					if (Value == -1) {
+						?auxCount(J);
+						-auxCount(J);
+						+auxCount(J+1);
+					}
+				}
+				?auxCount(J);
+				-auxCount(J);
+				if (J > .length(TaskSelected)-NumberTasks) {
+					?impossible(Imp);
+					-impossible(Imp);
+					+impossible(Imp+1);
+				}
+			}
+			if (not impossible(0)) {
+				?impossible(Imp2);
+				-impossible(Imp2);
+				.print("@@@@@@@@@@@@ Ignoring job, impossible (or risky) tasks: ",Imp2);
+				.broadcast(achieve,endCNP);
+			}
+			else {
+				for (.range(I,0,.length(BidList)-1)) {
+		    		.nth(I,BidList,X);
+			    	?select_bid(X,bid(99999,99999,99999,99999),bid(Bid,Agent,ShopId,item(ItemId,Qty)));
+			    	.print("Bid that won: ",Bid," Agent: ",Agent," going to ",ShopId);
+			    	if (not awarded(Agent,_,_)) {
+			    		+awarded(Agent,ShopId,[item(ItemId,Qty)]);
+			    		.term2string(Agent,AgentS);
+			    		?load(AgentS,Load);
+			    		?product(ItemId,Volume,BaseList);
+			    		updateLoad(Agent,Load-Volume*Qty);
+			    	}
+			    	else {
+			    		?awarded(Agent,ShopId,List);
+			    		-awarded(Agent,ShopId,List);
+			    		.concat(List,[item(ItemId,Qty)],NewList);
+			    		+awarded(Agent,ShopId,NewList);
+			    		.term2string(Agent,AgentS);
+						?load(AgentS,Load);
+			    		?product(ItemId,Volume,BaseList);
+			    		updateLoad(Agent,Load-Volume*Qty);		    		
+			    	}
+			    }
+			    .count(awarded(_,_,_),N);
+			    +numberAwarded(JobId,N);
+			    -numberTasks(NumberTasks);
+			    ?agentsFree(AFree);
+			    -+agentsFree(AFree-N);
+			    for (awarded(Agent,ShopId,List)) {
+			    	.print("Agent ",Agent," to get ",List," in ",ShopId);
+			    	.send(Agent,tell,winner(List,JobId,StorageId,ShopId));
+	    			-awarded(Agent,ShopId,List);	
+				}			
+				.broadcast(achieve,endCNP);
+				
+				?jobsInProgress(NumberJobsProgress);
+				-+jobsInProgress(NumberJobsProgress+1);
+				.print("## We Have ",NumberJobsProgress+1," Jobs (",JobId,") In Progress Right Now!");
+			}
 	    }
 	}
 	.

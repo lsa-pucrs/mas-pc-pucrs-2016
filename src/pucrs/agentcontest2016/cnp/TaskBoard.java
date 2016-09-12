@@ -18,13 +18,14 @@ public class TaskBoard extends Artifact {
 		taskId = 0;
 	}
 	
-	@OPERATION void announce(String taskDescr, int duration, String storageId, OpFeedbackParam<String> id){
+	@OPERATION void announce(String taskDescr, int duration, String storageId, OpFeedbackParam<String> id, OpFeedbackParam<Integer> tId){
 		taskId++;
 		try {
 			String artifactName = "cnp_board_"+taskId;
 			makeArtifact(artifactName, "pucrs.agentcontest2016.cnp.ContractNetBoard", new ArtifactConfig(taskDescr,duration));
 			defineObsProperty("task", Literal.parseLiteral(taskDescr), artifactName, storageId, taskId);
 			id.set(artifactName);
+			tId.set(taskId);
 		} catch (Exception ex){
 			logger.info("announce_failed");
 		}

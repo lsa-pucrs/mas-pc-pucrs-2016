@@ -44,23 +44,303 @@
 <- 
 	?find_shops(ItemId,List,ShopsViable);
 	?closest_facility(ShopsViable, ShopId);
-	?route(ShopId, RouteLenShop);
-	?route(ShopId, StorageId, RouteLenStorage);	
-	?calculate_bases_load(BaseList,Qty,0,LoadB);
+	?charge(Battery);
+	+bid(0,TaskId);
+	+chargeExp(0,TaskId);
+	!calculate_route(ShopId,TaskId,Battery);
+//	?route(ShopId, StorageId, RouteLenStorage);	
+	?bid(BidAux,TaskId);
+//	.print("Placing bid SHOP  ",BidAux);
+	?chargeExp(NewBattery,TaskId);
+	if (BidAux == -1) {
+		Bid = -1;
+		-chargeExp(NewBattery,TaskId);
+		-bid(BidAux,TaskId);
+	}
+	else {
+		!calculate_routeStorage(StorageId,ShopId,TaskId,NewBattery);
+		?bid(BidAux2,TaskId);
+		?chargeExp(NewBattery2,TaskId);
+		-chargeExp(NewBattery2,TaskId);
+		-bid(BidAux2,TaskId);
+//		.print("Placing bid SHOP+STORAGE   ",BidAux2);
+		if (BidAux2 == -1) {
+			Bid = -1;
+		}
+		else {
+			?calculate_bases_load(BaseList,Qty,0,LoadB);
+			if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) ) {
+				Bid = BidAux2;
+			//		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));		
+			}
+			if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
+				Bid = -1;
+			}	
+			if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
+				Bid = BidAux2;
+			//		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
+			}
+			if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
+				Bid = -1;
+			}	
+		}
+	}
+	.
 	
-	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) ) {
-		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));		
++!calculate_route(FacilityId,TaskId,Battery)
+	: chargingList(List) & role(_, Speed, LoadCap, BatteryCap, Tools) & closest_facility(List, FacilityId, FacilityId2) & enough_battery(FacilityId, FacilityId2, Result)
+<-
+	?bid(BidAux,TaskId);
+	?chargeExp(Exp,TaskId);
+	if (not Result) {
+		?lat(Lat);
+		?lon(Lon);
+		?getFacility(FacilityId,Flat,Flon,Aux1,Aux2);
+		+onMyWay([],TaskId);
+		?inFacility(Fac);
+		if (.member(Fac,List)) {
+			.delete(Fac,List,List2);
+		}
+		else {
+			List2 = List;
+		}
+		for(.member(ChargingId,List2)){
+			?chargingStation(ChargingId,Clat,Clon,_,_,_);
+			if(math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Lat-Clat)**2+(Lon-Clon)**2)) & math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Clat-Flat)**2+(Clon-Flon)**2))){
+				?onMyWay(AuxList,TaskId);
+				-onMyWay(AuxList,TaskId);
+				+onMyWay([ChargingId|AuxList],TaskId);
+				//.print("me-to-facility: ",math.sqrt((Lat-Flat)**2+(Lon-Flon)**2));
+				//.print("me-to-charging: ",math.sqrt((Lat-Clat)**2+(Lon-Clon)**2));
+				//.print("charging-to-facility: ",math.sqrt((Clat-Flat)**2+(Clon-Flon)**2));
+			}
+		}
+		?onMyWay(Aux2List,TaskId);
+		-onMyWay(Aux2List,TaskId);
+	//	.print("Lista: ",Aux2List);
+		if(.empty(Aux2List)){
+			?closest_facility(List2,Facility);
+//			FacilityAux2 = Facility;
+			!calculate_routeCharging(FacilityId, Facility, TaskId, BatteryCap);
+//			-bid(BidAux,TaskId);
+//			+bid(-1,TaskId);
+//			!calculate_route(FacilityId,TaskId);				
+//			.print("There is no charging station between me and my goal, going to the nearest one.");
+		}
+		else{
+	//		.print("FacilityID: ",FacilityId);
+			?closest_facility(Aux2List,Facility);
+			?enough_battery_charging2(Facility, Result,Battery);
+			if (not Result) {
+	//			.print("I don't even have battery to go to the nearest charging station of the list, go to the nearest overall!");
+				?closest_facility(List2,FacilityAux);
+				!calculate_routeCharging(FacilityId, FacilityAux, TaskId, BatteryCap);
+//				-+bid(-1,TaskId);
+//				FacilityAux2 = FacilityAux;
+			}
+			else {
+				?closest_facility(Aux2List,FacilityId,FacilityAux);
+	//			.print("Closest of ",Aux2List," charging station to ",FacilityId," is ",FacilityAux);
+				?enough_battery_charging2(FacilityAux, ResultAux,Battery);
+				if (ResultAux) {
+//					FacilityAux2 = FacilityAux;
+					?route(FacilityAux, RouteLen);
+					-bid(BidAux,TaskId);
+					+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+					!calculate_routeCharging(FacilityId, FacilityAux, TaskId, BatteryCap);
+				}
+				else {
+					.delete(FacilityAux,Aux2List,Aux2List2);
+					!check_list_charging(Aux2List2,FacilityId);
+					?charge_in(FacAux);
+					-charge_in(FacAux);
+					?route(FacAux, RouteLen);
+					-bid(BidAux,TaskId);
+					+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+					!calculate_routeCharging(FacilityId, FacAux, TaskId, BatteryCap);
+//					FacilityAux2 = FacAux;
+				}
+			}
+		}
 	}
-	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
-		Bid = -1;
-	}	
-	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
-		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
+	else {
+		?route(FacilityId, RouteLen);
+		-chargeExp(Exp);
+		+chargeExp(Exp + math.round(RouteLen / Speed * 10),TaskId);
+		-bid(BidAux,TaskId);
+		+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+//		.print("Bid: ",math.round(RouteLen / Speed));
 	}
-	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
-		Bid = -1;
+	.
+	
++!calculate_routeCharging(FacilityId,FacilityAtm,TaskId,Battery)
+	: chargingList(List) & role(_, Speed, LoadCap, BatteryCap, Tools) & closest_facility(List, FacilityId, FacilityId2) & enough_battery2(FacilityAtm, FacilityId, FacilityId2, Result)
+<-
+	?bid(BidAux,TaskId);
+	?chargeExp(Exp,TaskId);
+	if (not Result) {
+		?lat(Lat);
+		?lon(Lon);
+		?getFacility(FacilityId,Flat,Flon,Aux1,Aux2);
+		+onMyWay([],TaskId);
+		?inFacility(Fac);
+		if (.member(Fac,List)) {
+			.delete(Fac,List,List2);
+		}
+		else {
+			List2 = List;
+		}
+		for(.member(ChargingId,List2)){
+			?chargingStation(ChargingId,Clat,Clon,_,_,_);
+			if(math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Lat-Clat)**2+(Lon-Clon)**2)) & math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Clat-Flat)**2+(Clon-Flon)**2))){
+				?onMyWay(AuxList,TaskId);
+				-onMyWay(AuxList,TaskId);
+				+onMyWay([ChargingId|AuxList],TaskId);
+				//.print("me-to-facility: ",math.sqrt((Lat-Flat)**2+(Lon-Flon)**2));
+				//.print("me-to-charging: ",math.sqrt((Lat-Clat)**2+(Lon-Clon)**2));
+				//.print("charging-to-facility: ",math.sqrt((Clat-Flat)**2+(Clon-Flon)**2));
+			}
+		}
+		?onMyWay(Aux2List,TaskId);
+		-onMyWay(Aux2List,TaskId);		
+	//	.print("Lista: ",Aux2List);
+		if(.empty(Aux2List)){
+			?closest_facility(List2,Facility);
+//			FacilityAux2 = Facility;
+			-bid(BidAux,TaskId);
+			+bid(-1,TaskId);
+//			!calculate_route(FacilityId,TaskId);				
+//			.print("There is no charging station between me and my goal, going to the nearest one.");
+		}
+		else{
+	//		.print("FacilityID: ",FacilityId);
+			?closest_facility(Aux2List,Facility);
+			?enough_battery_charging2(Facility, Result,Battery);
+			if (not Result) {
+	//			.print("I don't even have battery to go to the nearest charging station of the list, go to the nearest overall!");
+//				?closest_facility(List2,FacilityAux);
+				-bid(BidAux,TaskId);
+				+bid(-1,TaskId);
+//				FacilityAux2 = FacilityAux;
+			}
+			else {
+				?closest_facility(Aux2List,FacilityId,FacilityAux);
+	//			.print("Closest of ",Aux2List," charging station to ",FacilityId," is ",FacilityAux);
+				?enough_battery_charging2(FacilityAux, ResultAux,Battery);
+				if (ResultAux) {
+//					FacilityAux2 = FacilityAux;
+					?route(FacilityAtm, FacilityAux, RouteLen);
+					-bid(BidAux,TaskId);
+					+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+					!calculate_routeCharging(FacilityId, FacilityAux, TaskId, BatteryCap);
+				}
+				else {
+					.delete(FacilityAux,Aux2List,Aux2List2);
+					!check_list_charging(Aux2List2,FacilityId);
+					?charge_in(FacAux);
+					-charge_in(FacAux);
+					?route(FacilityAtm, FacAux, RouteLen);
+					-bid(BidAux,TaskId);
+					+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+					!calculate_routeCharging(FacilityId, FacAux, TaskId, BatteryCap);
+//					FacilityAux2 = FacAux;
+				}
+			}
+		}
 	}
-	.	 
+	else {
+		?route(FacilityAtm, FacilityId, RouteLen);
+		-chargeExp(Exp);
+		+chargeExp(Exp + math.round(RouteLen / Speed * 10),TaskId);
+		-bid(BidAux,TaskId);
+		+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+//		.print("Bid: ",math.round(RouteLen / Speed));
+	}
+	.
+	
++!calculate_routeStorage(FacilityId,FacilityAtm,TaskId,Battery)
+	: chargingList(List) & role(_, Speed, LoadCap, BatteryCap, Tools) & closest_facility(List, FacilityId, FacilityId2) & enough_battery2(FacilityAtm, FacilityId, FacilityId2, Result)
+<-
+	?bid(BidAux,TaskId);
+//	?chargeExp(Exp,TaskId);
+	if (not Result) {
+		?lat(Lat);
+		?lon(Lon);
+		?getFacility(FacilityId,Flat,Flon,Aux1,Aux2);
+		+onMyWay([],TaskId);
+		?inFacility(Fac);
+		if (.member(Fac,List)) {
+			.delete(Fac,List,List2);
+		}
+		else {
+			List2 = List;
+		}
+		for(.member(ChargingId,List2)){
+			?chargingStation(ChargingId,Clat,Clon,_,_,_);
+			if(math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Lat-Clat)**2+(Lon-Clon)**2)) & math.sqrt((Lat-Flat)**2+(Lon-Flon)**2)>(math.sqrt((Clat-Flat)**2+(Clon-Flon)**2))){
+				?onMyWay(AuxList,TaskId);
+				-onMyWay(AuxList,TaskId);
+				+onMyWay([ChargingId|AuxList],TaskId);
+				//.print("me-to-facility: ",math.sqrt((Lat-Flat)**2+(Lon-Flon)**2));
+				//.print("me-to-charging: ",math.sqrt((Lat-Clat)**2+(Lon-Clon)**2));
+				//.print("charging-to-facility: ",math.sqrt((Clat-Flat)**2+(Clon-Flon)**2));
+			}
+		}
+		?onMyWay(Aux2List,TaskId);
+		-onMyWay(Aux2List,TaskId);		
+	//	.print("Lista: ",Aux2List);
+		if(.empty(Aux2List)){
+			?closest_facility(List2,Facility);
+//			FacilityAux2 = Facility;
+			!calculate_routeCharging(FacilityId, Facility, TaskId, BatteryCap);
+//			!calculate_route(FacilityId,TaskId);				
+//			.print("There is no charging station between me and my goal, going to the nearest one.");
+		}
+		else{
+	//		.print("FacilityID: ",FacilityId);
+			?closest_facility(Aux2List,Facility);
+			?enough_battery_charging2(Facility, Result,Battery);
+			if (not Result) {
+	//			.print("I don't even have battery to go to the nearest charging station of the list, go to the nearest overall!");
+				?closest_facility(List2,FacilityAux);
+				!calculate_routeCharging(FacilityId, FacilityAux, TaskId, BatteryCap);
+//				-+bid(-1,TaskId);
+//				FacilityAux2 = FacilityAux;
+			}
+			else {
+				?closest_facility(Aux2List,FacilityId,FacilityAux);
+	//			.print("Closest of ",Aux2List," charging station to ",FacilityId," is ",FacilityAux);
+				?enough_battery_charging2(FacilityAux, ResultAux,Battery);
+				if (ResultAux) {
+//					FacilityAux2 = FacilityAux;
+					?route(FacilityAtm, FacilityAux, RouteLen);
+					-bid(BidAux,TaskId);
+					+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+					!calculate_routeCharging(FacilityId, FacilityAux, TaskId, BatteryCap);
+				}
+				else {
+					.delete(FacilityAux,Aux2List,Aux2List2);
+					!check_list_charging(Aux2List2,FacilityId);
+					?charge_in(FacAux);
+					-charge_in(FacAux);
+					?route(FacilityAtm, FacAux, RouteLen);
+					-bid(BidAux,TaskId);
+					+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+					!calculate_routeCharging(FacilityId, FacAux, TaskId, BatteryCap);
+//					FacilityAux2 = FacAux;
+				}
+			}
+		}
+	}
+	else {
+		?route(FacilityAtm, FacilityId, RouteLen);
+//		-+chargeExp(Exp + math.round(RouteLen / Speed * 10),TaskId);
+		-bid(BidAux,TaskId);
+		+bid(BidAux + math.round(RouteLen / Speed),TaskId);
+//		.print("Bid: ",math.round(RouteLen / Speed));
+	}
+	.	
+	
 
 /* 
 @task[atomic]
