@@ -31,6 +31,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	?map_center(CenterLat, CenterLon);
 	?closest_facility_from_center(CenterLat, CenterLon, List2, ShopId);
 	+center_shop(ShopId);
+	.broadcast(tell,explorationInProgress); 
 	.
 
 +!create_taskboard
@@ -112,6 +113,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	for ( doneExploration[source(A)] ) {
 		-doneExploration[source(A)];
 	}
+	.broadcast(untell,explorationInProgress); 
 	.print("All agents are done, time to start looking for a new job.");
 	.	
 @done6[atomic]

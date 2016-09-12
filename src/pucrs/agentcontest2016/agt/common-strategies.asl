@@ -27,18 +27,6 @@
 		!assemble(Item);
 	}
 	.
-	
-+!post_priced
-	: storageList([StorageId|_]) & steps(Steps) & activePricedSteps(Active)
-<-
-	 !post_job_priced(Active, Steps, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
-	 .
-	 
-+!post_auction
-	: storageList([StorageId|_]) & rewardAuction(Reward) & fineAuction(Fine) & activeAuctionSteps(Active) & auctionSteps(ActiveAuction)
-<-
-	 !post_job_auction(Reward, Fine, Active, ActiveAuction, StorageId, [item(base1,1), item(material1,2), item(tool1,3)]);
-	 .
 	 
 +!go_work(JobId,StorageId)
 	: buyList(_,_,ShopId) & .my_name(Me) & role(_, _, LoadCap, _, _)
@@ -421,6 +409,47 @@
 	//.print("AGENTS ",ListOfAgents);
 	.	
 //### RINGING ###
+
++!free 
+  : explorationInProgress & storageList(StorageList) 
+<-    
+  // Populate itemList with product list (to easy access)
+  +itemList([]); 
+  for ( product(ItemId,Volume,BaseList) ) { 
+    ?itemList(List); 
+    -+itemList([ItemId|List]); 
+  } 
+  ?itemList(ItemList);  
+  // Shuffle list to get some random items
+  .shuffle(ItemList, ShuffledItemList);
+  +randomItems([]);
+  // We will get (length / 3) + 1 items to this job
+  NumberOfItems = math.floor(.length(ShuffledItemList) / 3) + 1;
+  for (.range(I,0,NumberOfItems)) {
+  	// Get nth item
+  	.nth(I, ShuffledItemList, TempItemId);
+  	?randomItems(TempList); 
+  	?product(TempItemId, Volume, _);
+  	// Select the number of items to be posted (between 600 and 900, so only a truck will be able to do it with one trip), and dividing this by this item volume.
+  	N = math.ceil(math.ceil(600 + math.random(300)) / Volume);
+  	-+randomItems([item(TempItemId,N)|TempList]);
+  }
+  ?randomItems(ItemsToBePosted);
+  // Get random storage
+  .nth(math.floor(math.random(.length(StorageList))), StorageList, StorageId);
+  // Decide if we are going to post an auction or a priced job, with the random product selected 
+  .random(N); 
+  if(N < 0.5) { 
+    // Posting auction job (MaxBid, Fine, JobActive, AuctionActive, StorageId, Items)
+    !post_job_auction(2, 1, 20, 45, StorageId, ItemsToBePosted); 
+  } else { 
+    // Posting priced job (Reward, JobActive, StorageId, Items)
+    !post_job_priced(1, 20, StorageId, ItemsToBePosted); 
+  } 
+  -itemList(_); 
+  -randomNumberOfItems(_); 
+  -randomItems(_);
+  !free.
 
 // We need to experiment tweaking the wait value
 +!free
