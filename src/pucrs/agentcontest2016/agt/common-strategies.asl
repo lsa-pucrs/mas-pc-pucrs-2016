@@ -411,7 +411,7 @@
 //### RINGING ###
 
 +!free 
-  : explorationInProgress & storageList(StorageList) 
+  : (explorationInProgress | goHorse) & storageList(StorageList) & (not .desire(goto(_)) | not .desire(charge)) 
 <-    
   // Populate itemList with product list (to easy access)
   +itemList([]); 
