@@ -309,9 +309,15 @@
 	} else{
 		.print("Ringing is Done");
 		.broadcast(achieve,ringingFinished);
-		!!free;	
+		
+		if(not .length(NewAvailableAgents, 0)) {
+			.nth(0, NewAvailableAgents, agents(FreeAgent));
+			.send(FreeAgent, tell, allowedToPostJobs);
+		}
+		!!free;			
 	}	
 	
+	// Clean up
 	-tempComparingProposals(_);	
 	-tempAgentsSendProposals(_);
 	-tempNewListAvailableAgent(_);
@@ -319,6 +325,7 @@
 	-tempNextAgent(_);
 	-tempListAgentsRing(_);
 	.
+
 +!make_proposal(AvailableShops, Proposals, [agents(NextAgent)|RemainingAgents], AvailableAgents)
 	: .my_name(Me)
 <-
@@ -411,7 +418,7 @@
 //### RINGING ###
 
 +!free 
-  : (explorationInProgress | goHorse) & storageList(StorageList) & (not .desire(goto(_)) | not .desire(charge)) 
+  : allowedToPostJobs & (explorationInProgress | goHorse) & storageList(StorageList) & (not .desire(goto(_)) | not .desire(charge)) 
 <-    
   // Populate itemList with product list (to easy access)
   +itemList([]); 
