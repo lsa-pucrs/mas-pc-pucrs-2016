@@ -1,6 +1,6 @@
 <simulation id="2016-tournament-sim3of3">
   <configuration
-      maxNumberOfSteps="10"
+      maxNumberOfSteps="1000"
       map="sanfrancisco"
       seedcapital="50000"
       interest="2"
