@@ -66,12 +66,12 @@
 	}
 	!goto(StorageId);
 	!deliver_job(JobId);
-	while (lastActionResult(ActionResult) & Result == failed_random) {
+	while (lastActionResult(ActionResult) & ActionResult == failed_random) {
 		.print("Deliver Job failed, executing it again.");
 		!deliver_job(JobId);
 	}
 	!deliver_job(JobId);
-	if (lastActionResult(ActionResult2) & (Result == useless | Result == failed_job_status) & load(Load) & Load \== 0) {
+	if (lastActionResult(ActionResult2) & (ActionResult2 == useless | ActionResult2 == failed_job_status) & load(Load) & Load \== 0) {
 		!go_dump;
 	}
 //	.send(vehicle1,tell,done);
@@ -438,7 +438,7 @@
 //### RINGING ###
 
 +!free 
-  : allowedToPostJobs & (explorationInProgress | goHorse) & storageList(StorageList) & (not .desire(goto(_)) | not .desire(charge)) 
+  : allowedToPostJobs & (explorationInProgress | goHorse) & storageList(StorageList) & (not .desire(goto(_)) & not .desire(charge)) 
 <-    
   // Populate itemList with product list (to easy access)
   +itemList([]); 
@@ -482,15 +482,16 @@
   -randomNumberOfItems(_); 
   -randomItems(_);
   !free.
+  
 +!free
-	: not goHorse & (not .desire(goto(_)) | not .desire(charge)) & load(Load) & Load \== 0
+	: not goHorse & (not .desire(goto(_)) & not .desire(charge)) & load(Load) & Load \== 0
 <-
 	!go_dump;
 	!free;
 	.
 // We need to experiment tweaking the wait value
 +!free
-	: not .desire(goto(_)) | not .desire(charge)
+	: not .desire(goto(_)) & not .desire(charge)
 <-
 	!skip;
 //	.wait(500);
