@@ -231,8 +231,8 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 			?route_car_from_center(CenterLat, CenterLon, ShopId, RouteLenShop);
 			?route_car_from_center(CenterLat, CenterLon, StorageId, RouteLenStorage);
 			Total = math.round( (RouteLenShop/3 + RouteLenStorage/3) * NumberTasks );
-			.print("We estimate ",Total," steps to do priced job ",JobId," that needs ",End-Step," steps");
-			if (Total >  End-Step) {
+			.print("We estimate ",Total+35," steps to do priced job ",JobId," that needs ",End-Step," steps");
+			if (Total+35 >  End-Step) {
 				.print("Ignoring priced job ",JobId," even in the best case scenario we would not be able to complete it.");
 				.broadcast(achieve,endCNP);
 			}
