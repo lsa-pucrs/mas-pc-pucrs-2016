@@ -66,27 +66,27 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 	.print("All agents are done, time to start looking for a new job.");
 	.
 	
-@done3[atomic]
-//+done[source(X)]
-//	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
-+done(JobId)[source(X)]
-	: jobsInProgress(NumberJobsProgress) & numberAwarded(JobId, NumberAgents) & .count(done(JobId)[source(_)], NumberDone) & NumberAgents == NumberDone
-<-
-	-+jobsInProgress(NumberJobsProgress-1);
-	.print("## We Have ",NumberJobsProgress-1," Jobs In Progress Right Now! Job (",JobId,") is Done");
-
-	addPrices;
-//	-working;
-//	-numberAwarded(NumberAgents);
-//	for ( done[source(A)] ) {
-//		-done[source(A)];
+//@done3[atomic]
+////+done[source(X)]
+////	: numberAwarded(NumberAgents) & .count(done[source(_)], NumberDone) & NumberAgents == NumberDone
+//+done(JobId)[source(X)]
+//	: jobsInProgress(NumberJobsProgress) & numberAwarded(JobId, NumberAgents) & .count(done(JobId)[source(_)], NumberDone) & NumberAgents == NumberDone
+//<-
+//	-+jobsInProgress(NumberJobsProgress-1);
+//	.print("## We Have ",NumberJobsProgress-1," Jobs In Progress Right Now! Job (",JobId,") is Done");
+//
+//	addPrices;
+////	-working;
+////	-numberAwarded(NumberAgents);
+////	for ( done[source(A)] ) {
+////		-done[source(A)];
+////	}
+//	-numberAwarded(JobId, NumberAgents);
+//	for ( done(JobId)[source(A)] ) {
+//		-done(JobId)[source(A)];
 //	}
-	-numberAwarded(JobId, NumberAgents);
-	for ( done(JobId)[source(A)] ) {
-		-done(JobId)[source(A)];
-	}
-	.print("All agents are done, time to start looking for a new job.");
-	.
+//	.print("All agents are done, time to start looking for a new job.");
+//	.
 //@done2[atomic]
 //+done[source(X)]
 //<-

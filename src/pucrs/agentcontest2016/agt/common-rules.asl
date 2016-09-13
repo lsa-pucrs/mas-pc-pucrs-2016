@@ -36,8 +36,9 @@ calculate_bases_load([tools(ToolId,Qty2)|BaseList],Qty,Aux,LoadB) :- calculate_b
 find_shops_id([],Temp,Result) :- Result = Temp.
 find_shops_id([shop(ShopId,_)|List],Temp,Result) :- find_shops_id(List,[ShopId|Temp],Result).
 
-getFacility(FacilityId,Flat,Flon,LatAux,LonAux):- shop(FacilityId, LatAux, LonAux,_)& Flat=LatAux & Flon=LonAux.
-getFacility(FacilityId,Flat,Flon,LatAux,LonAux):- storage(FacilityId, LatAux, LonAux,_,_,_,_)& Flat=LatAux & Flon=LonAux.
+getFacility(FacilityId,Flat,Flon,LatAux,LonAux):- shop(FacilityId, LatAux, LonAux,_) & Flat=LatAux & Flon=LonAux.
+getFacility(FacilityId,Flat,Flon,LatAux,LonAux):- storage(FacilityId, LatAux, LonAux,_,_,_,_) & Flat=LatAux & Flon=LonAux.
+getFacility(FacilityId,Flat,Flon,LatAux,LonAux):- dump(FacilityId,LatAux,LonAux,_) & Flat=LatAux & Flon=LonAux.
 
 /* 
 //low_battery :- charge(Battery) & chargeTotal(BatteryCap) & Battery < BatteryCap*60/100.

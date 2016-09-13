@@ -27,11 +27,26 @@
 		!assemble(Item);
 	}
 	.
+	
++!go_dump
+	: dumpList(List)
+<-
+	?closest_facility(List,Facility);
+	!goto(Facility);
+	for (item(ItemId,Qty)) {
+ 		!dump(ItemId,Qty);
+ 		while (lastActionResult(ActionResult) & Result == failed_random) {
+			.print("Dump failed, executing it again.");
+			!dump(ItemId,Qty);
+		}
+ 	}
+	.
 	 
 +!go_work(JobId,StorageId)
 	: buyList(_,_,ShopId) & .my_name(Me) & role(_, _, LoadCap, _, _)
 <-
 	!goto(ShopId);
+	.drop_desire(goto(_));
 	for ( buyList(Item2,Qty2,ShopId) ) { 
 		while ( buyList(Item,Qty,ShopId) ) {
 			!buy(Item,Qty);
@@ -54,6 +69,10 @@
 	while (lastActionResult(ActionResult) & Result == failed_random) {
 		.print("Deliver Job failed, executing it again.");
 		!deliver_job(JobId);
+	}
+	!deliver_job(JobId);
+	if (lastActionResult(ActionResult2) & (Result == useless | Result == failed_job_status) & load(Load) & Load \== 0) {
+		!go_dump;
 	}
 //	.send(vehicle1,tell,done);
 	.send(vehicle15,tell,done(JobId));
@@ -457,7 +476,12 @@
   -randomNumberOfItems(_); 
   -randomItems(_);
   !free.
-
++!free
+	: not goHorse & (not .desire(goto(_)) | not .desire(charge)) & load(Load) & Load \== 0
+<-
+	!go_dump;
+	!free;
+	.
 // We need to experiment tweaking the wait value
 +!free
 	: not .desire(goto(_)) | not .desire(charge)

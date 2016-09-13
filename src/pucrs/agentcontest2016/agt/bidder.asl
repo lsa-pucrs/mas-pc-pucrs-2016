@@ -27,18 +27,24 @@
 +!make_bid(item(ItemId,Qty),StorageId,BoardId,CNPBoard,TaskId)
 	: .my_name(Me)
 <- 
-	!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId);
+	if (not .desire(go_dump) & not winner(_,_,_,_)) {
+		!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId);
+	}
+	else {
+		Bid = -1;
+		ShopId = shop0;
+	}
 	bid(Bid,Me,ShopId,item(ItemId,Qty))[artifact_id(BoardId)];
 //	.print("Bid submitted: ",Bid," for task: ",CNPBoard," at shop ",ShopId);
 	.
 	
 // Se o agente j� est� trabalhando em um job no pr�ximo job envia uma proposta zerada
-+!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId)
-	: winner(_,_,_,_)
-<-
-	Bid = -1;
-	ShopId = shop0;
-	.
+//+!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId)
+//	: winner(_,_,_,_)
+//<-
+//	Bid = -1;
+//	ShopId = shop0;
+//	.
 +!create_bid(item(ItemId,Qty),StorageId,Bid,ShopId,TaskId)
 	: product(ItemId, Volume, BaseList) & role(_, Speed, LoadCap, _, Tools) & load(Load) & shopList(List) 
 <- 
@@ -46,20 +52,20 @@
 	?closest_facility(ShopsViable, ShopId);
 	?route(ShopId, RouteLenShop);
 	?route(ShopId, StorageId, RouteLenStorage);	
-	?calculate_bases_load(BaseList,Qty,0,LoadB);
+//	?calculate_bases_load(BaseList,Qty,0,LoadB);
 	
-	if ( (LoadB > Volume * Qty) & (LoadCap - Load >= LoadB) ) {
+	if ( (LoadCap - Load >= Volume * Qty + 15) ) {
 		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));		
 	}
-	if ( (LoadB > Volume * Qty) & (LoadCap - Load < LoadB ) )  {
+	else  {
 		Bid = -1;
 	}	
-	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
-		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
-	}
-	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
-		Bid = -1;
-	}
+//	if ( (LoadB <= Volume * Qty) & (LoadCap - Load >= Volume * Qty)) {
+//		Bid = math.round((RouteLenShop / Speed) + (RouteLenStorage / Speed));
+//	}
+//	if ( (LoadB <= Volume * Qty) & (LoadCap - Load < Volume * Qty) ) {
+//		Bid = -1;
+//	}
 	.	 
 
 /* 

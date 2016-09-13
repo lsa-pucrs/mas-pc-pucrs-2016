@@ -8,7 +8,7 @@
 //	+activeAuctionSteps(1);
 //	+auctionSteps(3);
 	+chargingList([]);
-//	+dumpList([]);
+	+dumpList([]);
 	+storageList([]);
 	+shopList([]);
 	+noActionCount(0);
