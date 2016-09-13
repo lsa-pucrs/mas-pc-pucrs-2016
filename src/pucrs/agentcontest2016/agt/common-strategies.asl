@@ -108,8 +108,9 @@
 //	.print("Lista: ",Aux2List);
 	if(.empty(Aux2List)){
 		?closest_facility(List2,Facility);
-		?closest_facility(List,FacilityId,FacilityId2);
-		?enough_battery2(Facility, FacilityId, FacilityId2, Result, BatteryCap);
+//		?closest_facility(List,FacilityId,FacilityId2);
+		?enough_battery_charging2(Facility, FacilityId, Result, BatteryCap);
+//		?enough_battery2(Facility, FacilityId, FacilityId2, Result, BatteryCap);
 		if (not Result) {
 			+going(FacilityId); 
 			+impossible;
