@@ -220,7 +220,7 @@
 	
 @goHorse[atomic]	
 +step(Step)
-	: steps(TotalSteps) & Step >= TotalSteps - 135 & not goHorse
+	: steps(TotalSteps) & Step >= TotalSteps - 100 & not goHorse
 <-
 	+goHorse;
 	.print("|||GO-HORSE|||");

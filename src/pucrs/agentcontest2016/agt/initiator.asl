@@ -193,7 +193,7 @@ calculateCost([item(Id,Qty)|List],Aux,Cost) :-.term2string(Id,IdS)  & itemPrice(
 
 //// AQUI SE DEFINE MAXIMO DE JOBS SERAO FEITOS POR VEZ
 +pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)]
-	: jobsInProgress(NumberJobsProgress) & (NumberJobsProgress == 2)
+	: jobsInProgress(NumberJobsProgress) & (NumberJobsProgress == 3)
 <-
 	.print("## We've already reached our maximum number of simultaneous jobs");
 	-pricedJob(JobId, StorageId, Begin, End, Reward, Items)[source(X)];
