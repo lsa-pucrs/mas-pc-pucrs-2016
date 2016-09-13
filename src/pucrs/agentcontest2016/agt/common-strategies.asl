@@ -467,7 +467,12 @@
   .random(N); 
   if(N < 0.5) { 
     // Posting auction job (MaxBid, Fine, JobActive, AuctionActive, StorageId, Items)
-    !post_job_auction(2, 1, 20, 45, StorageId, ItemsToBePosted); 
+    if (goHorse) {
+    	!post_job_auction(1000, 1, 20, 5, StorageId, ItemsToBePosted); 
+    }
+    else {
+    	!post_job_auction(1000, 1, 20, 100, StorageId, ItemsToBePosted); 
+    }
   } else { 
     // Posting priced job (Reward, JobActive, StorageId, Items)
     !post_job_priced(1, 20, StorageId, ItemsToBePosted); 
